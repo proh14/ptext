@@ -1,3 +1,18 @@
+/* Copyright (c) 2023 proh14. All rights reserved.
+ *
+ *   This program is free software: you can redistribute it and/or modify it
+ *   under the terms of the GNU General Public License as published by the Free
+ *   Software Foundation, either version 3 of the License, or (at your option)
+ *   any later version.
+ *
+ *   This program is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with
+ *  this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 #define _DEFAULT_SOURCE
 #define _BSD_SOURCE
 #define _GNU_SOURCE
@@ -28,8 +43,18 @@ struct {
   row *rows;
   int numrows;
   size_t width;
-  size_t hight;
+  size_t height;
+  char *filename;
+  size_t filenamelen;
 } conf;
+
+struct buff {
+  char *chars;
+  size_t len;
+};
+
+#define INIT_BUFF                                                              \
+  { NULL, 0 }
 
 void die(const char *s) {
   perror(s);
@@ -82,7 +107,10 @@ void openFile(const char *s) {
   if (!file) {
     die("fopen");
   }
-
+  free(conf.filename);
+  conf.filenamelen = strlen(s) + 1;
+  conf.filename = malloc(conf.filenamelen);
+  snprintf(conf.filename, conf.filenamelen, "%s", s);
   char *line = NULL;
   size_t cap = 0;
   int len;
@@ -105,7 +133,8 @@ void init(void) {
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   conf.width = w.ws_col;
-  conf.hight w.ws_row;
+  conf.height = w.ws_row;
+  conf.filename = NULL;
 }
 
 void freeall(void) {
@@ -116,12 +145,14 @@ void freeall(void) {
       free(conf.rows[i].renchar);
     }
     free(conf.rows);
+    conf.rows = NULL;
+    free(conf.filename);
   }
 }
 
 void done(void) {
-  disableRawMode();
   freeall();
+  disableRawMode();
 }
 
 void enableRawMode(void) {
@@ -151,15 +182,51 @@ int readKey(void) {
   return c;
 }
 
-void drawAll(void) {
+void buffAppend(struct buff *buff, const char *s, size_t len) {
+  char *new = realloc(buff->chars, buff->len + len);
+  if (new == NULL)
+    return;
+  memcpy(&new[buff->len], s, len);
+  buff->chars = new;
+  buff->len += len;
+}
+
+void drawAll(struct buff *buff) {
   int y, x;
-  for (y = 0; y < conf.hight; y++) {
-    if (conf.numrows == 0 && y == conf.hight / 3) {
+  for (y = 0; y < conf.height - 1; y++) {
+    if (y < conf.numrows) {
+      buffAppend(buff, conf.rows[y].renchar, conf.rows[y].renlen);
+    } else {
+      buffAppend(buff, "~", 1);
     }
+    buffAppend(buff, "\x1b[K", 3);
+    buffAppend(buff, "\r\n", 2);
   }
 }
 
-void refresh(void) { drawAll(); }
+void drawStatusBar(struct buff *buff) {
+  size_t len = conf.filenamelen;
+  buffAppend(buff, "\x1b[7m", 4);
+  buffAppend(buff, conf.filename, conf.filenamelen);
+  buffAppend(buff, " -- ptext", 9);
+  len += 9;
+  while (len < conf.width) {
+    buffAppend(buff, " ", 1);
+    len++;
+  }
+  buffAppend(buff, "\x1b[27m", 5);
+}
+
+void refresh(void) {
+  struct buff buff = INIT_BUFF;
+  buffAppend(&buff, "\x1b[?25l", 6);
+  buffAppend(&buff, "\x1b[H", 3);
+  drawAll(&buff);
+  drawStatusBar(&buff);
+  buffAppend(&buff, "\x1b[?25h", 6);
+  write(1, buff.chars, buff.len);
+  free(buff.chars);
+}
 
 void procKey(void) {
   int c = readKey();
