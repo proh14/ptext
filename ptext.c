@@ -37,11 +37,14 @@ typedef struct {
   size_t renlen;
 } row;
 
+enum { ARROW_UP = 500, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT };
+
 struct {
   int cx, cy;
   struct termios orig_termios;
   row *rows;
   int numrows;
+  int rowoff;
   size_t width;
   size_t height;
   char *filename;
@@ -130,6 +133,7 @@ void init(void) {
   conf.rows = NULL;
   conf.cx = 0;
   conf.cy = 0;
+  conf.rowoff = 0;
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   conf.width = w.ws_col;
@@ -179,6 +183,32 @@ int readKey(void) {
     if (nr == -1 && errno != EAGAIN)
       die("read");
   }
+  if (c == '\x1b') {
+    char ecode[2];
+    if (read(0, &ecode[0], 1) != 1) {
+      return '\x1b';
+    }
+    if (read(0, &ecode[1], 1) != 1) {
+      return '\x1b';
+    }
+    if (ecode[0] == '[') {
+      switch (ecode[1]) {
+      case 'A':
+        return ARROW_UP;
+        break;
+      case 'B':
+        return ARROW_DOWN;
+        break;
+      case 'C':
+        return ARROW_LEFT;
+        break;
+      case 'D':
+        return ARROW_RIGHT;
+        break;
+      }
+    }
+  }
+
   return c;
 }
 
@@ -193,12 +223,15 @@ void buffAppend(struct buff *buff, const char *s, size_t len) {
 
 void drawAll(struct buff *buff) {
   int y, x;
+  int frow;
   for (y = 0; y < conf.height - 1; y++) {
+    frow = conf.rowoff + y;
     if (y < conf.numrows) {
-      buffAppend(buff, conf.rows[y].renchar, conf.rows[y].renlen);
+      buffAppend(buff, conf.rows[frow].renchar, conf.rows[frow].renlen);
     } else {
       buffAppend(buff, "~", 1);
     }
+
     buffAppend(buff, "\x1b[K", 3);
     buffAppend(buff, "\r\n", 2);
   }
@@ -208,8 +241,8 @@ void drawStatusBar(struct buff *buff) {
   size_t len = conf.filenamelen;
   buffAppend(buff, "\x1b[7m", 4);
   buffAppend(buff, conf.filename, conf.filenamelen);
-  buffAppend(buff, " -- ptext", 9);
-  len += 9;
+  buffAppend(buff, " -- ptext  ", 11);
+  len += 11;
   while (len < conf.width) {
     buffAppend(buff, " ", 1);
     len++;
@@ -217,12 +250,26 @@ void drawStatusBar(struct buff *buff) {
   buffAppend(buff, "\x1b[27m", 5);
 }
 
+void scroll() {
+  if (conf.cy < conf.rowoff) {
+    conf.rowoff = conf.cy;
+  }
+  if (conf.cy >= conf.rowoff + conf.height) {
+    conf.rowoff = conf.cy - conf.height + 1;
+  }
+}
+
 void refresh(void) {
+  scroll();
   struct buff buff = INIT_BUFF;
   buffAppend(&buff, "\x1b[?25l", 6);
   buffAppend(&buff, "\x1b[H", 3);
+  char s[32];
   drawAll(&buff);
+  snprintf(s, sizeof(s), "\x1b[%d;%dH", (conf.cy - conf.rowoff) + 1,
+           conf.cx + 1);
   drawStatusBar(&buff);
+  buffAppend(&buff, s, strlen(s));
   buffAppend(&buff, "\x1b[?25h", 6);
   write(1, buff.chars, buff.len);
   free(buff.chars);
@@ -235,6 +282,16 @@ void procKey(void) {
     write(STDOUT_FILENO, "\x1b[2J", 4);
     write(STDOUT_FILENO, "\x1b[H", 3);
     exit(0);
+    break;
+  case ARROW_DOWN:
+    if (conf.cy < conf.numrows) {
+      conf.cy++;
+    }
+    break;
+  case ARROW_UP:
+    if (conf.cy > 0) {
+      conf.cy--;
+    }
     break;
   }
 }
