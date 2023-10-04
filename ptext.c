@@ -45,10 +45,10 @@ struct {
   row *rows;
   int numrows;
   int rowoff;
-  size_t width;
-  size_t height;
+  int width;
+  int height;
   char *filename;
-  size_t filenamelen;
+  int filenamelen;
 } conf;
 
 struct buff {
@@ -85,7 +85,7 @@ void rowAppend(char *s, size_t len) {
 void fixTabs(void) {
   row *row = &conf.rows[conf.numrows - 1];
   int tabs = 0;
-  int j;
+  size_t j;
   for (j = 0; j < row->len; j++)
     if (row->chars[j] == '\t')
       tabs++;
@@ -222,23 +222,26 @@ void buffAppend(struct buff *buff, const char *s, size_t len) {
 }
 
 void drawAll(struct buff *buff) {
-  int y, x;
+  int y;
   int frow;
   for (y = 0; y < conf.height - 1; y++) {
     frow = conf.rowoff + y;
-    if (y < conf.numrows) {
-      buffAppend(buff, conf.rows[frow].renchar, conf.rows[frow].renlen);
-    } else {
+    if (frow >= conf.numrows) {
       buffAppend(buff, "~", 1);
+    } else {
+      if (conf.rows[frow].renlen < conf.width) {
+        buffAppend(buff, conf.rows[frow].renchar, conf.rows[frow].renlen);
+      } else {
+        buffAppend(buff, conf.rows[frow].renchar, conf.width);
+      }
     }
-
     buffAppend(buff, "\x1b[K", 3);
     buffAppend(buff, "\r\n", 2);
   }
 }
 
 void drawStatusBar(struct buff *buff) {
-  size_t len = conf.filenamelen;
+  int len = conf.filenamelen;
   buffAppend(buff, "\x1b[7m", 4);
   buffAppend(buff, conf.filename, conf.filenamelen);
   buffAppend(buff, " -- ptext  ", 11);
@@ -251,11 +254,16 @@ void drawStatusBar(struct buff *buff) {
 }
 
 void scroll() {
-  if (conf.cy < conf.rowoff) {
-    conf.rowoff = conf.cy;
+  if (conf.cy < 0) {
+    conf.cy = 0;
+  } else if (conf.cy >= conf.numrows) {
+    conf.cy = conf.numrows - 1;
   }
-  if (conf.cy >= conf.rowoff + conf.height) {
-    conf.rowoff = conf.cy - conf.height + 1;
+
+  if (conf.rowoff > conf.cy) {
+    conf.rowoff = conf.cy;
+  } else if (conf.rowoff + conf.height - 1 <= conf.cy) {
+    conf.rowoff = conf.cy - conf.height + 2;
   }
 }
 
@@ -274,7 +282,6 @@ void refresh(void) {
   write(1, buff.chars, buff.len);
   free(buff.chars);
 }
-
 void procKey(void) {
   int c = readKey();
   switch (c) {
@@ -293,9 +300,23 @@ void procKey(void) {
       conf.cy--;
     }
     break;
+  case ARROW_LEFT:
+    if (conf.cx < conf.rows[conf.cy].renlen) {
+      conf.cx++;
+    } else {
+      if (conf.cy < conf.numrows) {
+        conf.cx = 0;
+        conf.cy++;
+      }
+    }
+    break;
+  case ARROW_RIGHT:
+    if (conf.cx > 0) {
+      conf.cx--;
+    }
+    break;
   }
 }
-
 int main(int argc, char *argv[]) {
   enableRawMode();
   init();
