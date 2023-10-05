@@ -37,7 +37,7 @@ typedef struct {
   size_t renlen;
 } row;
 
-enum { ARROW_UP = 500, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT };
+enum editorKeys { ARROW_UP = 500, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT };
 
 struct {
   int cx, cy;
@@ -226,10 +226,10 @@ void drawAll(struct buff *buff) {
   int frow;
   for (y = 0; y < conf.height - 1; y++) {
     frow = conf.rowoff + y;
-    if (frow >= conf.numrows) {
+    if (frow >= conf.numrows || frow == -1) {
       buffAppend(buff, "~", 1);
     } else {
-      if (conf.rows[frow].renlen < conf.width) {
+      if (conf.rows[frow].renlen < (size_t)conf.width) {
         buffAppend(buff, conf.rows[frow].renchar, conf.rows[frow].renlen);
       } else {
         buffAppend(buff, conf.rows[frow].renchar, conf.width);
@@ -241,9 +241,12 @@ void drawAll(struct buff *buff) {
 }
 
 void drawStatusBar(struct buff *buff) {
-  int len = conf.filenamelen;
+  int len = 0;
+  if (conf.filename != NULL) {
+    len = conf.filenamelen;
+    buffAppend(buff, conf.filename, conf.filenamelen);
+  }
   buffAppend(buff, "\x1b[7m", 4);
-  buffAppend(buff, conf.filename, conf.filenamelen);
   buffAppend(buff, " -- ptext  ", 11);
   len += 11;
   while (len < conf.width) {
@@ -253,7 +256,7 @@ void drawStatusBar(struct buff *buff) {
   buffAppend(buff, "\x1b[27m", 5);
 }
 
-void scroll() {
+void scroll(void) {
   if (conf.cy < 0) {
     conf.cy = 0;
   } else if (conf.cy >= conf.numrows) {
@@ -301,7 +304,7 @@ void procKey(void) {
     }
     break;
   case ARROW_LEFT:
-    if (conf.cx < conf.rows[conf.cy].renlen) {
+    if (conf.cx < (int)conf.rows[conf.cy].renlen) {
       conf.cx++;
     } else {
       if (conf.cy < conf.numrows) {

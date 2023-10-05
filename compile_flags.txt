@@ -1,0 +1,5 @@
+-Wall
+--debug
+-Wextra
+-pedantic
+-std=c99
