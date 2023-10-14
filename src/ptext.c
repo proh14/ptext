@@ -17,8 +17,11 @@
 #define _BSD_SOURCE
 #define _GNU_SOURCE
 
+#include <buff.h>
 #include <ctype.h>
 #include <errno.h>
+#include <highlighter.h>
+#include <lexer.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,11 +53,6 @@ struct {
   char *filename;
   int filenamelen;
 } conf;
-
-struct buff {
-  char *chars;
-  size_t len;
-};
 
 #define INIT_BUFF                                                              \
   { NULL, 0 }
@@ -212,27 +210,25 @@ int readKey(void) {
   return c;
 }
 
-void buffAppend(struct buff *buff, const char *s, size_t len) {
-  char *new = realloc(buff->chars, buff->len + len);
-  if (new == NULL)
-    return;
-  memcpy(&new[buff->len], s, len);
-  buff->chars = new;
-  buff->len += len;
-}
-
 void drawAll(struct buff *buff) {
   int y;
   int frow;
   for (y = 0; y < conf.height - 1; y++) {
     frow = conf.rowoff + y;
+    Lexer l;
     if (frow >= conf.numrows || frow == -1) {
       buffAppend(buff, "~", 1);
     } else {
       if (conf.rows[frow].renlen < (size_t)conf.width) {
-        buffAppend(buff, conf.rows[frow].renchar, conf.rows[frow].renlen);
+        l.content = conf.rows[frow].renchar;
+        l.contentlen = conf.rows[frow].renlen;
+        l.cursor = 0;
+        highlight(&l, buff);
       } else {
-        buffAppend(buff, conf.rows[frow].renchar, conf.width);
+        l.content = conf.rows[frow].renchar;
+        l.contentlen = conf.width;
+        l.cursor = 0;
+        highlight(&l, buff);
       }
     }
     buffAppend(buff, "\x1b[K", 3);
