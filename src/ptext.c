@@ -233,6 +233,7 @@ void drawAll(struct buff *buff) {
     }
     buffAppend(buff, "\x1b[K", 3);
     buffAppend(buff, "\r\n", 2);
+    buffAppend(buff, "\x1b[0m", 4);
   }
 }
 

@@ -55,48 +55,79 @@ const char *keywords[] = {
     "xor_eq",
 };
 
+Single_Tokens single_tokens[] = {
+    {.kind = TOKEN_SEMICOLON, .text = ";"},
+    {.kind = TOKEN_OPEN_CURLY, .text = "}"},
+    {.kind = TOKEN_CLOSE_CURLY, .text = "{"},
+    {.kind = TOKEN_OPEN_PAREN, .text = "("},
+    {.kind = TOKEN_CLOSE_PAREN, .text = ")"},
+    {.kind = TOKEN_SEMICOLON, .text = ";"},
+};
+
 #define KEYWORDS_COUNT (sizeof(keywords) / sizeof(keywords[0]))
 
 int isSymbol(char x) { return isalnum(x) || x == '_'; }
 int isSymbolStart(char x) { return isalpha(x) || x == '_'; }
 
-void trimLeft(Lexer *l) {
+int trimLeft(Lexer *l) {
+  int num = 0;
   while (isspace(l->content[l->cursor])) {
     l->cursor++;
+    num++;
   }
+  return num;
 }
 
 Token getNextToken(Lexer *l) {
   Token t = {0};
-
-  t.kind = TOKEN_END;
-  trimLeft(l);
+  int firstloc = l->cursor;
+  int spaces = trimLeft(l);
   t.text = &l->content[l->cursor];
+  if (l->cursor >= l->contentlen) {
+    t.kind = TOKEN_END;
+    return t;
+  }
 
   if (l->content[l->cursor] == '#') {
     t.kind = TOKEN_PREPROC;
-    while (l->content[l->cursor] != '\n' && l->content[l->cursor] != '\\') {
-      l->cursor++;
-      t.textlen++;
-    }
+    t.textlen = l->contentlen;
+    l->cursor = l->contentlen;
     return t;
   }
+
+  size_t i;
+  for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
+    if (l->content[l->cursor] == single_tokens[i].text[0]) {
+      t.kind = single_tokens[i].kind;
+      t.textlen = 1 + spaces;
+      l->cursor++;
+      return t;
+    }
+  }
+
   if (isSymbolStart(l->content[l->cursor])) {
     t.kind = TOKEN_SYMBOL;
-    t.textlen++;
-    l->cursor++;
-    while (isSymbol(l->content[l->cursor]) && l->cursor <= l->contentlen) {
+    while (isSymbol(l->content[l->cursor]) && l->cursor < l->contentlen) {
       t.textlen++;
-      l->content++;
+      l->cursor++;
     }
-    for (size_t i = 0; i < KEYWORDS_COUNT; ++i) {
+    for (i = 0; i < KEYWORDS_COUNT; ++i) {
       size_t keyword_len = strlen(keywords[i]);
-      if (keyword_len == t.textlen &&
+      if (keyword_len == (t.textlen) &&
           memcmp(keywords[i], t.text, keyword_len) == 0) {
         t.kind = TOKEN_KEYWORD;
+        t.textlen--;
         break;
       }
     }
+    t.textlen += spaces;
+    t.text = &l->content[firstloc];
+    return t;
   }
+  t.kind = TOKEN_INVALID;
+  t.textlen = 1;
+  t.textlen += spaces;
+  t.text = &l->content[firstloc];
+  l->cursor++;
   return t;
 }
