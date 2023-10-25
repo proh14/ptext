@@ -99,7 +99,8 @@ Token getNextToken(Lexer *l) {
   for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
     if (l->content[l->cursor] == single_tokens[i].text[0]) {
       t.kind = single_tokens[i].kind;
-      t.textlen = 1 + spaces;
+      t.textlen = 1 +  spaces;
+      t.text = &l->content[firstloc];
       l->cursor++;
       return t;
     }
@@ -116,7 +117,6 @@ Token getNextToken(Lexer *l) {
       if (keyword_len == (t.textlen) &&
           memcmp(keywords[i], t.text, keyword_len) == 0) {
         t.kind = TOKEN_KEYWORD;
-        t.textlen--;
         break;
       }
     }

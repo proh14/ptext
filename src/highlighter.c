@@ -27,6 +27,7 @@ void highlight(Lexer *l, struct buff *buff) {
       return;
       break;
     default:
+      buffAppend(buff , INVALID_COLOR, INVALID_LEN);
       buffAppend(buff, t.text, t.textlen);
       break;
     }
