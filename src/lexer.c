@@ -94,28 +94,35 @@ Token getNextToken(Lexer *l) {
     l->cursor = l->contentlen;
     return t;
   }
+  if (l->content[l->cursor] == '/') {
+    if (l->content[l->cursor + 1] == '/') {
+      t.kind = TOKEN_COMMENT;
+      t.textlen = l->contentlen;
+      l->cursor = l->contentlen;
+      return t;
+    }
+  }
 
   size_t i;
   for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
     if (l->content[l->cursor] == single_tokens[i].text[0]) {
       t.kind = single_tokens[i].kind;
-      t.textlen = 1 +  spaces;
+      t.textlen = 1 + spaces;
       t.text = &l->content[firstloc];
       l->cursor++;
       return t;
     }
   }
-  if (isdigit(l->content[l->cursor])){
-      t.kind = TOKEN_DIGIT;
-      while (isdigit(l->content[l->cursor]) && l->cursor < l->contentlen){
-          t.textlen++;
-          l->cursor++;
-          }
-          t.textlen+=spaces;
-          t.text = &l->content[firstloc];
-          return t;
-      }
-
+  if (isdigit(l->content[l->cursor])) {
+    t.kind = TOKEN_DIGIT;
+    while (isdigit(l->content[l->cursor]) && l->cursor < l->contentlen) {
+      t.textlen++;
+      l->cursor++;
+    }
+    t.textlen += spaces;
+    t.text = &l->content[firstloc];
+    return t;
+  }
 
   if (isSymbolStart(l->content[l->cursor])) {
     t.kind = TOKEN_SYMBOL;

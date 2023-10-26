@@ -13,7 +13,7 @@
 #define KEYWORD_LEN 5
 #define DIGIT_COLOR "\x1b[31m"
 #define DIGIT_LEN 5
-#define COMMENT_COLOR "\x1b[32m"
+#define COMMENT_COLOR "\x1b[36m"
 #define COMMENT_LEN 5
 #define INVALID_COLOR "\x1b[0m"
 #define INVALID_LEN 4

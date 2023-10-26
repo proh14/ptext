@@ -27,11 +27,15 @@ void highlight(Lexer *l, struct buff *buff) {
       buffAppend(buff, DIGIT_COLOR, DIGIT_LEN);
       buffAppend(buff, t.text, t.textlen);
       break;
+    case TOKEN_COMMENT:
+      buffAppend(buff, COMMENT_COLOR, COMMENT_LEN);
+      buffAppend(buff, t.text, t.textlen);
+      break;
     case TOKEN_END:
       return;
       break;
     default:
-      buffAppend(buff , INVALID_COLOR, INVALID_LEN);
+      buffAppend(buff, INVALID_COLOR, INVALID_LEN);
       buffAppend(buff, t.text, t.textlen);
       break;
     }
