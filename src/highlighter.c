@@ -23,6 +23,10 @@ void highlight(Lexer *l, struct buff *buff) {
       buffAppend(buff, PREPROC_COLOR, PREPROC_LEN);
       buffAppend(buff, t.text, t.textlen);
       break;
+    case TOKEN_DIGIT:
+      buffAppend(buff, DIGIT_COLOR, DIGIT_LEN);
+      buffAppend(buff, t.text, t.textlen);
+      break;
     case TOKEN_END:
       return;
       break;

@@ -105,6 +105,17 @@ Token getNextToken(Lexer *l) {
       return t;
     }
   }
+  if (isdigit(l->content[l->cursor])){
+      t.kind = TOKEN_DIGIT;
+      while (isdigit(l->content[l->cursor]) && l->cursor < l->contentlen){
+          t.textlen++;
+          l->cursor++;
+          }
+          t.textlen+=spaces;
+          t.text = &l->content[firstloc];
+          return t;
+      }
+
 
   if (isSymbolStart(l->content[l->cursor])) {
     t.kind = TOKEN_SYMBOL;

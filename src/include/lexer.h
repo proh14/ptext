@@ -12,6 +12,7 @@ typedef enum {
   TOKEN_OPEN_CURLY,
   TOKEN_CLOSE_CURLY,
   TOKEN_SEMICOLON,
+  TOKEN_DIGIT
 } Token_kind;
 
 typedef struct {
