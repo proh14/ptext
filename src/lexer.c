@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
-const char *keywords[] = {
+static struct flags fl = {0};
+
+static const char *keywords[] = {
     "auto",          "break",
     "case",          "char",
     "const",         "continue",
@@ -66,8 +68,8 @@ Single_Tokens single_tokens[] = {
 
 #define KEYWORDS_COUNT (sizeof(keywords) / sizeof(keywords[0]))
 
-int isSymbol(char x) { return isalnum(x) || x == '_'; }
-int isSymbolStart(char x) { return isalpha(x) || x == '_'; }
+static int isSymbol(char x) { return isalnum(x) || x == '_'; }
+static int isSymbolStart(char x) { return isalpha(x) || x == '_'; }
 
 int trimLeft(Lexer *l) {
   int num = 0;
@@ -94,15 +96,41 @@ Token getNextToken(Lexer *l) {
     l->cursor = l->contentlen;
     return t;
   }
-  if (l->content[l->cursor] == '/') {
+  if (l->content[l->cursor] == '*' && fl.in_comment) {
     if (l->content[l->cursor + 1] == '/') {
       t.kind = TOKEN_COMMENT;
-      t.textlen = l->contentlen;
-      l->cursor = l->contentlen;
+      l->cursor += 2;
+      t.textlen += 2;
+      fl.in_comment = 0;
       return t;
     }
   }
-
+  if (fl.in_comment) {
+    goto comment;
+  }
+  if (l->content[l->cursor] == '/' || fl.in_comment) {
+    if (l->cursor + 1 < l->contentlen) {
+      if (l->content[l->cursor + 1] == '/') {
+        t.kind = TOKEN_COMMENT;
+        t.textlen = l->contentlen;
+        l->cursor = l->contentlen;
+        return t;
+      }
+      if (l->content[l->cursor + 1] == '*') {
+      comment:
+        l->cursor += 1;
+        t.kind = TOKEN_COMMENT;
+        t.textlen += 1;
+        fl.in_comment = 1;
+        while (l->content[l->cursor] != '*' && l->cursor + 1 < l->contentlen) {
+          if (l->content[++l->cursor + 1] != '/') {
+            t.textlen++;
+          }
+        }
+        return t;
+      }
+    }
+  }
   size_t i;
   for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
     if (l->content[l->cursor] == single_tokens[i].text[0]) {

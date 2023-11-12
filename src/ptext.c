@@ -38,6 +38,7 @@ typedef struct {
   size_t len;
   char *renchar;
   size_t renlen;
+  Token *tokens;
 } row;
 
 enum editorKeys { ARROW_UP = 500, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT };
@@ -77,6 +78,7 @@ void rowAppend(char *s, size_t len) {
   conf.rows[at].len = len;
   conf.rows[at].renlen = 0;
   conf.rows[at].renchar = NULL;
+  conf.rows[at].tokens = NULL;
   conf.numrows++;
 }
 
@@ -101,6 +103,8 @@ void fixTabs(void) {
   }
   row->renchar[idx] = '\0';
   row->renlen = idx;
+  Lexer l = {.content = row->renchar, .contentlen = row->renlen, .cursor = 0};
+  row->tokens = prehighlight(row->tokens, &l);
 }
 
 void openFile(const char *s) {
@@ -123,7 +127,7 @@ void openFile(const char *s) {
     fixTabs();
   }
   free(line);
-  fclose(file);
+  (void)fclose(file);
 }
 
 void init(void) {
@@ -145,6 +149,7 @@ void freeall(void) {
     for (i = 0; i < conf.numrows; i++) {
       free(conf.rows[i].chars);
       free(conf.rows[i].renchar);
+      free(conf.rows[i].tokens);
     }
     free(conf.rows);
     conf.rows = NULL;
@@ -215,20 +220,13 @@ void drawAll(struct buff *buff) {
   int frow;
   for (y = 0; y < conf.height - 1; y++) {
     frow = conf.rowoff + y;
-    Lexer l;
     if (frow >= conf.numrows || frow == -1) {
       buffAppend(buff, "~", 1);
     } else {
       if (conf.rows[frow].renlen < (size_t)conf.width) {
-        l.content = conf.rows[frow].renchar;
-        l.contentlen = conf.rows[frow].renlen;
-        l.cursor = 0;
-        highlight(&l, buff);
+        highlight(conf.rows[frow].tokens, buff);
       } else {
-        l.content = conf.rows[frow].renchar;
-        l.contentlen = conf.width;
-        l.cursor = 0;
-        highlight(&l, buff);
+        highlight(conf.rows[frow].tokens, buff);
       }
     }
     buffAppend(buff, "\x1b[K", 3);
@@ -239,11 +237,11 @@ void drawAll(struct buff *buff) {
 
 void drawStatusBar(struct buff *buff) {
   int len = 0;
+  buffAppend(buff, "\x1b[7m", 4);
   if (conf.filename != NULL) {
     len = conf.filenamelen;
     buffAppend(buff, conf.filename, conf.filenamelen);
   }
-  buffAppend(buff, "\x1b[7m", 4);
   buffAppend(buff, " -- ptext  ", 11);
   len += 11;
   while (len < conf.width) {

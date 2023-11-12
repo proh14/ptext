@@ -18,5 +18,8 @@
 #define INVALID_COLOR "\x1b[0m"
 #define INVALID_LEN 4
 
-void highlight(Lexer *l, struct buff *buff);
+enum { SYMBOL, PREPROC, KEYWORD, DIGIT, COMMENT, INVALID };
+
+void highlight(Token *t, struct buff *buff);
+Token *prehighlight(Token *tokens, Lexer *l);
 #endif // _HIGHLIGHT_H_

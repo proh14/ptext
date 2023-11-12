@@ -1,6 +1,7 @@
-#include <stddef.h>
+#pragma once
 #ifndef _LEXER_H_
 #define _LEXER_H_
+#include <stddef.h>
 typedef enum {
   TOKEN_END = 0,
   TOKEN_INVALID,
@@ -32,6 +33,12 @@ typedef struct {
   char *text;
   Token_kind kind;
 } Single_Tokens;
+
+struct flags {
+  int in_comment;
+  int in_preproc;
+  int in_string;
+};
 
 Token getNextToken(Lexer *);
 
