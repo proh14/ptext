@@ -82,8 +82,7 @@ void rowAppend(char *s, size_t len) {
   conf.numrows++;
 }
 
-void fixTabs(void) {
-  row *row = &conf.rows[conf.numrows - 1];
+void fixTabs(row *row) {
   int tabs = 0;
   size_t j;
   for (j = 0; j < row->len; j++)
@@ -124,7 +123,7 @@ void openFile(const char *s) {
       len--;
     }
     rowAppend(line, len);
-    fixTabs();
+    fixTabs(&conf.rows[conf.numrows - 1]);
   }
   free(line);
   (void)fclose(file);
@@ -179,6 +178,24 @@ void enableRawMode(void) {
     die("tcsetattr");
 }
 
+void rowInsertChar(row *row, int at, int c) {
+  if (at < 0 || at > (int)row->len)
+    at = row->len;
+  row->chars = realloc(row->chars, row->len + 2);
+  memmove(&row->chars[at + 1], &row->chars[at], row->len - at + 1);
+  row->len++;
+  row->chars[at] = c;
+  fixTabs(row);
+}
+
+void insertAChar(int c) {
+  if (conf.cy == conf.numrows) {
+    rowAppend("", 0);
+  }
+  rowInsertChar(&conf.rows[conf.cy], conf.cx, c);
+  conf.cx++;
+}
+
 int readKey(void) {
   int nr;
   int c = '\0';
@@ -211,14 +228,13 @@ int readKey(void) {
       }
     }
   }
-
   return c;
 }
 
 void drawAll(struct buff *buff) {
   int y;
   int frow;
-  for (y = 0; y < conf.height - 1; y++) {
+  for (y = 0; y < conf.height - 2; y++) {
     frow = conf.rowoff + y;
     if (frow >= conf.numrows || frow == -1) {
       buffAppend(buff, "~", 1);
@@ -227,6 +243,7 @@ void drawAll(struct buff *buff) {
         highlight(conf.rows[frow].tokens, buff);
       } else {
         highlight(conf.rows[frow].tokens, buff);
+        // TODO
       }
     }
     buffAppend(buff, "\x1b[K", 3);
@@ -249,6 +266,11 @@ void drawStatusBar(struct buff *buff) {
     len++;
   }
   buffAppend(buff, "\x1b[27m", 5);
+  buffAppend(buff, "\r\n", 2);
+}
+
+void drawStatusMessage(char *message, struct buff *buff) {
+  buffAppend(buff, message, strlen(message));
 }
 
 void scroll(void) {
@@ -299,7 +321,7 @@ void procKey(void) {
     }
     break;
   case ARROW_LEFT:
-    if (conf.cx < (int)conf.rows[conf.cy].renlen) {
+    if (conf.cx < (int)conf.rows[conf.cy].renlen - 1) {
       conf.cx++;
     } else {
       if (conf.cy < conf.numrows) {
@@ -312,6 +334,9 @@ void procKey(void) {
     if (conf.cx > 0) {
       conf.cx--;
     }
+    break;
+  default:
+    insertAChar(c);
     break;
   }
 }
