@@ -119,9 +119,9 @@ Token getNextToken(Lexer *l) {
       if (l->content[l->cursor + 1] == '*') {
       comment:
         l->cursor += 1;
-        t.kind = TOKEN_COMMENT;
         t.textlen += 1;
         fl.in_comment = 1;
+        t.kind = TOKEN_COMMENT;
         while (l->content[l->cursor] != '*' && l->cursor + 1 < l->contentlen) {
           if (l->content[++l->cursor + 1] != '/') {
             t.textlen++;

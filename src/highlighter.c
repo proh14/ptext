@@ -3,11 +3,13 @@
 #include <lexer.h>
 #include <stdlib.h>
 
-void highlight(Token *t, struct buff *buff) {
+void highlight(char *hl, char *content, struct buff *buff, int len) {
   int i = 0;
+  if (hl == NULL) {
+    return;
+  }
   while (1) {
-    i++;
-    switch (t[i - 1].kind) {
+    switch (hl[i]) {
     case TOKEN_SYMBOL:
       buffAppend(buff, SYMBOL_COLOR, SYMBOL_LEN);
       break;
@@ -33,18 +35,23 @@ void highlight(Token *t, struct buff *buff) {
       buffAppend(buff, INVALID_COLOR, INVALID_LEN);
       break;
     }
-    buffAppend(buff, t[i - 1].text, t[i - 1].textlen);
+    if (i >= len)
+      return;
+    buffAppend(buff, &content[i], 1);
+    i++;
   }
 }
 
-Token *prehighlight(Token *tokens, Lexer *l) {
-  int i = 0;
-  while (1) {
-    i++;
-    tokens = realloc(tokens, sizeof(Token) * i);
-    tokens[i - 1] = getNextToken(l);
-    if (tokens[i - 1].kind == TOKEN_END)
-      break;
+void prehighlight(char *hl, Lexer *l) {
+  Token t = {0};
+  size_t hllen = 0;
+  t.kind = TOKEN_SYMBOL;
+  while (t.kind != TOKEN_END) {
+    t = getNextToken(l);
+    for (size_t i = 0; i < t.textlen; i++) {
+      hl[i + hllen] = t.kind;
+    }
+    hllen += t.textlen;
   }
-  return tokens;
+  hl[hllen] = TOKEN_END;
 }

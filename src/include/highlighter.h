@@ -15,11 +15,11 @@
 #define DIGIT_LEN 5
 #define COMMENT_COLOR "\x1b[36m"
 #define COMMENT_LEN 5
-#define INVALID_COLOR "\x1b[0m"
-#define INVALID_LEN 4
+#define INVALID_COLOR "\x1b[31m"
+#define INVALID_LEN 5
 
 enum { SYMBOL, PREPROC, KEYWORD, DIGIT, COMMENT, INVALID };
 
-void highlight(Token *t, struct buff *buff);
-Token *prehighlight(Token *tokens, Lexer *l);
+void highlight(char *hl, char *content, struct buff *buff, int len);
+void prehighlight(char *hl, Lexer *l);
 #endif // _HIGHLIGHT_H_
