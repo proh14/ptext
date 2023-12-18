@@ -96,41 +96,6 @@ Token getNextToken(Lexer *l) {
     l->cursor = l->contentlen;
     return t;
   }
-  if (l->content[l->cursor] == '*' && fl.in_comment) {
-    if (l->content[l->cursor + 1] == '/') {
-      t.kind = TOKEN_COMMENT;
-      l->cursor += 2;
-      t.textlen += 2;
-      fl.in_comment = 0;
-      return t;
-    }
-  }
-  if (fl.in_comment) {
-    goto comment;
-  }
-  if (l->content[l->cursor] == '/' || fl.in_comment) {
-    if (l->cursor + 1 < l->contentlen) {
-      if (l->content[l->cursor + 1] == '/') {
-        t.kind = TOKEN_COMMENT;
-        t.textlen = l->contentlen;
-        l->cursor = l->contentlen;
-        return t;
-      }
-      if (l->content[l->cursor + 1] == '*') {
-      comment:
-        l->cursor += 1;
-        t.textlen += 1;
-        fl.in_comment = 1;
-        t.kind = TOKEN_COMMENT;
-        while (l->content[l->cursor] != '*' && l->cursor + 1 < l->contentlen) {
-          if (l->content[++l->cursor + 1] != '/') {
-            t.textlen++;
-          }
-        }
-        return t;
-      }
-    }
-  }
   size_t i;
   for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
     if (l->content[l->cursor] == single_tokens[i].text[0]) {
