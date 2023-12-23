@@ -8,7 +8,7 @@
 <h4 align="center">A nano like text editor built with pure C </h4>
 
 ptext is a text editor based on kilo. <br> 
-My goal of making this was to learn more about managing tui interfaces not using ncruses.</br> 
+My goal of making this was to learn more about managing tui interfaces not using ncurses.</br> 
 
 
 ### Preview:
