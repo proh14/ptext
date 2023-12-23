@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static struct flags fl = {0};
-
 static const char *keywords[] = {
     "auto",          "break",
     "case",          "char",
