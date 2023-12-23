@@ -90,7 +90,7 @@ Token getNextToken(Lexer *l) {
 
   if (l->content[l->cursor] == '#') {
     t.kind = TOKEN_PREPROC;
-    t.textlen = l->contentlen;
+    t.textlen = l->contentlen - l->cursor;
     l->cursor = l->contentlen;
     return t;
   }
