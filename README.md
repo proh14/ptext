@@ -12,7 +12,9 @@ My goal of making this was to learn more about managing tui interfaces not using
 
 
 ### Preview:
-<div style="width:100%;height:0px;position:relative;padding-bottom:56.250%;"><iframe src="https://streamable.com/e/26qu1e" frameborder="0" width="100%" height="100%" allowfullscreen style="width:100%;height:100%;position:absolute;left:0px;top:0px;overflow:hidden;"></iframe></div>
+https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a66855d5
+
+
 
 ### How to install:
 1. Clone this repo.
