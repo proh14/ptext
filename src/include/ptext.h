@@ -1,11 +1,12 @@
+#pragma once
 #ifndef _PTEXT_H_
 #define _PTEXT_H_
-
-#define TABSTOP 5
 
 #include <rows.h>
 #include <termios.h>
 #include <time.h>
+
+#define TABSTOP 5
 
 struct config {
   int cx, cy;
@@ -23,5 +24,9 @@ struct config {
   time_t statusmsg_time;
   struct termios orig_termios;
 };
+
+extern struct config conf;
+
+void die(const char *s);
 
 #endif

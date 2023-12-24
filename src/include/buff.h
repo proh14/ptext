@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _BUFF_H_
 #define _BUFF_H_
 

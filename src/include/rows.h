@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _ROWS_H_
 #define _ROWS_H_
 #include <stddef.h>

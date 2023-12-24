@@ -3,8 +3,6 @@
 #include <rows.h>
 #include <stdlib.h>
 
-extern struct config conf;
-
 void updateRow(row *row) {
   int tabs = 0;
   size_t j;
