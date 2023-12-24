@@ -1,23 +1,10 @@
-#include <buff.h>
-#include <ctype.h>
-#include <cursor.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <files.h>
-#include <highlighter.h>
 #include <input.h>
-#include <lexer.h>
 #include <output.h>
 #include <ptext.h>
-#include <rows.h>
-#include <stdarg.h>
-#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/ioctl.h>
 #include <termio.h>
-#include <time.h>
 #include <unistd.h>
 
 struct config conf;
