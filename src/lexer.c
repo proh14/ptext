@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <lexer.h>
-#include <stdio.h>
 #include <string.h>
 
 static const char *keywords[] = {

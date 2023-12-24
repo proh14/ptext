@@ -1,7 +1,6 @@
 #include <buff.h>
 #include <highlighter.h>
 #include <lexer.h>
-#include <stdlib.h>
 
 void highlight(char *hl, char *content, struct buff *buff, int len) {
   int i = 0;
