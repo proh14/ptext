@@ -10,16 +10,16 @@
 ptext is a text editor based on kilo. <br> 
 My goal in making this was to learn more about managing tui interfaces not using ncurses.</br> 
 
-### Preview:
+### Preview🙈:
 https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a66855d5
 
-### How to install:
+### How to install⬇️:
 1. Clone this repo.
 2. Run `make` inside this repos main directory.
 3. go to build directory
 4. run ptext with `./ptext`!
 
-### Goals:
+### Goals🥅:
 1. Fix syntax highlighting.
 2. Add search.
 3. Add a plugin system.
@@ -28,10 +28,10 @@ https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a668
 ### Work in progress⚒️:
 This is still work in progress!
 
-### Thank you Stargazers:
+### Thank you Stargazers⭐:
 [![Stargazers repo roster for @proh14/ptext](http://reporoster.com/stars/proh14/ptext)](https://github.com/proh14/ptext/stargazers)
 
-### Thank you Forkers:
+### Thank you Forkers🍴:
 [![Forkers repo roster for @proh14/ptext](http://reporoster.com/forks/proh14/ptext)](https://github.com/proh14/ptext/network/members)
 
 ### A huge thanks to:
