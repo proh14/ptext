@@ -34,6 +34,6 @@ This is still work in progress!
 ### Thank you Forkers🍴:
 [![Forkers repo roster for @proh14/ptext](http://reporoster.com/forks/proh14/ptext)](https://github.com/proh14/ptext/network/members)
 
-### A huge thanks to:
+### A huge thanks to🙏:
 1. [viewsourcecode](https://viewsourcecode.org)
 2. [kilo](https://github.com/antirez/kilo)
