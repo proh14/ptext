@@ -8,13 +8,10 @@
 <h4 align="center">A nano like text editor built with pure C </h4>
 
 ptext is a text editor based on kilo. <br> 
-My goal of making this was to learn more about managing tui interfaces not using ncurses.</br> 
-
+My goal in making this was to learn more about managing tui interfaces not using ncurses.</br> 
 
 ### Preview:
 https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a66855d5
-
-
 
 ### How to install:
 1. Clone this repo.
@@ -28,8 +25,14 @@ https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a668
 3. Add a plugin system.
 4. Add windows.
 
-### Work in progress:
+### Work in progress⚒️:
 This is still work in progress!
+
+### Thank you Stargazers:
+[![Stargazers repo roster for @proh14/ptext](http://reporoster.com/stars/proh14/ptext)](https://github.com/proh14/ptext/stargazers)
+
+### Thank you Forkers:
+[![Forkers repo roster for @proh14/ptext](http://reporoster.com/forks/proh14/ptext)](https://github.com/proh14/ptext/network/members)
 
 ### A huge thanks to:
 1. [viewsourcecode](https://viewsourcecode.org)
