@@ -15,9 +15,35 @@ https://github.com/proh14/ptext/assets/95998030/08ee068b-fe9b-4d3f-b3e4-49d3a668
 
 ### How to install⬇️:
 1. Clone this repo.
-2. Run `make` inside this repos main directory.
+```shell
+git clone https://github.com/proh14/ptext.git
+cd ptext
+```
+2. Run `make` inside this repo's main directory.
+```shell
+make
+```
+
 3. go to build directory
-4. run ptext with `./ptext`!
+```shell
+cd build
+```
+4. run ptext!
+```shell
+./ptext <filename>
+```
+
+OR to install you may run the command
+```shell
+make install
+```
+then restart your shell and run
+```shell
+ptext <file name>
+``` 
+to start the editor.
+
+## To exit you may press Ctrl+q and Ctrl + s to save the file
 
 ### Goals🥅:
 1. Fix syntax highlighting.

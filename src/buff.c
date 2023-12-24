@@ -1,4 +1,4 @@
-#include "./buff.h"
+#include <buff.h>
 
 void buffAppend(struct buff *buff, const char *s, size_t len) {
   char *new = realloc(buff->chars, buff->len + len);
