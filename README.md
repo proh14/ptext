@@ -52,7 +52,11 @@ to start the editor.
 4. Add windows.
 
 ### Work in progress⚒️:
-This is still work in progress!
+This is still a work in progress project!
+
+### Contributions💖:
+I appreciate contributions but first of all, you must read the <br>
+Read the [CONTRIBUTING.md](CONTRIBUTING.md) Then you can send your pr!
 
 ### Thank you Stargazers⭐:
 [![Stargazers repo roster for @proh14/ptext](http://reporoster.com/stars/proh14/ptext)](https://github.com/proh14/ptext/stargazers)
