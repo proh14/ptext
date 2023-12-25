@@ -13,8 +13,10 @@
 #include <utils.h>
 
 void save(void) {
-  if (conf.filename == NULL)
+  if (conf.filename == NULL) {
+    conf.filename = getPrompt("Save as: %s");
     return;
+  }
   int len;
   char *buf = rowsToString(&len);
   int fd = open(conf.filename, O_RDWR | O_CREAT, 0644);
@@ -34,10 +36,13 @@ void save(void) {
   setStatusMessage("Can't save! I/O error: %s", strerror(errno));
 }
 
-void openFile(const char *s) {
+void openFile(char *s) {
   FILE *file = fopen(s, "r");
-  if (!file) {
+  if (!file && errno != ENOENT) {
     die("fopen");
+  } else if (errno == ENOENT) {
+    conf.filename = strdup(s);
+    return;
   }
   free(conf.filename);
   conf.filenamelen = strlen(s) + 1;
