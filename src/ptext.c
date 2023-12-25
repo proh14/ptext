@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <termio.h>
 #include <unistd.h>
+#include <utils.h>
 
 struct config conf;
 
@@ -44,6 +45,7 @@ void init(void) {
   conf.width = w.ws_col;
   conf.height = w.ws_row;
   conf.filename = NULL;
+  setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit");
   atexit(done);
 }
 
