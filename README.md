@@ -35,7 +35,7 @@ cd build
 
 OR to install you may run the command
 ```shell
-make install
+sudo make install
 ```
 then restart your shell and run
 ```shell
@@ -47,9 +47,8 @@ to start the editor.
 
 ### Goals🥅:
 1. Fix syntax highlighting.
-2. Add search.
-3. Add a plugin system.
-4. Add windows.
+2. Add a plugin system.
+3. Add windows.
 
 ### Work in progress⚒️:
 This is still a work in progress project!
