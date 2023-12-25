@@ -45,7 +45,7 @@ void init(void) {
   conf.width = w.ws_col;
   conf.height = w.ws_row;
   conf.filename = NULL;
-  setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit");
+  setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
   atexit(done);
 }
 
