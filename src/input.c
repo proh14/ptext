@@ -1,5 +1,6 @@
 #include <cursor.h>
 #include <errno.h>
+#include <files.h>
 #include <input.h>
 #include <ptext.h>
 #include <rows.h>
