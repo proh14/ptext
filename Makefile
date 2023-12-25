@@ -18,12 +18,19 @@ $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: install clean
+.PHONY: install clean uninstall
 
 install: $(BUILD_DIR)/$(TARGET_EXEC)
 	install -m 755 $< $(INSTALL_DIR)/$(TARGET_EXEC)
 
+uninstall: $(INSTALL_DIR)/$(TARGET_EXEC)
+	rm $(INSTALL_DIR)/$(TARGET_EXEC) 
+
 clean:
 	rm -r $(BUILD_DIR)
+
+clean-all:
+	rm -r $(BUILD_DIR)
+	rm $(INSTALL_DIR)/$(TARGET_EXEC)
 
 -include $(DEPS)
