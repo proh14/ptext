@@ -1,11 +1,14 @@
 #include <cursor.h>
 #include <ptext.h>
 #include <search.h>
+#include <stdlib.h>
 #include <string.h>
 #include <utils.h>
 
-void search(void) {
-  char *query = getPrompt("Search: %s", NULL);
+void searchCallBack(char *query, int c) {
+  if (c == '\x1b' || c == '\r') {
+    return;
+  }
   int i;
   for (i = 0; i < conf.numrows; i++) {
     char *match = strstr(conf.rows[i].renchar, query);
@@ -16,4 +19,9 @@ void search(void) {
       break;
     }
   }
+}
+
+void search(void) {
+  char *query = getPrompt("Search: %s", &searchCallBack);
+  free(query);
 }
