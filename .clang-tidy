@@ -1,0 +1,9 @@
+Checks: "abseil*,
+        clang-analyzer*,
+        android*,
+        google*,
+        modernize*,
+        bugprone*,
+        misc*,
+        performance*
+"
