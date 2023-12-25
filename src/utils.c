@@ -54,7 +54,7 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
       }
     } else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
       if (bufsize != 0) {
-        buf[bufsize - 1] = '\0';
+        buf[bufsize--] = '\0';
       }
     } else if (c == ESC_KEY) {
       if (callback)
