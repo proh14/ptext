@@ -15,9 +15,6 @@ void highlight(char *hl, char *content, struct buff *buff, int len) {
     case TOKEN_KEYWORD:
       buffAppend(buff, KEYWORD_COLOR, KEYWORD_LEN);
       break;
-    case TOKEN_INVALID:
-      buffAppend(buff, INVALID_COLOR, INVALID_LEN);
-      break;
     case TOKEN_PREPROC:
       buffAppend(buff, PREPROC_COLOR, PREPROC_LEN);
       break;
@@ -26,6 +23,9 @@ void highlight(char *hl, char *content, struct buff *buff, int len) {
       break;
     case TOKEN_COMMENT:
       buffAppend(buff, COMMENT_COLOR, COMMENT_LEN);
+      break;
+    case TOKEN_MATCH:
+      buffAppend(buff, MATCH_COLOR, MATCH_LEN);
       break;
     case TOKEN_END:
       return;

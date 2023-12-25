@@ -17,6 +17,8 @@
 #define COMMENT_LEN 5
 #define INVALID_COLOR "\x1b[31m"
 #define INVALID_LEN 5
+#define MATCH_COLOR "\x1b[34m"
+#define MATCH_LEN 5
 
 enum { SYMBOL, PREPROC, KEYWORD, DIGIT, COMMENT, INVALID };
 

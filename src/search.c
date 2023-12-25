@@ -1,5 +1,6 @@
 #include <cursor.h>
 #include <input.h>
+#include <lexer.h>
 #include <ptext.h>
 #include <rows.h>
 #include <search.h>
@@ -42,6 +43,7 @@ void searchCallBack(char *query, int c) {
       conf.cy = current;
       conf.cx = rowRxToCx(row, match - row->renchar);
       conf.rowoff = conf.numrows;
+      memset(&row->hl[match - row->renchar], TOKEN_MATCH, strlen(query));
       break;
     }
   }
