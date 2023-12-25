@@ -33,7 +33,7 @@ char *rowsToString(int *buflen) {
   return buf;
 }
 
-char *getPrompt(char *promt) {
+char *getPrompt(char *promt, void (*callback)(char *, int)) {
   size_t bufcap = 100;
   size_t bufsize = 0;
   const int ADD_SIZE = 16;
@@ -48,6 +48,8 @@ char *getPrompt(char *promt) {
     if (c == '\r') {
       if (bufsize != 0) {
         setStatusMessage("");
+        if (callback)
+          callback(buf, c);
         return buf;
       }
     } else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
@@ -55,6 +57,8 @@ char *getPrompt(char *promt) {
         buf[bufsize - 1] = '\0';
       }
     } else if (c == ESC_KEY) {
+      if (callback)
+        callback(buf, c);
       setStatusMessage("");
       free(buf);
       return NULL;
@@ -66,9 +70,12 @@ char *getPrompt(char *promt) {
           die("realloc");
         }
       }
+
       buf[bufsize + 1] = '\0';
       buf[bufsize] = c;
       bufsize++;
     }
+    if (callback)
+      callback(buf, c);
   }
 }

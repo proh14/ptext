@@ -14,9 +14,9 @@
 
 void save(void) {
   if (conf.filename == NULL) {
-    char *fname = getPrompt("Save as: %s");
+    char *fname = getPrompt("Save as: %s", NULL);
     if (access(fname, F_OK) != -1) {
-      char *yorn = getPrompt("File exists. Overwrite? (y/n) %s");
+      char *yorn = getPrompt("File exists. Overwrite? (y/n) %s", NULL);
       if (yorn[0] != 'y') {
         free(fname);
         free(yorn);

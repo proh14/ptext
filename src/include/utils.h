@@ -4,6 +4,6 @@
 
 char *rowsToString(int *buflen);
 void setStatusMessage(const char *fmt, ...);
-char *getPrompt(char *prompt);
+char *getPrompt(char *promt, void (*callback)(char *, int));
 
 #endif
