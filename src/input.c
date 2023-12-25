@@ -130,6 +130,13 @@ void procKey(void) {
   case CTRL_KEY('f'):
     search();
     break;
+
+  case CTRL_KEY('a'):
+    conf.cx = 0;
+    break;
+  case CTRL_KEY('e'):
+    conf.cx = conf.rows[conf.cy].renlen;
+    break;
   default:
     insertAChar(c);
     break;
