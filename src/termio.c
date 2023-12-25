@@ -1,7 +1,8 @@
+#include <ptext.h>
 #include <termios.h>
 
 void enableRawMode(void) {
-  if (tcgetattr(STDIN_FILENO, &conf.orig_termios) == -1)
+  if (tcgetattr(0, &conf.orig_termios) == -1)
     die("tcgetattr");
 
   struct termios raw = conf.orig_termios;
@@ -12,11 +13,11 @@ void enableRawMode(void) {
   raw.c_cc[VMIN] = 0;
   raw.c_cc[VTIME] = 1;
 
-  if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
+  if (tcsetattr(0, TCSAFLUSH, &raw) == -1)
     die("tcsetattr");
 }
 
 void disableRawMode(void) {
-  if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &conf.orig_termios) == -1)
+  if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1)
     die("tcsetattr");
 }
