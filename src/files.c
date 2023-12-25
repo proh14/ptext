@@ -14,8 +14,17 @@
 
 void save(void) {
   if (conf.filename == NULL) {
-    conf.filename = getPrompt("Save as: %s");
-    return;
+    char *fname = getPrompt("Save as: %s");
+    if (access(fname, F_OK) != -1) {
+      char *yorn = getPrompt("File exists. Overwrite? (y/n) %s");
+      if (yorn[0] != 'y') {
+        free(fname);
+        free(yorn);
+        return;
+      }
+      conf.filename = fname;
+      free(yorn);
+    }
   }
   int len;
   char *buf = rowsToString(&len);
