@@ -14,6 +14,19 @@ int rowCxToRx(row *row, int cx) {
   return rx;
 }
 
+int rowRxToCx(row *row, int rx) {
+  int cur_rx = 0;
+  int cx;
+  for (cx = 0; cx < row->len; cx++) {
+    if (row->chars[cx] == '\t')
+      cur_rx += (TABSTOP - 1) - (cur_rx % TABSTOP);
+    cur_rx++;
+    if (cur_rx > rx)
+      return cx;
+  }
+  return cx;
+}
+
 void scroll(void) {
   conf.rx = 0;
   if (conf.cy < conf.numrows) {
