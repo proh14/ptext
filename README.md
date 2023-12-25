@@ -43,7 +43,14 @@ ptext <file name>
 ``` 
 to start the editor.
 
-## To exit you may press Ctrl+q and Ctrl + s to save the file
+### A little bit of documentation📖:
+- To exit you can press CTRL + q
+- To save you can press CTRL + s
+- To search you can press CTRL + f
+- To goto the start of the line you can press CTRL + a
+- To goto the end of the line you can press CTRL + e
+- To goto the start of the file you can press CTRL + u
+- To goto the end of the file you can press CTRL + d
 
 ### Goals🥅:
 1. Fix syntax highlighting.
