@@ -1,20 +1,46 @@
 #include <cursor.h>
+#include <input.h>
 #include <ptext.h>
+#include <rows.h>
 #include <search.h>
 #include <stdlib.h>
 #include <string.h>
 #include <utils.h>
 
 void searchCallBack(char *query, int c) {
-  if (c == '\x1b' || c == '\r') {
+  static int direction = 1;
+  static int last_match = -1;
+
+  switch (c) {
+  case '\r':
+  case '\x1b':
+    direction = 1;
+    last_match = 0;
     return;
+    break;
+  case ARROW_UP:
+    direction = -1;
+    break;
+  case ARROW_DOWN:
+    direction = 1;
+    break;
   }
+  if (last_match == -1)
+    direction = 1;
+  int current = last_match;
   int i;
   for (i = 0; i < conf.numrows; i++) {
-    char *match = strstr(conf.rows[i].renchar, query);
+    current += direction;
+    if (current == -1)
+      current = conf.numrows - 1;
+    else if (current == conf.numrows)
+      current = 0;
+    row *row = &conf.rows[current];
+    char *match = strstr(row->renchar, query);
     if (match) {
-      conf.cy = i;
-      conf.cx = match - conf.rows[i].renchar;
+      last_match = current;
+      conf.cy = current;
+      conf.cx = rowRxToCx(row, match - row->renchar);
       conf.rowoff = conf.numrows;
       break;
     }
