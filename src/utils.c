@@ -33,7 +33,7 @@ char *rowsToString(int *buflen) {
   return buf;
 }
 
-char *getPromt(char *promt) {
+char *getPrompt(char *promt) {
   size_t bufcap = 100;
   size_t bufsize = 0;
   const int ADD_SIZE = 16;
