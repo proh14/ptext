@@ -57,7 +57,7 @@ int readKey(void) {
       die("read");
   }
   if (c == '\x1b') {
-    char ecode[2];
+    char ecode[3];
     if (read(0, &ecode[0], 1) != 1) {
       return '\x1b';
     }
@@ -78,8 +78,13 @@ int readKey(void) {
       case 'D':
         return ARROW_RIGHT;
         break;
-      case 3:
-        return DEL_KEY;
+      case '3':
+        if (read(0, &ecode[2], 1) != 1) {
+          return '\x1b';
+        }
+        if (ecode[2] == '~') {
+          return DEL_KEY;
+        }
         break;
       }
     }
@@ -105,7 +110,7 @@ void procKey(void) {
   case DEL_KEY:
   case CTRL_KEY('h'):
     if (c == DEL_KEY)
-      moveCursor(ARROW_RIGHT);
+      moveCursor(ARROW_LEFT);
     delChar();
     break;
 
