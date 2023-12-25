@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <utils.h>
 
 void delChar(void) {
   if (conf.cy == conf.numrows)
@@ -97,6 +98,23 @@ void procKey(void) {
   int c = readKey();
   switch (c) {
   case CTRL_KEY('q'):
+    if (!conf.dirty) {
+      write(1, "\x1b[2J", 4);
+      write(1, "\x1b[H", 3);
+      exit(0);
+    }
+    char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
+    if (yorn == NULL) {
+      break;
+    }
+    if (yorn[0] == 'y') {
+      free(yorn);
+      write(1, "\x1b[2J", 4);
+      write(1, "\x1b[H", 3);
+      save();
+      exit(0);
+    }
+    free(yorn);
     write(1, "\x1b[2J", 4);
     write(1, "\x1b[H", 3);
     exit(0);
