@@ -114,28 +114,29 @@ void procKey(void) {
       moveCursor(ARROW_LEFT);
     delChar();
     break;
-
   case '\r':
     insertNewLine();
     break;
-
   case CTRL_KEY('s'):
     save();
     break;
-
   case CTRL_KEY('l'):
   case '\x1b':
     break;
-
   case CTRL_KEY('f'):
     search();
     break;
-
   case CTRL_KEY('a'):
     conf.cx = 0;
     break;
   case CTRL_KEY('e'):
     conf.cx = conf.rows[conf.cy].renlen;
+    break;
+  case CTRL_KEY('d'):
+    conf.cy = conf.numrows - 1;
+    break;
+  case CTRL_KEY('u'):
+    conf.cy = 0;
     break;
   default:
     insertAChar(c);
