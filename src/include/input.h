@@ -2,6 +2,8 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
 
+#define CTRL_KEY(k) ((k)&0x1f)
+
 enum editorKeys {
   BACKSPACE = 127,
   ARROW_UP = 500,
@@ -9,6 +11,7 @@ enum editorKeys {
   ARROW_LEFT,
   ARROW_RIGHT,
   DEL_KEY,
+  ESC_KEY = 27,
 };
 
 void delChar(void);

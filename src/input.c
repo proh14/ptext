@@ -8,8 +8,6 @@
 #include <termios.h>
 #include <unistd.h>
 
-#define CTRL_KEY(k) ((k)&0x1f)
-
 void delChar(void) {
   if (conf.cy == conf.numrows)
     return;
