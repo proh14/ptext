@@ -4,6 +4,7 @@
 #include <input.h>
 #include <ptext.h>
 #include <rows.h>
+#include <search.h>
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
@@ -126,6 +127,9 @@ void procKey(void) {
   case '\x1b':
     break;
 
+  case CTRL_KEY('f'):
+    search();
+    break;
   default:
     insertAChar(c);
     break;
