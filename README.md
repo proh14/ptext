@@ -56,6 +56,8 @@ to start the editor.
 1. Fix syntax highlighting.
 2. Add a plugin system.
 3. Add windows.
+4. Add utf support.
+5. Read the terminfo database.
 
 ### Work in progress⚒️:
 This is still a work in progress project!
