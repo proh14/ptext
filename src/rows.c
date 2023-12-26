@@ -1,3 +1,4 @@
+#include <config.h>
 #include <highlighter.h>
 #include <ptext.h>
 #include <rows.h>
