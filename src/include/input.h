@@ -14,6 +14,11 @@ enum editorKeys {
   ESC_KEY = 27,
 };
 
+typedef struct keyPair {
+  int key;
+  void (*func)(void);
+} keysPair;
+
 void delChar(void);
 void insertAChar(int c);
 void insertNewLine(void);

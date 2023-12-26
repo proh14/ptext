@@ -1,3 +1,4 @@
+#include <config.h>
 #include <cursor.h>
 #include <errno.h>
 #include <files.h>
@@ -96,6 +97,12 @@ int readKey(void) {
 
 void procKey(void) {
   int c = readKey();
+  for (size_t i = 0; i < customKeysLen; i++) {
+    if (customKeys[i].key == c) {
+      customKeys[i].func();
+      return;
+    }
+  }
   switch (c) {
   case CTRL_KEY('q'):
     if (!conf.dirty) {

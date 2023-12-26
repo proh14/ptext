@@ -1,3 +1,4 @@
+#include <config.h>
 #include <cursor.h>
 #include <input.h>
 #include <ptext.h>

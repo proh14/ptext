@@ -6,8 +6,6 @@
 #include <termios.h>
 #include <time.h>
 
-#define TABSTOP 5
-
 struct config {
   int cx, cy;
   int rx;
