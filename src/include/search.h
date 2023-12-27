@@ -2,7 +2,7 @@
 #ifndef _SEARCH_H_
 #define _SEARCH_H_
 
-void searchCallBack(char *buf, int c);
 void search(void);
+void replace(void);
 
 #endif

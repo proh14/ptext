@@ -163,6 +163,9 @@ void procKey(void) {
   case CTRL_KEY('u'):
     conf.cy = 0;
     break;
+  case CTRL_KEY('r'):
+    replace();
+    break;
   default:
     insertAChar(c);
     break;
