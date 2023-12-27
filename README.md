@@ -47,6 +47,7 @@ to start the editor.
 - To exit you can press CTRL + q
 - To save you can press CTRL + s
 - To search you can press CTRL + f
+- To search & replace you can press CTRL + r
 - To goto the start of the line you can press CTRL + a
 - To goto the end of the line you can press CTRL + e
 - To goto the start of the file you can press CTRL + u
