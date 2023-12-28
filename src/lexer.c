@@ -79,7 +79,7 @@ int trimLeft(Lexer *l) {
 
 Token getNextToken(Lexer *l) {
   Token t = {0};
-  int firstloc = l->cursor;
+  int firstloc = (int)l->cursor;
   int spaces = trimLeft(l);
   t.text = &l->content[l->cursor];
   if (l->cursor >= l->contentlen) {
