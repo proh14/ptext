@@ -12,16 +12,18 @@
 #include <utils.h>
 
 void delChar(void) {
-  if (conf.cy == conf.numrows)
+  if (conf.cy == conf.numrows) {
     return;
-  if (conf.cx == 0 && conf.cy == 0)
+  }
+  if (conf.cx == 0 && conf.cy == 0) {
     return;
+  }
   row *row = &conf.rows[conf.cy];
   if (conf.cx > 0) {
     rowDelChar(row, conf.cx - 1);
     conf.cx--;
   } else {
-    conf.cx = conf.rows[conf.cy - 1].len;
+    conf.cx = (int)conf.rows[conf.cy - 1].len;
     rowAppendString(&conf.rows[conf.cy - 1], row->chars, row->len);
     delRow(conf.cy);
     conf.cy--;
@@ -55,9 +57,10 @@ void insertNewLine(void) {
 int readKey(void) {
   int nr;
   int c = '\0';
-  while ((nr = read(STDIN_FILENO, &c, 1)) != 1) {
-    if (nr == -1 && errno != EAGAIN)
+  while ((nr = (int)read(STDIN_FILENO, &c, 1)) != 1) {
+    if (nr == -1 && errno != EAGAIN) {
       die("read");
+    }
   }
   if (c == '\x1b') {
     char ecode[3];
@@ -97,7 +100,7 @@ int readKey(void) {
 
 void procKey(void) {
   int c = readKey();
-  for (size_t i = 0; i < customKeysLen; i++) {
+  for (int i = 0; i < customKeysLen; i++) {
     if (customKeys[i].key == c) {
       customKeys[i].func();
       return;
@@ -135,8 +138,9 @@ void procKey(void) {
   case BACKSPACE:
   case DEL_KEY:
   case CTRL_KEY('h'):
-    if (c == DEL_KEY)
+    if (c == DEL_KEY) {
       moveCursor(ARROW_LEFT);
+    }
     delChar();
     break;
   case '\r':
@@ -155,7 +159,7 @@ void procKey(void) {
     conf.cx = 0;
     break;
   case CTRL_KEY('e'):
-    conf.cx = conf.rows[conf.cy].renlen;
+    conf.cx = (int)conf.rows[conf.cy].renlen;
     break;
   case CTRL_KEY('d'):
     conf.cy = conf.numrows - 1;
