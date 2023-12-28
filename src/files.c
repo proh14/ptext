@@ -54,8 +54,8 @@ void openFile(char *s) {
     return;
   }
   free(conf.filename);
-  conf.filename = malloc(conf.filenamelen);
-  snprintf(conf.filename, conf.filenamelen, "%s", s);
+  conf.filename = malloc(strlen(s) + 1);
+  snprintf(conf.filename, strlen(s) + 1, "%s", s);
   char *line = NULL;
   size_t cap = 0;
   int len;
