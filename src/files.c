@@ -54,13 +54,12 @@ void openFile(char *s) {
     return;
   }
   free(conf.filename);
-  conf.filenamelen = strlen(s) + 1;
   conf.filename = malloc(conf.filenamelen);
   snprintf(conf.filename, conf.filenamelen, "%s", s);
   char *line = NULL;
   size_t cap = 0;
   int len;
-  while ((len = getline(&line, &cap, file)) != -1) {
+  while ((len = (int)getline(&line, &cap, file)) != -1) {
     while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
       len--;
     }
