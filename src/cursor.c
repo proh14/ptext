@@ -8,8 +8,9 @@ int rowCxToRx(row *row, int cx) {
   int rx = 0;
   int j;
   for (j = 0; j < cx; j++) {
-    if (row->chars[j] == '\t')
+    if (row->chars[j] == '\t') {
       rx += (TABSTOP - 1) - (rx % TABSTOP);
+    }
     rx++;
   }
   return rx;
@@ -18,12 +19,14 @@ int rowCxToRx(row *row, int cx) {
 int rowRxToCx(row *row, int rx) {
   int cur_rx = 0;
   int cx;
-  for (cx = 0; cx < row->len; cx++) {
-    if (row->chars[cx] == '\t')
+  for (cx = 0; cx < (int)row->len; cx++) {
+    if (row->chars[cx] == '\t') {
       cur_rx += (TABSTOP - 1) - (cur_rx % TABSTOP);
+    }
     cur_rx++;
-    if (cur_rx > rx)
+    if (cur_rx > rx) {
       return cx;
+    }
   }
   return cx;
 }
@@ -72,7 +75,7 @@ void moveCursor(int key) {
       conf.cx--;
     } else if (conf.cy > 0) {
       conf.cy--;
-      conf.cx = conf.rows[conf.cy].len;
+      conf.cx = (int)conf.rows[conf.cy].len;
     }
     break;
   case ARROW_UP:
@@ -88,7 +91,7 @@ void moveCursor(int key) {
   }
 
   row = (conf.cy >= conf.numrows) ? NULL : &conf.rows[conf.cy];
-  int rowlen = row ? row->len : 0;
+  int rowlen = row ? (int)row->len : 0;
   if (conf.cx > rowlen) {
     conf.cx = rowlen;
   }
