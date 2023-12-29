@@ -13,9 +13,10 @@ typedef enum {
   TOKEN_CLOSE_PAREN,
   TOKEN_MATCH,
   TOKEN_OPEN_CURLY,
-  TOKEN_CLOSE_CURLY = '=',
-  TOKEN_SEMICOLON = 'd',
-  TOKEN_DIGIT = 'e'
+  TOKEN_CLOSE_CURLY,
+  TOKEN_SEMICOLON,
+  TOKEN_STRING,
+  TOKEN_DIGIT,
 } Token_kind;
 
 typedef struct {

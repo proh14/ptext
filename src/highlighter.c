@@ -27,6 +27,9 @@ void highlight(char *hl, char *content, struct buff *buff, int len) {
     case TOKEN_MATCH:
       buffAppend(buff, MATCH_COLOR, MATCH_LEN);
       break;
+    case TOKEN_STRING:
+      buffAppend(buff, STRING_COLOR, STRING_LEN);
+      break;
     case TOKEN_END:
       return;
       break;
