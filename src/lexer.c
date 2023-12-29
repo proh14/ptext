@@ -78,20 +78,43 @@ int trimLeft(Lexer *l) {
 }
 
 Token getNextToken(Lexer *l) {
+  static int in_comment = 0;
   Token t = {0};
+  int spaces = 0;
   int firstloc = (int)l->cursor;
-  int spaces = trimLeft(l);
+  if (!in_comment) {
+    spaces = trimLeft(l);
+  }
   t.text = &l->content[l->cursor];
   if (l->cursor >= l->contentlen) {
     t.kind = TOKEN_END;
     return t;
   }
 
-  if (l->content[l->cursor] == '/' && l->content[l->cursor + 1] == '/') {
-    t.kind = TOKEN_COMMENT;
-    t.textlen = l->contentlen - l->cursor;
-    l->cursor = l->contentlen;
-    return t;
+  if (l->content[l->cursor] == '/' || in_comment) {
+    if (l->content[l->cursor + 1] == '/' && !in_comment) {
+      t.kind = TOKEN_COMMENT;
+      t.textlen = l->contentlen - l->cursor;
+      l->cursor = l->contentlen;
+      return t;
+    }
+    if (l->content[l->cursor + 1] == '*' || in_comment) {
+      in_comment = 1;
+      t.kind = TOKEN_COMMENT;
+      if (!in_comment) {
+        l->cursor += 2;
+      }
+      while (l->cursor < l->contentlen) {
+        if (l->content[l->cursor] == '*' && l->content[l->cursor + 1] == '/') {
+          l->cursor += 2;
+          in_comment = 0;
+          break;
+        }
+        l->cursor++;
+      }
+      t.textlen = l->cursor - firstloc;
+      return t;
+    }
   }
 
   if (l->content[l->cursor] == '#') {
