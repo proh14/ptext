@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 TARGET_EXEC := ptext
 BUILD_DIR := ./build
 INSTALL_DIR := /usr/local/bin
@@ -9,7 +9,7 @@ DEPS := $(OBJS:.o=.d)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 CFLAGS := $(INC_FLAGS) -MMD -MP -Wall -g -Wextra -pedantic -std=c99
-LDFLAGS :=
+LDFLAGS := 
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
@@ -21,7 +21,7 @@ $(BUILD_DIR)/%.c.o: %.c
 .PHONY: install clean uninstall
 
 install: $(BUILD_DIR)/$(TARGET_EXEC)
-	install -m 755 $< $(INSTALL_DIR)/$(TARGET_EXEC)
+	sudo install -m 755 $< $(INSTALL_DIR)/$(TARGET_EXEC)
 
 uninstall: $(INSTALL_DIR)/$(TARGET_EXEC)
 	rm $(INSTALL_DIR)/$(TARGET_EXEC) 

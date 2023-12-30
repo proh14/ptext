@@ -35,7 +35,7 @@ cd build
 
 OR to install you may run the command
 ```shell
-sudo make install
+make install
 ```
 then restart your shell and run
 ```shell
