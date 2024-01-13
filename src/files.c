@@ -22,9 +22,9 @@ void save(void) {
         free(yorn);
         return;
       }
-      conf.filename = fname;
       free(yorn);
     }
+    conf.filename = fname;
   }
   int len;
   char *buf = rowsToString(&len);
