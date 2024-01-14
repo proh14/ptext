@@ -1,4 +1,4 @@
-CC=clang
+CC=gcc
 TARGET_EXEC := ptext
 BUILD_DIR := ./build
 INSTALL_DIR := /usr/local/bin
