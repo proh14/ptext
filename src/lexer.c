@@ -131,9 +131,12 @@ Token getNextToken(Lexer *l) {
       t.textlen++;
       l->cursor++;
     }
-    t.textlen++;
-    t.textlen++;
-    l->cursor++;
+    if (l->content[l->cursor] == '"') {
+      t.textlen++;
+      t.textlen++;
+      l->cursor++;
+    }
+    t.textlen = l->cursor - firstloc;
     return t;
   }
 
