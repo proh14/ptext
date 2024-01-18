@@ -3,7 +3,6 @@
 
 #include <buff.h>
 #include <lexer.h>
-#include <stddef.h>
 
 #define SYMBOL_COLOR "\x1b[0m"
 #define SYMBOL_LEN 4

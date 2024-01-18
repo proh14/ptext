@@ -51,3 +51,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Visual Studio compilation files
+
+/x86
+/x64
+/.vs
+*.vcxproj.filters
+*.vcxproj.user

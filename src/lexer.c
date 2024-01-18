@@ -1,56 +1,104 @@
-#include <ctype.h>
+#include <stdafx.h>
+
 #include <lexer.h>
-#include <string.h>
 
 static const char *keywords[] = {
-    "auto",          "break",
-    "case",          "char",
-    "const",         "continue",
-    "default",       "do",
-    "double",        "else",
-    "enum",          "extern",
-    "float",         "for",
-    "goto",          "if",
-    "int",           "long",
-    "register",      "return",
-    "short",         "signed",
-    "sizeof",        "static",
-    "struct",        "switch",
-    "typedef",       "union",
-    "unsigned",      "void",
-    "volatile",      "while",
-    "alignas",       "alignof",
-    "and",           "and_eq",
-    "asm",           "atomic_cancel",
-    "atomic_commit", "atomic_noexcept",
-    "bitand",        "bitor",
-    "bool",          "catch",
-    "char16_t",      "char32_t",
-    "char8_t",       "class",
-    "co_await",      "co_return",
-    "co_yield",      "compl",
-    "concept",       "const_cast",
-    "consteval",     "constexpr",
-    "constinit",     "decltype",
-    "delete",        "dynamic_cast",
-    "explicit",      "export",
-    "false",         "friend",
-    "inline",        "mutable",
-    "namespace",     "new",
-    "noexcept",      "not",
-    "not_eq",        "nullptr",
-    "operator",      "or",
-    "or_eq",         "private",
-    "protected",     "public",
-    "reflexpr",      "reinterpret_cast",
-    "requires",      "static_assert",
-    "static_cast",   "synchronized",
-    "template",      "this",
-    "thread_local",  "throw",
-    "true",          "try",
-    "typeid",        "typename",
-    "using",         "virtual",
-    "wchar_t",       "xor",
+    "auto",
+    "break",
+    "case",
+    "char",
+    "const",
+    "continue",
+    "default",
+    "do",
+    "double",
+    "else",
+    "enum",
+    "extern",
+    "float",
+    "for",
+    "goto",
+    "if",
+    "int",
+    "long",
+    "register",
+    "return",
+    "short",
+    "signed",
+    "sizeof",
+    "static",
+    "struct",
+    "switch",
+    "typedef",
+    "union",
+    "unsigned",
+    "void",
+    "volatile",
+    "while",
+    "alignas",
+    "alignof",
+    "and",
+    "and_eq",
+    "asm",
+    "atomic_cancel",
+    "atomic_commit",
+    "atomic_noexcept",
+    "bitand",
+    "bitor",
+    "bool",
+    "catch",
+    "char16_t",
+    "char32_t",
+    "char8_t",
+    "class",
+    "co_await",
+    "co_return",
+    "co_yield",
+    "compl",
+    "concept",
+    "const_cast",
+    "consteval",
+    "constexpr",
+    "constinit",
+    "decltype",
+    "delete",
+    "dynamic_cast",
+    "explicit",
+    "export",
+    "false",
+    "friend",
+    "inline",
+    "mutable",
+    "namespace",
+    "new",
+    "noexcept",
+    "not",
+    "not_eq",
+    "nullptr",
+    "operator",
+    "or",
+    "or_eq",
+    "private",
+    "protected",
+    "public",
+    "reflexpr",
+    "reinterpret_cast",
+    "requires",
+    "static_assert",
+    "static_cast",
+    "synchronized",
+    "template",
+    "this",
+    "thread_local",
+    "throw",
+    "true",
+    "try",
+    "typeid",
+    "typename",
+    "using",
+    "virtual",
+    "wchar_t",
+    "xor",
     "xor_eq",
 };
 
@@ -68,44 +116,55 @@ Single_Tokens single_tokens[] = {
 static int isSymbol(char x) { return isalnum(x) || x == '_'; }
 static int isSymbolStart(char x) { return isalpha(x) || x == '_'; }
 
-int trimLeft(Lexer *l) {
+int trimLeft(Lexer *l)
+{
   int num = 0;
-  while (isspace(l->content[l->cursor])) {
+  while (isspace(l->content[l->cursor]))
+  {
     l->cursor++;
     num++;
   }
   return num;
 }
 
-Token getNextToken(Lexer *l) {
+Token getNextToken(Lexer *l)
+{
   static int in_comment = 0;
   Token t = {0};
   int spaces = 0;
   int firstloc = (int)l->cursor;
-  if (!in_comment) {
+  if (!in_comment)
+  {
     spaces = trimLeft(l);
   }
   t.text = &l->content[l->cursor];
-  if (l->cursor >= l->contentlen) {
+  if (l->cursor >= l->contentlen)
+  {
     t.kind = TOKEN_END;
     return t;
   }
 
-  if (l->content[l->cursor] == '/' || in_comment) {
-    if (l->content[l->cursor + 1] == '/' && !in_comment) {
+  if (l->content[l->cursor] == '/' || in_comment)
+  {
+    if (l->content[l->cursor + 1] == '/' && !in_comment)
+    {
       t.kind = TOKEN_COMMENT;
       t.textlen = l->contentlen - l->cursor;
       l->cursor = l->contentlen;
       return t;
     }
-    if (l->content[l->cursor + 1] == '*' || in_comment) {
+    if (l->content[l->cursor + 1] == '*' || in_comment)
+    {
       in_comment = 1;
       t.kind = TOKEN_COMMENT;
-      if (!in_comment) {
+      if (!in_comment)
+      {
         l->cursor += 2;
       }
-      while (l->cursor < l->contentlen) {
-        if (l->content[l->cursor] == '*' && l->content[l->cursor + 1] == '/') {
+      while (l->cursor < l->contentlen)
+      {
+        if (l->content[l->cursor] == '*' && l->content[l->cursor + 1] == '/')
+        {
           l->cursor += 2;
           in_comment = 0;
           break;
@@ -117,21 +176,25 @@ Token getNextToken(Lexer *l) {
     }
   }
 
-  if (l->content[l->cursor] == '#') {
+  if (l->content[l->cursor] == '#')
+  {
     t.kind = TOKEN_PREPROC;
     l->cursor = l->contentlen;
     t.textlen = l->cursor - firstloc;
     return t;
   }
 
-  if (l->content[l->cursor] == '"') {
+  if (l->content[l->cursor] == '"')
+  {
     t.kind = TOKEN_STRING;
     l->cursor++;
-    while (l->content[l->cursor] != '"' && l->cursor < l->contentlen) {
+    while (l->content[l->cursor] != '"' && l->cursor < l->contentlen)
+    {
       t.textlen++;
       l->cursor++;
     }
-    if (l->content[l->cursor] == '"') {
+    if (l->content[l->cursor] == '"')
+    {
       t.textlen++;
       t.textlen++;
       l->cursor++;
@@ -141,8 +204,10 @@ Token getNextToken(Lexer *l) {
   }
 
   size_t i;
-  for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i) {
-    if (l->content[l->cursor] == single_tokens[i].text[0]) {
+  for (i = 0; i < sizeof(single_tokens) / sizeof(single_tokens[0]); ++i)
+  {
+    if (l->content[l->cursor] == single_tokens[i].text[0])
+    {
       t.kind = single_tokens[i].kind;
       t.textlen = 1 + spaces;
       t.text = &l->content[firstloc];
@@ -150,9 +215,11 @@ Token getNextToken(Lexer *l) {
       return t;
     }
   }
-  if (isdigit(l->content[l->cursor])) {
+  if (isdigit(l->content[l->cursor]))
+  {
     t.kind = TOKEN_DIGIT;
-    while (isdigit(l->content[l->cursor]) && l->cursor < l->contentlen) {
+    while (isdigit(l->content[l->cursor]) && l->cursor < l->contentlen)
+    {
       t.textlen++;
       l->cursor++;
     }
@@ -161,16 +228,20 @@ Token getNextToken(Lexer *l) {
     return t;
   }
 
-  if (isSymbolStart(l->content[l->cursor])) {
+  if (isSymbolStart(l->content[l->cursor]))
+  {
     t.kind = TOKEN_SYMBOL;
-    while (isSymbol(l->content[l->cursor]) && l->cursor < l->contentlen) {
+    while (isSymbol(l->content[l->cursor]) && l->cursor < l->contentlen)
+    {
       t.textlen++;
       l->cursor++;
     }
-    for (i = 0; i < KEYWORDS_COUNT; ++i) {
+    for (i = 0; i < KEYWORDS_COUNT; ++i)
+    {
       size_t keyword_len = strlen(keywords[i]);
       if (keyword_len == (t.textlen) &&
-          memcmp(keywords[i], t.text, keyword_len) == 0) {
+          memcmp(keywords[i], t.text, keyword_len) == 0)
+      {
         t.kind = TOKEN_KEYWORD;
         break;
       }

@@ -2,9 +2,8 @@
 #ifndef _BUFF_H_
 #define _BUFF_H_
 
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdafx.h>
+
 struct buff {
   char *chars;
   size_t len;

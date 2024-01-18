@@ -1,10 +1,19 @@
+#include <stdafx.h>
+
 #include <ptext.h>
-#include <termios.h>
 
-void enableRawMode(void) {
-  if (tcgetattr(0, &conf.orig_termios) == -1)
-    die("tcgetattr");
+void enableRawMode(void)
+{
+#ifdef _WIN32
 
+  if (!GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &conf.originalConsoleMode))
+    die("GetConsoleMode");
+
+  DWORD newConsoleMode = conf.originalConsoleMode & ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+  if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), newConsoleMode))
+    die("SetConsoleMode");
+
+#elif defined(__linux__)
   struct termios raw = conf.orig_termios;
   raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
   raw.c_oflag &= ~(OPOST);
@@ -15,9 +24,16 @@ void enableRawMode(void) {
 
   if (tcsetattr(0, TCSAFLUSH, &raw) == -1)
     die("tcsetattr");
+#endif
 }
 
-void disableRawMode(void) {
+void disableRawMode(void)
+{
+#ifdef _WIN32
+  if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), conf.originalConsoleMode))
+    die("SetConsoleMode");
+#else
   if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1)
     die("tcsetattr");
+#endif
 }

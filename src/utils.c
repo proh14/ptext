@@ -1,14 +1,12 @@
-#include <ctype.h>
-#include <input.h>
-#include <output.h>
-#include <ptext.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <utils.h>
+#include <stdafx.h>
 
-void setStatusMessage(const char *fmt, ...) {
+#include <ptext.h>
+#include <utils.h>
+#include <output.h>
+#include <input.h>
+
+void setStatusMessage(const char *fmt, ...)
+{
   va_list ap;
   va_start(ap, fmt);
   vsnprintf(conf.statusmsg, sizeof(conf.statusmsg), fmt, ap);
@@ -16,7 +14,8 @@ void setStatusMessage(const char *fmt, ...) {
   conf.statusmsg_time = time(NULL);
 }
 
-char *rowsToString(int *buflen) {
+char *rowsToString(int *buflen)
+{
   int totlen = 0;
   int j;
   for (j = 0; j < conf.numrows; j++)
@@ -24,7 +23,8 @@ char *rowsToString(int *buflen) {
   *buflen = totlen;
   char *buf = malloc(totlen);
   char *p = buf;
-  for (j = 0; j < conf.numrows; j++) {
+  for (j = 0; j < conf.numrows; j++)
+  {
     memcpy(p, conf.rows[j].chars, conf.rows[j].len);
     p += conf.rows[j].len;
     *p = '\n';
@@ -33,40 +33,65 @@ char *rowsToString(int *buflen) {
   return buf;
 }
 
-char *getPrompt(char *promt, void (*callback)(char *, int)) {
+char *getPrompt(char *promt, void (*callback)(char *, int))
+{
   size_t bufcap = 100;
   size_t bufsize = 0;
   const int ADD_SIZE = 16;
   char *buf = malloc(100);
   buf[0] = '\0';
 
-  while (1) {
+  while (1)
+  {
     setStatusMessage(promt, buf);
     refresh();
 
+#ifdef _WIN32
+    KEY_EVENT_RECORD key = readKey();
+    int c = key.wVirtualKeyCode;
+
+    if (c == VK_RETURN)
+#else
     int c = readKey();
-    if (c == '\r') {
-      if (bufsize != 0) {
+    if (c == '\r')
+#endif
+    {
+      if (bufsize != 0)
+      {
         setStatusMessage("");
         if (callback)
           callback(buf, c);
         return buf;
       }
-    } else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
-      if (bufsize != 0) {
+    }
+#ifdef _WIN32
+    else if (c == DEL_KEY || ((key.dwControlKeyState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) && (key.uChar.AsciiChar == 'H')) || c == BACKSPACE)
+    {
+#else
+    else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE)
+    {
+#endif
+      if (bufsize != 0)
+      {
         buf[--bufsize] = '\0';
       }
-    } else if (c == ESC_KEY) {
+    }
+    else if (c == ESC_KEY)
+    {
       if (callback)
         callback(buf, c);
       setStatusMessage("");
       free(buf);
       return NULL;
-    } else if (!iscntrl(c) && c < 128) {
-      if (bufcap == bufsize - 1) {
+    }
+    else if (!iscntrl(c) && c < 128)
+    {
+      if (bufcap == bufsize - 1)
+      {
         bufcap += ADD_SIZE;
         buf = realloc(buf, bufsize);
-        if (buf == NULL) {
+        if (buf == NULL)
+        {
           die("realloc");
         }
       }
