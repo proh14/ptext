@@ -49,13 +49,6 @@ int main(int argc, char *argv[]) {
     procKey();
   }
 
-#ifdef _INC_CRTDBG
-  _CrtDumpMemoryLeaks();
-#endif // _INC_CRTDBG
-
-#ifdef _WIN32
-  FreeConsole();
-#endif // _WIN32
   return EXIT_SUCCESS;
 }
 
@@ -112,6 +105,13 @@ void freeall(void) {
 }
 
 void done(void) {
+#ifdef _INC_CRTDBG
+  _CrtDumpMemoryLeaks();
+#endif // _INC_CRTDBG
+
+#ifdef _WIN32
+  FreeConsole();
+#endif // _WIN32
   freeall();
   disableRawMode();
 }
