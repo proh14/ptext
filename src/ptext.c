@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 #ifdef _INC_CRTDBG
   _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
   _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-#endif  // _INC_CRTDBG
+#endif // _INC_CRTDBG
 
   enableRawMode();
   init();
@@ -51,11 +51,11 @@ int main(int argc, char *argv[]) {
 
 #ifdef _INC_CRTDBG
   _CrtDumpMemoryLeaks();
-#endif  // _INC_CRTDBG
+#endif // _INC_CRTDBG
 
 #ifdef _WIN32
   FreeConsole();
-#endif  // _WIN32
+#endif // _WIN32
   return EXIT_SUCCESS;
 }
 
@@ -71,7 +71,6 @@ void init(void) {
   conf.cy = 0;
   conf.dirty = 0;
   conf.rowoff = 0;
-
 #ifdef _WIN32
   SetConsoleOutputCP(CP_UTF8);
 
@@ -90,7 +89,7 @@ void init(void) {
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   conf.width = w.ws_col;
   conf.height = w.ws_row;
-#endif  // _WIN32
+#endif // _WIN32
 
   conf.filename = NULL;
   setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
