@@ -21,7 +21,7 @@ $(BUILD_DIR)/%.c.o: %.c
 .PHONY: install clean uninstall
 
 install: $(BUILD_DIR)/$(TARGET_EXEC)
-	sudo install -m 755 $< $(INSTALL_DIR)/$(TARGET_EXEC)
+	install -m 755 $< $(INSTALL_DIR)/$(TARGET_EXEC)
 
 uninstall: $(INSTALL_DIR)/$(TARGET_EXEC)
 	rm $(INSTALL_DIR)/$(TARGET_EXEC) 
