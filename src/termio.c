@@ -22,7 +22,8 @@ void enableRawMode(void) {
   raw.c_cc[VMIN] = 0;
   raw.c_cc[VTIME] = 1;
 
-  if (tcsetattr(0, TCSAFLUSH, &raw) == -1) die("tcsetattr");
+  if (tcsetattr(0, TCSAFLUSH, &raw) == -1)
+    die("tcsetattr");
 #endif
 }
 
@@ -31,6 +32,7 @@ void disableRawMode(void) {
   if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), conf.originalConsoleMode))
     die("SetConsoleMode");
 #else
-  if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1) die("tcsetattr");
+  if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1)
+    die("tcsetattr");
 #endif
 }
