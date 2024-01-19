@@ -97,10 +97,9 @@ void init(void) {
 }
 
 void freeall(void) {
-  if (conf.rows != NULL && conf.numrows != 0) {
+  if (conf.rows == NULL && conf.numrows == 0) {
     return;
   }
-
   for (int i = 0; i < conf.numrows; i++) {
     free(conf.rows[i].chars);
     free(conf.rows[i].renchar);
