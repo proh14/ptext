@@ -14,6 +14,8 @@ void enableRawMode(void) {
     die("SetConsoleMode");
 
 #elif defined(__linux__)
+  if (tcgetattr(STDIN_FILENO, &conf.orig_termios) == -1)
+    die("tcgetattr");
   struct termios raw = conf.orig_termios;
   raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
   raw.c_oflag &= ~(OPOST);
