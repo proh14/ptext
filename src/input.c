@@ -87,26 +87,26 @@ int readKey(void) {
     }
     if (ecode[0] == '[') {
       switch (ecode[1]) {
-        case 'A':
-          return ARROW_UP;
-          break;
-        case 'B':
-          return ARROW_DOWN;
-          break;
-        case 'C':
-          return ARROW_LEFT;
-          break;
-        case 'D':
-          return ARROW_RIGHT;
-          break;
-        case '3':
-          if (read(0, &ecode[2], 1) != 1) {
-            return '\x1b';
-          }
-          if (ecode[2] == '~') {
-            return DEL_KEY;
-          }
-          break;
+      case 'A':
+        return ARROW_UP;
+        break;
+      case 'B':
+        return ARROW_DOWN;
+        break;
+      case 'C':
+        return ARROW_LEFT;
+        break;
+      case 'D':
+        return ARROW_RIGHT;
+        break;
+      case '3':
+        if (read(0, &ecode[2], 1) != 1) {
+          return '\x1b';
+        }
+        if (ecode[2] == '~') {
+          return DEL_KEY;
+        }
+        break;
       }
     }
   }
@@ -117,7 +117,8 @@ int readKey(void) {
 void procKey(void) {
 #ifdef _WIN32
   KEY_EVENT_RECORD key = readKey();
-  if (key.uChar.AsciiChar == 0) return;
+  if (key.uChar.AsciiChar == 0)
+    return;
 
   if (key.dwControlKeyState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) {
     if (handleCustomKeys(key.wVirtualKeyCode)) {
@@ -125,77 +126,76 @@ void procKey(void) {
     }
 
     switch (key.wVirtualKeyCode) {
-      case KEY_Q: {
-        if (!conf.dirty) {
-          system("cls");
-          exit(0);
-        }
-
-        char *yorn =
-            getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
-        if (yorn == NULL) {
-          break;
-        }
-
-        if (yorn[0] == 'y') {
-          free(yorn);
-          system("cls");
-          save();
-          exit(0);
-        }
-
-        free(yorn);
+    case KEY_Q: {
+      if (!conf.dirty) {
         system("cls");
         exit(0);
-      } break;
-      case KEY_H:
-        delChar();
+      }
+
+      char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
+      if (yorn == NULL) {
         break;
-      case KEY_S:
+      }
+
+      if (yorn[0] == 'y') {
+        free(yorn);
+        system("cls");
         save();
-        break;
-      case KEY_F:
-        search();
-        break;
-      case KEY_A:
-        conf.cx = 0;
-        break;
-      case KEY_E:
-        conf.cx = (int)conf.rows[conf.cy].renlen;
-        break;
-      case KEY_D:
-        conf.cy = conf.numrows - 1;
-        break;
-      case KEY_U:
-        conf.cy = 0;
-        break;
-      case KEY_R:
-        replace();
-        break;
+        exit(0);
+      }
+
+      free(yorn);
+      system("cls");
+      exit(0);
+    } break;
+    case KEY_H:
+      delChar();
+      break;
+    case KEY_S:
+      save();
+      break;
+    case KEY_F:
+      search();
+      break;
+    case KEY_A:
+      conf.cx = 0;
+      break;
+    case KEY_E:
+      conf.cx = (int)conf.rows[conf.cy].renlen;
+      break;
+    case KEY_D:
+      conf.cy = conf.numrows - 1;
+      break;
+    case KEY_U:
+      conf.cy = 0;
+      break;
+    case KEY_R:
+      replace();
+      break;
     }
     return;
   }
 
   switch (key.wVirtualKeyCode) {
-    case ARROW_DOWN:
-    case ARROW_UP:
-    case ARROW_LEFT:
-    case ARROW_RIGHT:
-      moveCursor(key.wVirtualKeyCode);
-      break;
-    case BACKSPACE:
-    case DEL_KEY:
-      if (key.wVirtualKeyCode == DEL_KEY) {
-        moveCursor(ARROW_LEFT);
-      }
-      delChar();
-      break;
-    case '\r':
-      insertNewLine();
-      break;
-    default:
-      insertAChar(key.uChar.AsciiChar);
-      break;
+  case ARROW_DOWN:
+  case ARROW_UP:
+  case ARROW_LEFT:
+  case ARROW_RIGHT:
+    moveCursor(key.wVirtualKeyCode);
+    break;
+  case BACKSPACE:
+  case DEL_KEY:
+    if (key.wVirtualKeyCode == DEL_KEY) {
+      moveCursor(ARROW_LEFT);
+    }
+    delChar();
+    break;
+  case '\r':
+    insertNewLine();
+    break;
+  default:
+    insertAChar(key.uChar.AsciiChar);
+    break;
   }
 #else
   int c = readKey();
@@ -204,75 +204,75 @@ void procKey(void) {
   }
 
   switch (c) {
-    case CTRL_KEY('q'): {
-      if (!conf.dirty) {
-        write(1, "\x1b[2J", 4);
-        write(1, "\x1b[H", 3);
-        exit(0);
-      }
-      char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
-      if (yorn == NULL) {
-        break;
-      }
-      if (yorn[0] == 'y') {
-        free(yorn);
-        write(1, "\x1b[2J", 4);
-        write(1, "\x1b[H", 3);
-        save();
-        exit(0);
-      }
-      free(yorn);
+  case CTRL_KEY('q'): {
+    if (!conf.dirty) {
       write(1, "\x1b[2J", 4);
       write(1, "\x1b[H", 3);
       exit(0);
-    } break;
-    case ARROW_DOWN:
-    case ARROW_UP:
-    case ARROW_LEFT:
-    case ARROW_RIGHT:
-      moveCursor(c);
+    }
+    char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
+    if (yorn == NULL) {
       break;
-    case BACKSPACE:
-    case DEL_KEY:
-    case CTRL_KEY('h'):
-      if (c == DEL_KEY) {
-        moveCursor(ARROW_LEFT);
-      }
-      delChar();
-      break;
-    case '\r':
-      insertNewLine();
-      break;
-    case CTRL_KEY('s'):
+    }
+    if (yorn[0] == 'y') {
+      free(yorn);
+      write(1, "\x1b[2J", 4);
+      write(1, "\x1b[H", 3);
       save();
-      break;
+      exit(0);
+    }
+    free(yorn);
+    write(1, "\x1b[2J", 4);
+    write(1, "\x1b[H", 3);
+    exit(0);
+  } break;
+  case ARROW_DOWN:
+  case ARROW_UP:
+  case ARROW_LEFT:
+  case ARROW_RIGHT:
+    moveCursor(c);
+    break;
+  case BACKSPACE:
+  case DEL_KEY:
+  case CTRL_KEY('h'):
+    if (c == DEL_KEY) {
+      moveCursor(ARROW_LEFT);
+    }
+    delChar();
+    break;
+  case '\r':
+    insertNewLine();
+    break;
+  case CTRL_KEY('s'):
+    save();
+    break;
 
-      // TODO: what is it used for?
-    case CTRL_KEY('l'):
-    case '\x1b':
-      break;
+    // TODO: what is it used for?
+  case CTRL_KEY('l'):
+  case '\x1b':
+    break;
 
-    case CTRL_KEY('f'):
-      search();
-      break;
-    case CTRL_KEY('a'):
-      conf.cx = 0;
-      break;
-    case CTRL_KEY('e'):
-      conf.cx = (int)conf.rows[conf.cy].renlen;
-      break;
-    case CTRL_KEY('d'):
-      conf.cy = conf.numrows - 1;
-      break;
-    case CTRL_KEY('u'):
-      conf.cy = 0;
-      break;
-    case CTRL_KEY('r'):
-      replace();
-      break;
-    default:
-      insertAChar(c);
-      break;
+  case CTRL_KEY('f'):
+    search();
+    break;
+  case CTRL_KEY('a'):
+    conf.cx = 0;
+    break;
+  case CTRL_KEY('e'):
+    conf.cx = (int)conf.rows[conf.cy].renlen;
+    break;
+  case CTRL_KEY('d'):
+    conf.cy = conf.numrows - 1;
+    break;
+  case CTRL_KEY('u'):
+    conf.cy = 0;
+    break;
+  case CTRL_KEY('r'):
+    replace();
+    break;
+  default:
+    insertAChar(c);
+    break;
   }
 #endif
 }
