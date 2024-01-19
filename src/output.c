@@ -7,7 +7,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define INIT_BUFF \
+#define INIT_BUFF                                                              \
   { NULL, 0 }
 
 void drawAll(struct buff *buff) {
@@ -19,8 +19,10 @@ void drawAll(struct buff *buff) {
       buffAppend(buff, "~", 1);
     } else {
       int len = conf.rows[frow].renlen - conf.coloff;
-      if (len < 0) len = 0;
-      if (len > conf.width) len = conf.width;
+      if (len < 0)
+        len = 0;
+      if (len > conf.width)
+        len = conf.width;
       highlight(&conf.rows[frow].hl[conf.coloff],
                 &conf.rows[frow].renchar[conf.coloff], buff, len);
     }
@@ -38,7 +40,8 @@ void drawStatusBar(struct buff *buff) {
                      conf.dirty ? "(modified)" : "");
   int rlen =
       snprintf(rstatus, sizeof(rstatus), "%d/%d", conf.cy + 1, conf.numrows);
-  if (len > conf.width) len = conf.width;
+  if (len > conf.width)
+    len = conf.width;
   buffAppend(buff, status, len);
   while (len < conf.width) {
     if (conf.width - len == rlen) {
@@ -56,7 +59,8 @@ void drawStatusBar(struct buff *buff) {
 void drawStatusMessage(struct buff *buff) {
   buffAppend(buff, "\x1b[K", 3);
   int msglen = strlen(conf.statusmsg);
-  if (msglen > conf.width) msglen = conf.width;
+  if (msglen > conf.width)
+    msglen = conf.width;
   if (msglen && time(NULL) - conf.statusmsg_time < 5)
     buffAppend(buff, conf.statusmsg, msglen);
 }
@@ -86,7 +90,7 @@ void refresh(void) {
                 NULL);
 #else
   write(1, buff.chars, buff.len);
-#endif  // _WIN32
+#endif // _WIN32
 
   free(buff.chars);
 }
