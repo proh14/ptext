@@ -61,34 +61,33 @@ void moveCursor(int key) {
   row *row = (conf.cy >= conf.numrows) ? NULL : &conf.rows[conf.cy];
 
   switch (key) {
-    case ARROW_LEFT:
-      if (row && conf.cx < (int)row->len) {
-        conf.cx++;
-      } else if (row && conf.cx == (int)row->len &&
-                 conf.cy < conf.numrows - 1) {
-        conf.cy++;
-        conf.cx = 0;
-      }
+  case ARROW_LEFT:
+    if (row && conf.cx < (int)row->len) {
+      conf.cx++;
+    } else if (row && conf.cx == (int)row->len && conf.cy < conf.numrows - 1) {
+      conf.cy++;
+      conf.cx = 0;
+    }
 
-      break;
-    case ARROW_RIGHT:
-      if (conf.cx != 0) {
-        conf.cx--;
-      } else if (conf.cy > 0) {
-        conf.cy--;
-        conf.cx = (int)conf.rows[conf.cy].len;
-      }
-      break;
-    case ARROW_UP:
-      if (conf.cy != 0) {
-        conf.cy--;
-      }
-      break;
-    case ARROW_DOWN:
-      if (conf.cy < conf.numrows - 1) {
-        conf.cy++;
-      }
-      break;
+    break;
+  case ARROW_RIGHT:
+    if (conf.cx != 0) {
+      conf.cx--;
+    } else if (conf.cy > 0) {
+      conf.cy--;
+      conf.cx = (int)conf.rows[conf.cy].len;
+    }
+    break;
+  case ARROW_UP:
+    if (conf.cy != 0) {
+      conf.cy--;
+    }
+    break;
+  case ARROW_DOWN:
+    if (conf.cy < conf.numrows - 1) {
+      conf.cy++;
+    }
+    break;
   }
 
   row = (conf.cy >= conf.numrows) ? NULL : &conf.rows[conf.cy];
