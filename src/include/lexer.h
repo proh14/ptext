@@ -44,4 +44,4 @@ struct flags {
 
 Token getNextToken(Lexer *);
 
-#endif // _LEXER_H_
+#endif  // _LEXER_H_

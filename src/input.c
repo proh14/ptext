@@ -1,14 +1,11 @@
 #include <config.h>
 #include <cursor.h>
-#include <errno.h>
 #include <files.h>
 #include <input.h>
 #include <ptext.h>
 #include <rows.h>
 #include <search.h>
-#include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
+#include <stdafx.h>
 #include <utils.h>
 
 void delChar(void) {
@@ -54,6 +51,24 @@ void insertNewLine(void) {
   conf.cx = 0;
 }
 
+#ifdef _WIN32
+KEY_EVENT_RECORD readKey(void) {
+  HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+  INPUT_RECORD irInBuf;
+  DWORD cNumRead;
+
+  while (1) {
+    WaitForSingleObject(hStdin, INFINITE);
+    if (!ReadConsoleInputA(hStdin, &irInBuf, 1, &cNumRead)) {
+      die("read");
+    }
+
+    if (irInBuf.EventType == KEY_EVENT && irInBuf.Event.KeyEvent.bKeyDown) {
+      return irInBuf.Event.KeyEvent;
+    }
+  }
+}
+#else
 int readKey(void) {
   int nr;
   int c = '\0';
@@ -72,106 +87,203 @@ int readKey(void) {
     }
     if (ecode[0] == '[') {
       switch (ecode[1]) {
-      case 'A':
-        return ARROW_UP;
-        break;
-      case 'B':
-        return ARROW_DOWN;
-        break;
-      case 'C':
-        return ARROW_LEFT;
-        break;
-      case 'D':
-        return ARROW_RIGHT;
-        break;
-      case '3':
-        if (read(0, &ecode[2], 1) != 1) {
-          return '\x1b';
-        }
-        if (ecode[2] == '~') {
-          return DEL_KEY;
-        }
-        break;
+        case 'A':
+          return ARROW_UP;
+          break;
+        case 'B':
+          return ARROW_DOWN;
+          break;
+        case 'C':
+          return ARROW_LEFT;
+          break;
+        case 'D':
+          return ARROW_RIGHT;
+          break;
+        case '3':
+          if (read(0, &ecode[2], 1) != 1) {
+            return '\x1b';
+          }
+          if (ecode[2] == '~') {
+            return DEL_KEY;
+          }
+          break;
       }
     }
   }
   return c;
 }
+#endif
 
 void procKey(void) {
-  int c = readKey();
-  for (int i = 0; i < customKeysLen; i++) {
-    if (customKeys[i].key == c) {
-      customKeys[i].func();
+#ifdef _WIN32
+  KEY_EVENT_RECORD key = readKey();
+  if (key.uChar.AsciiChar == 0) return;
+
+  if (key.dwControlKeyState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) {
+    if (handleCustomKeys(key.wVirtualKeyCode)) {
       return;
     }
+
+    switch (key.wVirtualKeyCode) {
+      case KEY_Q: {
+        if (!conf.dirty) {
+          system("cls");
+          exit(0);
+        }
+
+        char *yorn =
+            getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
+        if (yorn == NULL) {
+          break;
+        }
+
+        if (yorn[0] == 'y') {
+          free(yorn);
+          system("cls");
+          save();
+          exit(0);
+        }
+
+        free(yorn);
+        system("cls");
+        exit(0);
+      } break;
+      case KEY_H:
+        delChar();
+        break;
+      case KEY_S:
+        save();
+        break;
+      case KEY_F:
+        search();
+        break;
+      case KEY_A:
+        conf.cx = 0;
+        break;
+      case KEY_E:
+        conf.cx = (int)conf.rows[conf.cy].renlen;
+        break;
+      case KEY_D:
+        conf.cy = conf.numrows - 1;
+        break;
+      case KEY_U:
+        conf.cy = 0;
+        break;
+      case KEY_R:
+        replace();
+        break;
+    }
+    return;
   }
-  switch (c) {
-  case CTRL_KEY('q'):
-    if (!conf.dirty) {
-      write(1, "\x1b[2J", 4);
-      write(1, "\x1b[H", 3);
-      exit(0);
-    }
-    char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
-    if (yorn == NULL) {
+
+  switch (key.wVirtualKeyCode) {
+    case ARROW_DOWN:
+    case ARROW_UP:
+    case ARROW_LEFT:
+    case ARROW_RIGHT:
+      moveCursor(key.wVirtualKeyCode);
       break;
-    }
-    if (yorn[0] == 'y') {
+    case BACKSPACE:
+    case DEL_KEY:
+      if (key.wVirtualKeyCode == DEL_KEY) {
+        moveCursor(ARROW_LEFT);
+      }
+      delChar();
+      break;
+    case '\r':
+      insertNewLine();
+      break;
+    default:
+      insertAChar(key.uChar.AsciiChar);
+      break;
+  }
+#else
+  int c = readKey();
+  if (handleCustomKeys(c)) {
+    return;
+  }
+
+  switch (c) {
+    case CTRL_KEY('q'): {
+      if (!conf.dirty) {
+        write(1, "\x1b[2J", 4);
+        write(1, "\x1b[H", 3);
+        exit(0);
+      }
+      char *yorn = getPrompt("File has unsaved changes. Save? (y/n) %s", NULL);
+      if (yorn == NULL) {
+        break;
+      }
+      if (yorn[0] == 'y') {
+        free(yorn);
+        write(1, "\x1b[2J", 4);
+        write(1, "\x1b[H", 3);
+        save();
+        exit(0);
+      }
       free(yorn);
       write(1, "\x1b[2J", 4);
       write(1, "\x1b[H", 3);
-      save();
       exit(0);
-    }
-    free(yorn);
-    write(1, "\x1b[2J", 4);
-    write(1, "\x1b[H", 3);
-    exit(0);
-    break;
-  case ARROW_DOWN:
-  case ARROW_UP:
-  case ARROW_LEFT:
-  case ARROW_RIGHT:
-    moveCursor(c);
-    break;
-  case BACKSPACE:
-  case DEL_KEY:
-  case CTRL_KEY('h'):
-    if (c == DEL_KEY) {
-      moveCursor(ARROW_LEFT);
-    }
-    delChar();
-    break;
-  case '\r':
-    insertNewLine();
-    break;
-  case CTRL_KEY('s'):
-    save();
-    break;
-  case CTRL_KEY('l'):
-  case '\x1b':
-    break;
-  case CTRL_KEY('f'):
-    search();
-    break;
-  case CTRL_KEY('a'):
-    conf.cx = 0;
-    break;
-  case CTRL_KEY('e'):
-    conf.cx = (int)conf.rows[conf.cy].renlen;
-    break;
-  case CTRL_KEY('d'):
-    conf.cy = conf.numrows - 1;
-    break;
-  case CTRL_KEY('u'):
-    conf.cy = 0;
-    break;
-  case CTRL_KEY('r'):
-    replace();
-    break;
-  default:
-    insertAChar(c);
-    break;
+    } break;
+    case ARROW_DOWN:
+    case ARROW_UP:
+    case ARROW_LEFT:
+    case ARROW_RIGHT:
+      moveCursor(c);
+      break;
+    case BACKSPACE:
+    case DEL_KEY:
+    case CTRL_KEY('h'):
+      if (c == DEL_KEY) {
+        moveCursor(ARROW_LEFT);
+      }
+      delChar();
+      break;
+    case '\r':
+      insertNewLine();
+      break;
+    case CTRL_KEY('s'):
+      save();
+      break;
+
+      // TODO: what is it used for?
+    case CTRL_KEY('l'):
+    case '\x1b':
+      break;
+
+    case CTRL_KEY('f'):
+      search();
+      break;
+    case CTRL_KEY('a'):
+      conf.cx = 0;
+      break;
+    case CTRL_KEY('e'):
+      conf.cx = (int)conf.rows[conf.cy].renlen;
+      break;
+    case CTRL_KEY('d'):
+      conf.cy = conf.numrows - 1;
+      break;
+    case CTRL_KEY('u'):
+      conf.cy = 0;
+      break;
+    case CTRL_KEY('r'):
+      replace();
+      break;
+    default:
+      insertAChar(c);
+      break;
   }
+#endif
+}
+
+int handleCustomKeys(int c) {
+  for (int i = 0; i < customKeysLen; i++) {
+    if (customKeys[i].key == c) {
+      customKeys[i].func();
+      return 1;
+    }
+  }
+
+  return 0;
 }

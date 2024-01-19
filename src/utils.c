@@ -1,11 +1,7 @@
-#include <ctype.h>
 #include <input.h>
 #include <output.h>
 #include <ptext.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdafx.h>
 #include <utils.h>
 
 void setStatusMessage(const char *fmt, ...) {
@@ -19,8 +15,7 @@ void setStatusMessage(const char *fmt, ...) {
 char *rowsToString(int *buflen) {
   int totlen = 0;
   int j;
-  for (j = 0; j < conf.numrows; j++)
-    totlen += conf.rows[j].len + 1;
+  for (j = 0; j < conf.numrows; j++) totlen += conf.rows[j].len + 1;
   *buflen = totlen;
   char *buf = malloc(totlen);
   char *p = buf;
@@ -44,21 +39,36 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
     setStatusMessage(promt, buf);
     refresh();
 
+#ifdef _WIN32
+    KEY_EVENT_RECORD key = readKey();
+    int c = key.wVirtualKeyCode;
+
+    if (c == VK_RETURN)
+#else
     int c = readKey();
-    if (c == '\r') {
+    if (c == '\r')
+#endif
+    {
       if (bufsize != 0) {
         setStatusMessage("");
-        if (callback)
-          callback(buf, c);
+        if (callback) callback(buf, c);
         return buf;
       }
-    } else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
+    }
+#ifdef _WIN32
+    else if (c == DEL_KEY ||
+             ((key.dwControlKeyState &
+               (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) &&
+              (key.uChar.AsciiChar == 'H')) ||
+             c == BACKSPACE) {
+#else
+    else if (c == DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
+#endif
       if (bufsize != 0) {
         buf[--bufsize] = '\0';
       }
     } else if (c == ESC_KEY) {
-      if (callback)
-        callback(buf, c);
+      if (callback) callback(buf, c);
       setStatusMessage("");
       free(buf);
       return NULL;
@@ -75,7 +85,6 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
       buf[bufsize] = c;
       bufsize++;
     }
-    if (callback)
-      callback(buf, c);
+    if (callback) callback(buf, c);
   }
 }

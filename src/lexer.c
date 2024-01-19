@@ -1,6 +1,5 @@
-#include <ctype.h>
 #include <lexer.h>
-#include <string.h>
+#include <stdafx.h>
 
 static const char *keywords[] = {
     "auto",          "break",

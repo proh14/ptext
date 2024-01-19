@@ -4,8 +4,7 @@
 #include <ptext.h>
 #include <rows.h>
 #include <search.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdafx.h>
 #include <utils.h>
 
 void searchCallBack(char *query, int c) {
@@ -13,21 +12,20 @@ void searchCallBack(char *query, int c) {
   static int last_match = -1;
 
   switch (c) {
-  case '\r':
-  case '\x1b':
-    direction = 1;
-    last_match = 0;
-    return;
-    break;
-  case ARROW_UP:
-    direction = -1;
-    break;
-  case ARROW_DOWN:
-    direction = 1;
-    break;
+    case '\r':
+    case '\x1b':
+      direction = 1;
+      last_match = 0;
+      return;
+      break;
+    case ARROW_UP:
+      direction = -1;
+      break;
+    case ARROW_DOWN:
+      direction = 1;
+      break;
   }
-  if (last_match == -1)
-    direction = 1;
+  if (last_match == -1) direction = 1;
   int current = last_match;
   int i;
   for (i = 0; i < conf.numrows; i++) {
@@ -69,28 +67,27 @@ void replaceCallBack(char *query, int c) {
   static int last_match = -1;
   row *row = NULL;
   switch (c) {
-  case '\r':
-  case '\x1b':
-    row = &conf.rows[last_match];
-    char *replace = getPrompt("Replace with: %s", NULL);
-    row->chars = realloc(row->chars, row->len + strlen(replace) + 1);
-    memcpy(&row->chars[last_mr], replace, strlen(replace));
-    conf.dirty++;
-    updateRow(row);
-    free(replace);
-    direction = 1;
-    last_match = 0;
-    return;
-    break;
-  case ARROW_UP:
-    direction = -1;
-    break;
-  case ARROW_DOWN:
-    direction = 1;
-    break;
+    case '\r':
+    case '\x1b':
+      row = &conf.rows[last_match];
+      char *replace = getPrompt("Replace with: %s", NULL);
+      row->chars = realloc(row->chars, row->len + strlen(replace) + 1);
+      memcpy(&row->chars[last_mr], replace, strlen(replace));
+      conf.dirty++;
+      updateRow(row);
+      free(replace);
+      direction = 1;
+      last_match = 0;
+      return;
+      break;
+    case ARROW_UP:
+      direction = -1;
+      break;
+    case ARROW_DOWN:
+      direction = 1;
+      break;
   }
-  if (last_match == -1)
-    direction = 1;
+  if (last_match == -1) direction = 1;
   int current = last_match;
   int i;
   for (i = 0; i < conf.numrows; i++) {

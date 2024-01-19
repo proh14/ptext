@@ -1,0 +1,51 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build",
+            "command": "cmd.exe",
+            "args": [
+                "/C",
+                "${input:msbuild}",
+                "${workspaceFolder}${pathSeparator}ptext.sln",
+                "/p:configuration=${input:configuration};platform=${input:platform}"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "isDefault": true,
+                "kind": "build"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "platform",
+            "type": "pickString",
+            "options": [
+                "x64",
+                "x86"
+            ],
+            "default": "x64",
+            "description": "Target platform"
+        },
+        {
+            "id": "configuration",
+            "type": "pickString",
+            "options": [
+                "Debug",
+                "Release",
+            ],
+            "default": "Debug",
+            "description": "Target configuration"
+        },
+        {
+            "id": "msbuild",
+            "type": "promptString",
+            "description": "MSBuild path",
+            "default": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\msbuild.exe"
+        }
+    ]
+}
