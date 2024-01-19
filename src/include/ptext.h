@@ -2,11 +2,10 @@
 #ifndef _PTEXT_H_
 #define _PTEXT_H_
 
-#include <stdafx.h>
 #include <rows.h>
+#include <stdafx.h>
 
-struct config
-{
+struct config {
   int cx, cy;
   int rx;
   row *rows;
@@ -24,7 +23,7 @@ struct config
   DWORD originalConsoleMode;
 #else
   struct termios orig_termios;
-#endif // _WIN32
+#endif  // _WIN32
 };
 
 extern struct config conf;

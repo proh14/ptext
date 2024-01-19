@@ -9,14 +9,13 @@ void sayHello(void) { setStatusMessage("Hello from config"); }
 // To costumize the key bindings, add a new entry to the customKeys array
 // like this:
 
-struct keyPair customKeys[] = {
-	{
+struct keyPair customKeys[] = {{
 #ifdef _WIN32
-		0x49, // VK_KEY_I
+    0x49,  // VK_KEY_I
 #else
-		CTRL_KEY('i'),
-#endif // _WIN32
-		&sayHello}};
+    CTRL_KEY('i'),
+#endif  // _WIN32
+    &sayHello}};
 
 // The first argument is the key combination, the second is the function that
 // will get executed

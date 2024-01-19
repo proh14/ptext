@@ -1,15 +1,15 @@
+#include <ptext.h>
 #include <stdafx.h>
 
-#include <ptext.h>
-
-void enableRawMode(void)
-{
+void enableRawMode(void) {
 #ifdef _WIN32
 
-  if (!GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &conf.originalConsoleMode))
+  if (!GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
+                      &conf.originalConsoleMode))
     die("GetConsoleMode");
 
-  DWORD newConsoleMode = conf.originalConsoleMode & ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+  DWORD newConsoleMode =
+      conf.originalConsoleMode & ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
   if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), newConsoleMode))
     die("SetConsoleMode");
 
@@ -22,18 +22,15 @@ void enableRawMode(void)
   raw.c_cc[VMIN] = 0;
   raw.c_cc[VTIME] = 1;
 
-  if (tcsetattr(0, TCSAFLUSH, &raw) == -1)
-    die("tcsetattr");
+  if (tcsetattr(0, TCSAFLUSH, &raw) == -1) die("tcsetattr");
 #endif
 }
 
-void disableRawMode(void)
-{
+void disableRawMode(void) {
 #ifdef _WIN32
   if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), conf.originalConsoleMode))
     die("SetConsoleMode");
 #else
-  if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1)
-    die("tcsetattr");
+  if (tcsetattr(0, TCSAFLUSH, &conf.orig_termios) == -1) die("tcsetattr");
 #endif
 }

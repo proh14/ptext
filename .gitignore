@@ -52,10 +52,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Visual Studio compilation files
+# VS Code Config
 
-/x86
-/x64
-/.vs
-*.vcxproj.filters
-*.vcxproj.user
+.vscode/

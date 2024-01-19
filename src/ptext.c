@@ -1,11 +1,10 @@
-#include <stdafx.h>
-
 #include <files.h>
 #include <input.h>
 #include <output.h>
 #include <ptext.h>
-#include <utils.h>
+#include <stdafx.h>
 #include <termio.h>
+#include <utils.h>
 
 struct config conf;
 
@@ -17,7 +16,8 @@ void done(void);
 /*
 TODO: output is not working properly
 
-INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ char* pCmdLine, _In_ int nCmdShow)
+INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance,
+_In_ char* pCmdLine, _In_ int nCmdShow)
 {
     if (!AllocConsole())
     {
@@ -33,43 +33,38 @@ INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 }
 */
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 #ifdef _INC_CRTDBG
   _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
   _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-#endif // _INC_CRTDBG
+#endif  // _INC_CRTDBG
 
   enableRawMode();
   init();
-  if (argc >= 2)
-  {
+  if (argc >= 2) {
     openFile(argv[1]);
   }
-  while (1)
-  {
+  while (1) {
     refresh();
     procKey();
   }
 
 #ifdef _INC_CRTDBG
   _CrtDumpMemoryLeaks();
-#endif // _INC_CRTDBG
+#endif  // _INC_CRTDBG
 
 #ifdef _WIN32
   FreeConsole();
-#endif // _WIN32
+#endif  // _WIN32
   return EXIT_SUCCESS;
 }
 
-void die(const char *s)
-{
+void die(const char *s) {
   perror(s);
   exit(1);
 }
 
-void init(void)
-{
+void init(void) {
   conf.numrows = 0;
   conf.rows = NULL;
   conf.cx = 0;
@@ -95,22 +90,19 @@ void init(void)
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   conf.width = w.ws_col;
   conf.height = w.ws_row;
-#endif // _WIN32
+#endif  // _WIN32
 
   conf.filename = NULL;
   setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
   atexit(done);
 }
 
-void freeall(void)
-{
-  if (conf.rows != NULL && conf.numrows != 0)
-  {
+void freeall(void) {
+  if (conf.rows != NULL && conf.numrows != 0) {
     return;
   }
 
-  for (int i = 0; i < conf.numrows; i++)
-  {
+  for (int i = 0; i < conf.numrows; i++) {
     free(conf.rows[i].chars);
     free(conf.rows[i].renchar);
     free(conf.rows[i].hl);
@@ -121,8 +113,7 @@ void freeall(void)
   free(conf.filename);
 }
 
-void done(void)
-{
+void done(void) {
   freeall();
   disableRawMode();
 }

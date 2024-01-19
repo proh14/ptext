@@ -1,36 +1,26 @@
-#include <stdafx.h>
-
 #include <buff.h>
 #include <cursor.h>
 #include <highlighter.h>
 #include <output.h>
 #include <ptext.h>
+#include <stdafx.h>
 #include <stdarg.h>
 #include <stdio.h>
 
 #define INIT_BUFF \
-  {               \
-    NULL, 0       \
-  }
+  { NULL, 0 }
 
-void drawAll(struct buff *buff)
-{
+void drawAll(struct buff *buff) {
   int y;
   int frow;
-  for (y = 0; y < conf.height - 2; y++)
-  {
+  for (y = 0; y < conf.height - 2; y++) {
     frow = conf.rowoff + y;
-    if (frow >= conf.numrows || frow == -1)
-    {
+    if (frow >= conf.numrows || frow == -1) {
       buffAppend(buff, "~", 1);
-    }
-    else
-    {
+    } else {
       int len = conf.rows[frow].renlen - conf.coloff;
-      if (len < 0)
-        len = 0;
-      if (len > conf.width)
-        len = conf.width;
+      if (len < 0) len = 0;
+      if (len > conf.width) len = conf.width;
       highlight(&conf.rows[frow].hl[conf.coloff],
                 &conf.rows[frow].renchar[conf.coloff], buff, len);
     }
@@ -40,8 +30,7 @@ void drawAll(struct buff *buff)
   }
 }
 
-void drawStatusBar(struct buff *buff)
-{
+void drawStatusBar(struct buff *buff) {
   buffAppend(buff, "\x1b[7m", 4);
   char status[80], rstatus[80];
   int len = snprintf(status, sizeof(status), "%.20s - %d lines %s",
@@ -49,18 +38,13 @@ void drawStatusBar(struct buff *buff)
                      conf.dirty ? "(modified)" : "");
   int rlen =
       snprintf(rstatus, sizeof(rstatus), "%d/%d", conf.cy + 1, conf.numrows);
-  if (len > conf.width)
-    len = conf.width;
+  if (len > conf.width) len = conf.width;
   buffAppend(buff, status, len);
-  while (len < conf.width)
-  {
-    if (conf.width - len == rlen)
-    {
+  while (len < conf.width) {
+    if (conf.width - len == rlen) {
       buffAppend(buff, rstatus, rlen);
       break;
-    }
-    else
-    {
+    } else {
       buffAppend(buff, " ", 1);
       len++;
     }
@@ -69,18 +53,15 @@ void drawStatusBar(struct buff *buff)
   buffAppend(buff, "\r\n", 2);
 }
 
-void drawStatusMessage(struct buff *buff)
-{
+void drawStatusMessage(struct buff *buff) {
   buffAppend(buff, "\x1b[K", 3);
   int msglen = strlen(conf.statusmsg);
-  if (msglen > conf.width)
-    msglen = conf.width;
+  if (msglen > conf.width) msglen = conf.width;
   if (msglen && time(NULL) - conf.statusmsg_time < 5)
     buffAppend(buff, conf.statusmsg, msglen);
 }
 
-void refresh(void)
-{
+void refresh(void) {
   scroll();
   struct buff buff = INIT_BUFF;
 
@@ -101,10 +82,11 @@ void refresh(void)
 
 #ifdef _WIN32
   DWORD written;
-  WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), buff.chars, buff.len, &written, NULL);
+  WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), buff.chars, buff.len, &written,
+                NULL);
 #else
   write(1, buff.chars, buff.len);
-#endif // _WIN32
+#endif  // _WIN32
 
   free(buff.chars);
 }

@@ -23,4 +23,4 @@
 
 void highlight(char *hl, char *content, struct buff *buff, int len);
 void prehighlight(char *hl, Lexer *l);
-#endif // _HIGHLIGHT_H_
+#endif  // _HIGHLIGHT_H_
