@@ -15,7 +15,8 @@ void setStatusMessage(const char *fmt, ...) {
 char *rowsToString(int *buflen) {
   int totlen = 0;
   int j;
-  for (j = 0; j < conf.numrows; j++) totlen += conf.rows[j].len + 1;
+  for (j = 0; j < conf.numrows; j++)
+    totlen += conf.rows[j].len + 1;
   *buflen = totlen;
   char *buf = malloc(totlen);
   char *p = buf;
@@ -51,7 +52,8 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
     {
       if (bufsize != 0) {
         setStatusMessage("");
-        if (callback) callback(buf, c);
+        if (callback)
+          callback(buf, c);
         return buf;
       }
     }
@@ -68,7 +70,8 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
         buf[--bufsize] = '\0';
       }
     } else if (c == ESC_KEY) {
-      if (callback) callback(buf, c);
+      if (callback)
+        callback(buf, c);
       setStatusMessage("");
       free(buf);
       return NULL;
@@ -85,6 +88,7 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
       buf[bufsize] = c;
       bufsize++;
     }
-    if (callback) callback(buf, c);
+    if (callback)
+      callback(buf, c);
   }
 }
