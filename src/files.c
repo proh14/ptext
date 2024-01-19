@@ -10,7 +10,9 @@
 void save(void) {
   if (conf.filename == NULL) {
     char *fname = getPrompt("Save as: %s", NULL);
+#ifdef _WIN32
     if (GetFileAttributesA(fname) != INVALID_FILE_ATTRIBUTES) {
+#endif
       char *yorn = getPrompt("File exists. Overwrite? (y/n) %s", NULL);
       if (yorn[0] != 'y') {
         free(fname);
@@ -18,7 +20,10 @@ void save(void) {
         return;
       }
       free(yorn);
+
+#ifdef _WIN32
     }
+#endif
     conf.filename = fname;
   }
 
@@ -69,7 +74,8 @@ size_t getline(char **line, size_t *len, FILE *stream) {
   size_t capacity = *len + 128;
   char *temp = (char *)realloc(*line, capacity);
 
-  if (!temp) return -1;
+  if (!temp)
+    return -1;
 
   *line = temp;
 
@@ -91,14 +97,15 @@ size_t getline(char **line, size_t *len, FILE *stream) {
     (*line)[i++] = (char)c;
   }
 
-  if (c == EOF && i == 0) return -1;
+  if (c == EOF && i == 0)
+    return -1;
 
   (*line)[i] = '\0';
   *len = i;
 
   return i;
 }
-#endif  // _WIN32
+#endif // _WIN32
 
 void openFile(char *s) {
   FILE *file = fopen(s, "r");
