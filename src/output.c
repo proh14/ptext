@@ -25,10 +25,11 @@ void drawAll(struct buff *buff) {
         len = conf.width;
       highlight(&conf.rows[frow].hl[conf.coloff],
                 &conf.rows[frow].renchar[conf.coloff], buff, len);
+
+      buffAppend(buff, "\x1b[m", 3);
     }
     buffAppend(buff, "\x1b[K", 3);
     buffAppend(buff, "\r\n", 2);
-    buffAppend(buff, "\x1b[0m", 4);
   }
 }
 
