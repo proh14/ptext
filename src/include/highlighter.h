@@ -4,8 +4,8 @@
 #include <buff.h>
 #include <lexer.h>
 
-#define SYMBOL_COLOR "\x1b[0m"
-#define SYMBOL_LEN 4
+#define SYMBOL_COLOR "\x1b[m"
+#define SYMBOL_LEN 3
 #define PREPROC_COLOR "\x1b[97m"
 #define PREPROC_LEN 5
 #define KEYWORD_COLOR "\x1b[33m"
@@ -23,4 +23,4 @@
 
 void highlight(char *hl, char *content, struct buff *buff, int len);
 void prehighlight(char *hl, Lexer *l);
-#endif  // _HIGHLIGHT_H_
+#endif // _HIGHLIGHT_H_
