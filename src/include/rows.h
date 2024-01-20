@@ -9,6 +9,8 @@ typedef struct row {
   char *renchar;
   size_t renlen;
   char *hl;
+  int in_comment;
+  int idx;
 } row;
 
 void updateRow(row *row);

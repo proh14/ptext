@@ -29,6 +29,7 @@ typedef struct {
   char *content;
   size_t cursor;
   size_t contentlen;
+  int idx;
 } Lexer;
 
 typedef struct {
@@ -36,12 +37,6 @@ typedef struct {
   Token_kind kind;
 } Single_Tokens;
 
-struct flags {
-  int in_comment;
-  int in_preproc;
-  int in_string;
-};
-
 Token getNextToken(Lexer *);
 
-#endif  // _LEXER_H_
+#endif // _LEXER_H_

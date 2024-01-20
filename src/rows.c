@@ -24,7 +24,10 @@ void updateRow(row *row) {
   }
   row->renchar[idx] = '\0';
   row->renlen = idx;
-  Lexer l = {.content = row->renchar, .contentlen = row->renlen, .cursor = 0};
+  Lexer l = {.content = row->renchar,
+             .contentlen = row->renlen,
+             .cursor = 0,
+             .idx = row->idx};
   row->hl = realloc(row->hl, row->renlen + 1);
   prehighlight(row->hl, &l);
 }
@@ -38,10 +41,12 @@ void rowAppend(char *s, size_t len, int at) {
   conf.rows[at].chars = malloc(len + 1);
   memcpy(conf.rows[at].chars, s, len);
   conf.rows[at].chars[len] = '\0';
+  conf.rows[at].idx = at;
   conf.rows[at].len = len;
   conf.rows[at].renlen = 0;
   conf.rows[at].renchar = NULL;
   conf.rows[at].hl = NULL;
+  conf.rows[at].in_comment = 0;
   conf.numrows++;
   conf.dirty++;
   updateRow(&conf.rows[at]);
@@ -63,11 +68,15 @@ void freeRow(row *row) {
 }
 
 void delRow(int at) {
-  if (at < 0 || at >= conf.numrows)
+  if (at < 0 || at >= conf.numrows) {
     return;
+  }
   freeRow(&conf.rows[at]);
   memmove(&conf.rows[at], &conf.rows[at + 1],
           sizeof(row) * (conf.numrows - at - 1));
+  for (int i = at; i < conf.numrows - 1; i++) {
+    conf.rows[i].idx--;
+  }
   conf.numrows--;
   conf.dirty++;
 }
