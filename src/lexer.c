@@ -78,7 +78,8 @@ int trimLeft(Lexer *l) {
 }
 
 Token getNextToken(Lexer *l) {
-  int in_comment = (l->idx > 0 && conf.rows[l->idx - 1].in_comment);
+  int in_comment =
+      (l->idx > 0 && conf.rows[l->idx - 1].in_comment && l->cursor == 0);
   Token t = {0};
   int spaces = 0;
   int firstloc = (int)l->cursor;
@@ -119,6 +120,7 @@ Token getNextToken(Lexer *l) {
       t.textlen = l->cursor - firstloc;
       return t;
     }
+    conf.rows[l->idx].in_comment = 0;
   }
 
   if (l->content[l->cursor] == '#') {

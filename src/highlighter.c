@@ -1,6 +1,7 @@
 #include <buff.h>
 #include <highlighter.h>
 #include <lexer.h>
+#include <ptext.h>
 
 void highlight(char *hl, char *content, struct buff *buff, int len) {
   int i = 0;
@@ -54,6 +55,8 @@ void highlight(char *hl, char *content, struct buff *buff, int len) {
 void prehighlight(char *hl, Lexer *l) {
   Token t = {0};
   size_t hllen = 0;
+  int in_comment = (l->idx > 0 && conf.rows[l->idx - 1].in_comment);
+  int changed = (conf.rows[l->idx].in_comment != in_comment);
   t.kind = TOKEN_SYMBOL;
   while (t.kind != TOKEN_END) {
     t = getNextToken(l);
@@ -63,4 +66,11 @@ void prehighlight(char *hl, Lexer *l) {
     hllen += t.textlen;
   }
   hl[hllen] = TOKEN_END;
+  if (changed && l->idx + 1 < conf.numrows) {
+    Lexer tl = {.content = conf.rows[l->idx + 1].renchar,
+                .cursor = 0,
+                .contentlen = conf.rows[l->idx + 1].renlen,
+                .idx = l->idx + 1};
+    prehighlight(conf.rows[l->idx + 1].hl, &tl);
+  }
 }
