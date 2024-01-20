@@ -1,4 +1,5 @@
 #include <lexer.h>
+#include <ptext.h>
 #include <stdafx.h>
 
 static const char *keywords[] = {
@@ -77,7 +78,7 @@ int trimLeft(Lexer *l) {
 }
 
 Token getNextToken(Lexer *l) {
-  static int in_comment = 0;
+  int in_comment = (l->idx > 0 && conf.rows[l->idx - 1].in_comment);
   Token t = {0};
   int spaces = 0;
   int firstloc = (int)l->cursor;
@@ -86,6 +87,9 @@ Token getNextToken(Lexer *l) {
   }
   t.text = &l->content[l->cursor];
   if (l->cursor >= l->contentlen) {
+    if (!conf.rows[l->idx].in_comment && l->cursor == 0) {
+      conf.rows[l->idx].in_comment = in_comment;
+    }
     t.kind = TOKEN_END;
     return t;
   }
@@ -98,11 +102,11 @@ Token getNextToken(Lexer *l) {
       return t;
     }
     if (l->content[l->cursor + 1] == '*' || in_comment) {
-      in_comment = 1;
       t.kind = TOKEN_COMMENT;
       if (!in_comment) {
         l->cursor += 2;
       }
+      in_comment = 1;
       while (l->cursor < l->contentlen) {
         if (l->content[l->cursor] == '*' && l->content[l->cursor + 1] == '/') {
           l->cursor += 2;
@@ -111,6 +115,7 @@ Token getNextToken(Lexer *l) {
         }
         l->cursor++;
       }
+      conf.rows[l->idx].in_comment = in_comment;
       t.textlen = l->cursor - firstloc;
       return t;
     }
