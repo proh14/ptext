@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
   _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 #endif // _INC_CRTDBG
 
+  // TODO(Hoorad): Manage flags correctly
   if (argc >= 2 && strcmp(argv[1], "-v") == 0) {
     printVersion();
     return 0;
