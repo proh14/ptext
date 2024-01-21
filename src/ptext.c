@@ -12,6 +12,7 @@ void init(void);
 void freeall(void);
 void freeall(void);
 void done(void);
+void printVersion(void);
 
 /*
 TODO: output is not working properly
@@ -39,6 +40,11 @@ int main(int argc, char *argv[]) {
   _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 #endif // _INC_CRTDBG
 
+  if (argc >= 2 && strcmp(argv[1], "-v") == 0) {
+    printVersion();
+    return 0;
+  }
+
   enableRawMode();
   init();
   if (argc >= 2) {
@@ -50,6 +56,27 @@ int main(int argc, char *argv[]) {
   }
 
   return EXIT_SUCCESS;
+}
+
+void printVersion(void) {
+  // clang-format off
+  printf("@@@@@@@@@@@@@@@\n");
+  printf("@@@   @@@   @@@    @@@@@@@@@@@@@@@\n");
+  printf("@@@   @@@   @@@    @@@@@@@@@@@@@@@\n");
+  printf("      @@@                      @@@\n");
+  printf("      @@@                      @@@\n");
+  printf("      @@@                      @@@\n");
+  printf("   @@@@@@@@@                   @@@\n");
+  printf("   @@@@@@@@@                   @@@\n");
+  printf("                               @@@               Name:           %s\n",NAME);
+  printf("                               @@@               Version:        %s\n",VERSION);
+  printf("@@@                            @@@               Maintainer:     %s\n",MAINTAINER);
+  printf("@@@                            @@@               Licensed Under: %s\n",LICENSE);
+  printf("@@@                            @@@\n");
+  printf("@@@                            @@@\n");
+  printf("@@@                            @@@\n");
+  printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+  // clang-format on
 }
 
 void die(const char *s) {
