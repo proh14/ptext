@@ -52,13 +52,13 @@ to start the editor.
 - To goto the end of the line you can press CTRL + e
 - To goto the start of the file you can press CTRL + u
 - To goto the end of the file you can press CTRL + d
+- To remove an entire line you can press CTRL + x
 
 ### Goals🥅:
-1. Fix syntax highlighting.
-2. Add a plugin system.
-3. Add windows.
-4. Add utf support.
-5. Read the terminfo database.
+1. Add a plugin system (for example .ptextrc).
+2. Add windows.
+3. Add utf support.
+4. Read the terminfo database.
 
 ### Work in progress⚒️:
 This is still a work in progress project!
