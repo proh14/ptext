@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
 
 void printVersion(void) {
   // clang-format off
+  printf("\n");
   printf("@@@@@@@@@@@@@@@\n");
   printf("@@@   @@@   @@@    @@@@@@@@@@@@@@@\n");
   printf("@@@   @@@   @@@    @@@@@@@@@@@@@@@\n");
