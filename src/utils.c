@@ -92,3 +92,31 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
       callback(buf, c);
   }
 }
+
+char *rtrim(char *s) {
+  for (size_t i = strlen(s) - 1; i > 0; i--) {
+    if (!isspace(s[i])) {
+      break;
+    }
+    s[i] = '\0';
+  }
+  return s;
+}
+
+char *token(char *command) {
+  if (*command == '\0') {
+    return NULL;
+  }
+  int i = 0;
+  while (isspace(command[i])) {
+    i++;
+  }
+  command = &command[i];
+  for (; command[i] != '\0'; i++) {
+    if (isspace(command[i])) {
+      command[i] = '\0';
+      break;
+    }
+  }
+  return command;
+}
