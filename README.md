@@ -53,6 +53,7 @@ to start the editor.
 - To goto the start of the file you can press CTRL + u
 - To goto the end of the file you can press CTRL + d
 - To remove an entire line you can press CTRL + x
+- To enter a editor command you can press CTRL + .
 
 ### Goals🥅:
 1. Add a plugin system (for example .ptextrc).
