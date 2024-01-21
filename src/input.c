@@ -246,12 +246,9 @@ void procKey(void) {
   case CTRL_KEY('s'):
     save();
     break;
-
-    // TODO: what is it used for?
   case CTRL_KEY('l'):
   case '\x1b':
     break;
-
   case CTRL_KEY('f'):
     search();
     break;
@@ -269,6 +266,9 @@ void procKey(void) {
     break;
   case CTRL_KEY('r'):
     replace();
+    break;
+  case CTRL_KEY('x'):
+    delRow(conf.cy);
     break;
   default:
     insertAChar(c);
