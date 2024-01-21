@@ -1,3 +1,4 @@
+#include <commands.h>
 #include <config.h>
 #include <cursor.h>
 #include <files.h>
@@ -269,6 +270,9 @@ void procKey(void) {
     break;
   case CTRL_KEY('x'):
     delRow(conf.cy);
+    break;
+  case CTRL_KEY('.'):
+    execCommand();
     break;
   default:
     insertAChar(c);
