@@ -1,3 +1,4 @@
+#include <commands.h>
 #include <files.h>
 #include <input.h>
 #include <output.h>
@@ -115,6 +116,10 @@ void init(void) {
 
   conf.filename = NULL;
   setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
+  char filename[256];
+  strcpy(filename, getenv("HOME"));
+  strcat(filename, RCFILE);
+  doFile(filename);
   atexit(done);
 }
 

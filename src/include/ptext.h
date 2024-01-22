@@ -7,6 +7,8 @@
 #define MAINTAINER "proh14"
 #define LICENSE "BSD-2-Clause"
 
+#define RCFILE "/.ptextrc"
+
 #include <rows.h>
 #include <stdafx.h>
 

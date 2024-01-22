@@ -1,3 +1,7 @@
+#define _BSD_SOURCE
+#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
+
 #include <commands.h>
 #include <ctype.h>
 #include <files.h>
@@ -7,7 +11,6 @@
 
 commandBind commands[] = {{"set-status", &user_setStatus}, {NULL, NULL}};
 char *getFunctionName(char *command);
-char *token(char *command);
 
 void doLine(char *line) {
   int i;
@@ -32,6 +35,18 @@ void execCommand(void) {
   char *command = getPrompt(":%s", NULL);
   doLine(command);
   free(command);
+}
+
+void doFile(char *filename) {
+  FILE *fp = fopen(filename, "r");
+  char *line = NULL;
+  int len = 0;
+  size_t size = 0;
+  while ((len = (int)getline(&line, &size, fp)) != -1) {
+    doLine(line);
+  }
+  fclose(fp);
+  free(line);
 }
 
 char *getFunctionName(char *command) {
