@@ -104,6 +104,7 @@ char *rtrim(char *s) {
 }
 
 char *token(char *command) {
+  int inq = 0;
   if (*command == '\0') {
     return NULL;
   }
@@ -113,6 +114,12 @@ char *token(char *command) {
   }
   command = &command[i];
   for (; command[i] != '\0'; i++) {
+    if (command[i] == '"' || command[i] == '\'') {
+      inq = !inq;
+    }
+    if (inq) {
+      continue;
+    }
     if (isspace(command[i])) {
       command[i] = '\0';
       break;
