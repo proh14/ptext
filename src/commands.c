@@ -17,6 +17,9 @@ void doLine(char *line) {
   int i;
   line = rtrim(line);
   char *fname = getFunctionName(line);
+  if (fname == NULL) {
+    return;
+  }
   for (i = 0; commands[i].name != NULL; i++) {
     if (strcmp(commands[i].name, fname) == 0) {
       break;

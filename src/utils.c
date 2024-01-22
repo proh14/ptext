@@ -105,7 +105,7 @@ char *rtrim(char *s) {
 
 char *token(char *command) {
   int inq = 0;
-  if (*command == '\0') {
+  if (*command == '\0' || *command == '#') {
     return NULL;
   }
   int i = 0;
