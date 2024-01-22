@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <files.h>
 #include <stdafx.h>
+#include <stdio.h>
 #include <userfuncs.h>
 #include <utils.h>
 
@@ -38,6 +39,9 @@ void execCommand(void) {
 }
 
 void doFile(char *filename) {
+  if (access(filename, F_OK) == -1) {
+    return;
+  }
   FILE *fp = fopen(filename, "r");
   char *line = NULL;
   int len = 0;
