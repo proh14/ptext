@@ -4,6 +4,8 @@
 #include <output.h>
 #include <ptext.h>
 #include <stdafx.h>
+#include <stdlib.h>
+#include <string.h>
 #include <termio.h>
 #include <utils.h>
 
@@ -42,9 +44,10 @@ int main(int argc, char *argv[]) {
 #endif // _INC_CRTDBG
 
   // TODO(Hoorad): Manage flags correctly
-  if (argc >= 2 && strcmp(argv[1], "-v") == 0) {
+  if (argc >= 2 &&
+      (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "--version") == 0)) {
     printVersion();
-    return 0;
+    return EXIT_SUCCESS;
   }
 
   enableRawMode();
