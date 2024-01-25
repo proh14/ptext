@@ -43,17 +43,14 @@ ptext <file name>
 ``` 
 to start the editor.
 
-### A little bit of documentation📖:
-- To exit you can press CTRL + q
-- To save you can press CTRL + s
-- To search you can press CTRL + f
-- To search & replace you can press CTRL + r
-- To goto the start of the line you can press CTRL + a
-- To goto the end of the line you can press CTRL + e
-- To goto the start of the file you can press CTRL + u
-- To goto the end of the file you can press CTRL + d
-- To remove an entire line you can press CTRL + x
-- To enter a editor command you can press CTRL + .
+### Documentation📖:
+If you installed ptext on a *nix system you can simply run 
+``` shell
+man ptext
+```
+to see the maual page of ptext.
+Otherwise take a look at [./docs](./docs] directory to see the manual in diffrent formats!
+The markdown version of the [manual](./docs/manual.md)
 
 ### Goals🥅:
 1. Add a plugin system (for example .ptextrc).
