@@ -1,0 +1,70 @@
+.TH PTEXT 1 2024-1-24 LINUX
+
+.SH NAME
+ptext \- A nano like text editor built with pure C.
+
+.SH SYNOPSIS
+.B ptext
+[\fIoptions\fR] [\fIfile\fR]
+
+.SH DESCRIPTION
+.B ptext
+is a small text editor based on kilo that edits file.
+
+.SH OPTIONS
+.TP
+.BR \-v ", " \-\-version
+outputs version information and exits.
+
+.SH EDITING
+Editing a file is fairly easy; you start the editor and start typing the letters that you want.
+You can move around with the arrow keys and delete characters with backspace or delete key.
+
+.SH KEY BINDINGS
+.TP
+.BR Ctrl\-Q
+Exit ptext.
+.TP
+.BR Ctrl\-S
+Write the currently open file on the disk.
+.TP
+.BR Ctrl\-F
+Search on the currently open file.
+.TP
+.BR Ctrl\-R
+Search and replace on the currently open file.
+.TP
+.BR Ctrl\-A
+Go to the beginning of the line.
+.TP
+.BR Ctrl\-E
+Go to the end of the line.
+.TP
+.BR Ctrl\-U
+Go to the first line of the currently open file.
+.TP
+.BR Ctrl\-D
+Go to the last line of the currently open file.
+.TP
+.BR Ctrl\-X
+Delete the line that the cursor is on.
+.TP
+.BR Ctrl\-.
+Enter a editor command.
+
+.SH BUGS
+.TP
+You can report any bugs to \fIhttps://github.com/proh14/ptext/issues\fR.
+
+
+.SH AUTHOUR
+.TP
+Mainly developed by \fIproh14\fR. You can see other contributers in the github page \fIhttps://github.com/proh14/ptext\fR.Note that this program is based on kilo, which is developed by \fIantirez\fR.
+
+.SH COPYRIGHT
+.TP
+BSD 2-Clause License
+
+.SH SEE ALSO
+.TP
+\fBptextrc\fR(5)

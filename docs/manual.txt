@@ -1,0 +1,67 @@
+
+[4mPTEXT[24m(1)                    General Commands Manual                   [4mPTEXT[24m(1)
+
+[1mNAME[0m
+       ptext - A nano like text editor built with pure C.
+
+
+[1mSYNOPSIS[0m
+       [1mptext [22m[[4moptions[24m] [[4mfile[24m]
+
+
+[1mDESCRIPTION[0m
+       [1mptext [22mis a small text editor based on kilo that edits file.
+
+
+[1mOPTIONS[0m
+       [1m-v[22m, [1m--version[0m
+              outputs version information and exits.
+
+
+[1mEDITING[0m
+       Editing  a  file  is fairly easy; you start the editor and start typing
+       the letters that you want.  You can move around with the arrow keys and
+       delete characters with backspace or delete key.
+
+
+[1mKEY BINDINGS[0m
+       [1mCtrl-Q [22mExit ptext.
+
+       [1mCtrl-S [22mWrite the currently open file on the disk.
+
+       [1mCtrl-F [22mSearch on the currently open file.
+
+       [1mCtrl-R [22mSearch and replace on the currently open file.
+
+       [1mCtrl-A [22mGo to the beginning of the line.
+
+       [1mCtrl-E [22mGo to the end of the line.
+
+       [1mCtrl-U [22mGo to the first line of the currently open file.
+
+       [1mCtrl-D [22mGo to the last line of the currently open file.
+
+       [1mCtrl-X [22mDelete the line that the cursor is on.
+
+       [1mCtrl-. [22mEnter a editor command.
+
+
+[1mBUGS[0m
+       You can report any bugs to [4mhttps://github.com/proh14/ptext/issues[24m.
+
+
+
+[1mAUTHOUR[0m
+       Mainly developed by [4mproh14[24m. You can see other contributers in the
+       github page [4mhttps://github.com/proh14/ptext[24m.Note that this program is
+       based on kilo, which is developed by [4mantirez[24m.
+
+
+[1mCOPYRIGHT[0m
+       BSD 2-Clause License
+
+
+[1mSEE ALSO[0m
+       [1mptextrc[22m(5)
+
+LINUX                              2024-1-24                          [4mPTEXT[24m(1)

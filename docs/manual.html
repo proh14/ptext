@@ -1,0 +1,258 @@
+<!-- Creator     : groff version 1.23.0 -->
+<!-- CreationDate: Thu Jan 25 01:57:03 2024 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>PTEXT</title>
+
+</head>
+<body>
+
+<h1 align="center">PTEXT</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EDITING">EDITING</a><br>
+<a href="#KEY BINDINGS">KEY BINDINGS</a><br>
+<a href="#BUGS">BUGS</a><br>
+<a href="#AUTHOUR">AUTHOUR</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em">ptext - A nano
+like text editor built with pure C.</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em"><b>ptext</b>
+[<i>options</i>] [<i>file</i>]</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em"><b>ptext</b> is
+a small text editor based on kilo that edits file.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em"><b>-v</b>,
+<b>--version</b></p>
+
+<p style="margin-left:18%;">outputs version information and
+exits.</p>
+
+<h2>EDITING
+<a name="EDITING"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em">Editing a file
+is fairly easy; you start the editor and start typing the
+letters that you want. You can move around with the arrow
+keys and delete characters with backspace or delete key.</p>
+
+<h2>KEY BINDINGS
+<a name="KEY BINDINGS"></a>
+</h2>
+
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p style="margin-top: 1em"><b>Ctrl-Q</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p style="margin-top: 1em">Exit ptext.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-S</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Write the currently open file on the disk.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-F</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Search on the currently open file.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-R</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Search and replace on the currently open file.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-A</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Go to the beginning of the line.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-E</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Go to the end of the line.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-U</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Go to the first line of the currently open file.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-D</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Go to the last line of the currently open file.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-X</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Delete the line that the cursor is on.</p></td>
+<td width="21%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="9%"></td>
+<td width="8%">
+
+
+<p><b>Ctrl-.</b></p></td>
+<td width="1%"></td>
+<td width="61%">
+
+
+<p>Enter a editor command.</p></td>
+<td width="21%">
+</td></tr>
+</table>
+
+<h2>BUGS
+<a name="BUGS"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em">You can report
+any bugs to
+<i>https://github.com/proh14/ptext/issues</i>.</p>
+
+<h2>AUTHOUR
+<a name="AUTHOUR"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em">Mainly developed
+by <i>proh14</i>. You can see other contributers in the <br>
+github page <i>https://github.com/proh14/ptext</i>.Note that
+this program is <br>
+based on kilo, which is developed by <i>antirez</i>.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+<p style="margin-left:9%; margin-top: 1em">BSD 2-Clause
+License</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:9%; margin-top: 1em"><b>ptextrc</b>(5)</p>
+<hr>
+</body>
+</html>
