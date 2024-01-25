@@ -24,9 +24,7 @@ delete characters with backspace or delete key.
 
 # KEY BINDINGS
 
-**Ctrl-Q**
-
-:   Exit ptext.
+**Ctrl-Q** Exit ptext.
 
 **Ctrl-S**
 
