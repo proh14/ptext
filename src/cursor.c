@@ -38,7 +38,6 @@ void scroll(void) {
   if (conf.cy < conf.numrows) {
     conf.rx = rowCxToRx(&conf.rows[conf.cy], conf.cx);
   }
-  conf.rx = conf.cx;
   if (conf.cy < conf.rowoff) {
     conf.rowoff = conf.cy;
   }
