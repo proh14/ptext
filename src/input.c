@@ -1,8 +1,8 @@
 #include <commands.h>
-#include <config.h>
 #include <cursor.h>
 #include <files.h>
 #include <input.h>
+#include <options.h>
 #include <ptext.h>
 #include <rows.h>
 #include <search.h>
@@ -122,10 +122,11 @@ void procKey(void) {
     return;
 
   if (key.dwControlKeyState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) {
+    /*
     if (handleCustomKeys(key.wVirtualKeyCode)) {
       return;
     }
-
+    */
     switch (key.wVirtualKeyCode) {
     case KEY_Q: {
       if (!conf.dirty) {
@@ -199,10 +200,13 @@ void procKey(void) {
     break;
   }
 #else
+
   int c = readKey();
+  /*
   if (handleCustomKeys(c)) {
     return;
   }
+  */
 
   switch (c) {
   case CTRL_KEY('q'): {
@@ -281,6 +285,7 @@ void procKey(void) {
 #endif
 }
 
+/*
 int handleCustomKeys(int c) {
   for (int i = 0; i < customKeysLen; i++) {
     if (customKeys[i].key == c) {
@@ -291,3 +296,4 @@ int handleCustomKeys(int c) {
 
   return 0;
 }
+*/

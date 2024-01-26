@@ -1,22 +1,23 @@
-#include <config.h>
 #include <highlighter.h>
+#include <options.h>
 #include <ptext.h>
 #include <rows.h>
 #include <stdafx.h>
 
 void updateRow(row *row) {
   int tabs = 0;
+  int tabstop = getOption(O_TABSTOP);
   size_t j;
   for (j = 0; j < row->len; j++)
     if (row->chars[j] == '\t')
       tabs++;
   free(row->renchar);
-  row->renchar = malloc(row->len + tabs * (TABSTOP - 1) + 1);
+  row->renchar = malloc(row->len + tabs * (tabstop - 1) + 1);
   int idx = 0;
   for (j = 0; j < row->len; j++) {
     if (row->chars[j] == '\t') {
       row->renchar[idx++] = ' ';
-      while (idx % TABSTOP != 0)
+      while (idx % tabstop != 0)
         row->renchar[idx++] = ' ';
     } else {
       row->renchar[idx++] = row->chars[j];

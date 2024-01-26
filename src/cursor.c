@@ -1,15 +1,16 @@
-#include <config.h>
 #include <cursor.h>
 #include <input.h>
+#include <options.h>
 #include <ptext.h>
 #include <rows.h>
 
 int rowCxToRx(row *row, int cx) {
+  int tabstop = getOption(O_TABSTOP);
   int rx = 0;
   int j;
   for (j = 0; j < cx; j++) {
     if (row->chars[j] == '\t') {
-      rx += (TABSTOP - 1) - (rx % TABSTOP);
+      rx += (tabstop - 1) - (rx % tabstop);
     }
     rx++;
   }
@@ -17,11 +18,12 @@ int rowCxToRx(row *row, int cx) {
 }
 
 int rowRxToCx(row *row, int rx) {
+  int tabstop = getOption(O_TABSTOP);
   int cur_rx = 0;
   int cx;
   for (cx = 0; cx < (int)row->len; cx++) {
     if (row->chars[cx] == '\t') {
-      cur_rx += (TABSTOP - 1) - (cur_rx % TABSTOP);
+      cur_rx += (tabstop - 1) - (cur_rx % tabstop);
     }
     cur_rx++;
     if (cur_rx > rx) {
