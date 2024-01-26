@@ -104,12 +104,12 @@ char *rtrim(char *s) {
 }
 
 char *token(char *command, int *len) {
-  int inq = 0;
-  if (*command == '\0' || *command == '#') {
+  if (*command == '\0' || *command == '#' || *command == '\n') {
     return NULL;
   }
+  int inq = 0;
   int i = 0;
-  while (isspace(command[i])) {
+  while (isspace(command[i]) || command[i] == '\n') {
     i++;
   }
   command = &command[i];
