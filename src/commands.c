@@ -39,6 +39,9 @@ void doLine(char *line) {
 
 void execCommand(void) {
   char *command = getPrompt(":%s", NULL);
+  if (command == NULL) {
+    return;
+  }
   doLine(command);
   free(command);
 }
