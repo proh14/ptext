@@ -6,5 +6,6 @@ extern char *args;
 
 void hello(void);
 void user_setStatus(void);
+void user_set(void);
 
 #endif

@@ -10,13 +10,15 @@
 #include <userfuncs.h>
 #include <utils.h>
 
-commandBind commands[] = {{"set-status", &user_setStatus}, {NULL, NULL}};
-char *getFunctionName(char *command);
+commandBind commands[] = {
+    {"set-status", &user_setStatus}, {"set", &user_set}, {NULL, NULL}};
+char *getFunctionName(char *command, int *len);
 
 void doLine(char *line) {
   int i;
   line = rtrim(line);
-  char *fname = getFunctionName(line);
+  int len;
+  char *fname = getFunctionName(line, &len);
   if (fname == NULL) {
     return;
   }
@@ -31,7 +33,7 @@ void doLine(char *line) {
     return;
   }
 
-  args = &fname[strlen(fname) + 1];
+  args = &fname[len + 1];
   (void)(*commands[i].func)();
 }
 
@@ -56,8 +58,8 @@ void doFile(char *filename) {
   free(line);
 }
 
-char *getFunctionName(char *command) {
+char *getFunctionName(char *command, int *len) {
   command = &command[0];
-  char *fname = token(command);
+  char *fname = token(command, len);
   return fname;
 }

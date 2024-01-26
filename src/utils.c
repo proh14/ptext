@@ -103,7 +103,7 @@ char *rtrim(char *s) {
   return s;
 }
 
-char *token(char *command) {
+char *token(char *command, int *len) {
   int inq = 0;
   if (*command == '\0' || *command == '#') {
     return NULL;
@@ -125,5 +125,6 @@ char *token(char *command) {
       break;
     }
   }
+  *len = i;
   return command;
 }

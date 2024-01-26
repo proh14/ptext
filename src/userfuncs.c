@@ -1,3 +1,4 @@
+#include <options.h>
 #include <stdafx.h>
 #include <userfuncs.h>
 #include <utils.h>
@@ -5,7 +6,9 @@
 char *args = NULL;
 
 char *nextarg(void) {
-  char *arg = token(args);
+  int len;
+  char *arg = token(args, &len);
+  args += len + 1;
   return arg;
 }
 
@@ -44,4 +47,27 @@ void user_setStatus(void) {
   }
   strip_quotes(arg1, arg1);
   setStatusMessage("%s", arg1);
+}
+
+void user_set(void) {
+  char *arg1 = nextarg();
+  char *arg2 = nextarg();
+  if (arg1 == NULL || arg2 == NULL) {
+    setStatusMessage("arguments are not enough for \"%s\"", "set");
+    return;
+  }
+  strip_quotes(arg1, arg1);
+  strip_quotes(arg2, arg2);
+
+  int val = atoi(arg2);
+  if (val == 0 && strcmp(arg2, "0") != 0) {
+    setStatusMessage("argument 2 is not a number");
+    return;
+  }
+
+  int ret = setOption_char(arg1, val);
+
+  if (!ret) {
+    setStatusMessage("option \"%s\" not found", arg1);
+  }
 }
