@@ -2,7 +2,7 @@
 #ifndef _OPTIONS_H_
 #define _OPTIONS_H_
 
-typedef enum optionIndex { O_TABSTOP = 0 } optionIndex;
+typedef enum optionIndex { O_TABSTOP = 0, O_QUITCONF } optionIndex;
 
 typedef struct {
   const char *name;

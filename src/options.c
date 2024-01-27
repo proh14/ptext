@@ -1,9 +1,7 @@
 #include <options.h>
 #include <stdafx.h>
 
-option options[] = {
-    {"tabstop", 5},
-};
+option options[] = {{"tabstop", 5}, {"quitconf", 1}};
 
 int optionCount = sizeof(options) / sizeof(option);
 
