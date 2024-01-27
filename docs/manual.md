@@ -80,6 +80,12 @@ BSD 2-Clause License
 
 :   
 
+# HOMEPAGE
+
+*https://github.com/proh14/ptext*
+
+:   
+
 # SEE ALSO
 
 **ptextrc**(5)

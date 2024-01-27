@@ -61,6 +61,10 @@
        BSD 2-Clause License
 
 
+[1mHOMEPAGE[0m
+       [4mhttps://github.com/proh14/ptext[0m
+
+
 [1mSEE ALSO[0m
        [1mptextrc[22m(5)
 
