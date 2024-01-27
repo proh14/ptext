@@ -53,7 +53,7 @@
 
 [1mAUTHOUR[0m
        Mainly developed by [4mproh14[24m. You can see other contributers in the
-       github page [4mhttps://github.com/proh14/ptext[24m.Note that this program is
+       github page [4mhttps://github.com/proh14/ptext[24m. Note that this program is
        based on kilo, which is developed by [4mantirez[24m.
 
 

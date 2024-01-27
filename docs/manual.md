@@ -70,7 +70,7 @@ You can report any bugs to *https://github.com/proh14/ptext/issues*.
 
 # AUTHOUR
 
-Mainly developed by *proh14*. You can see other contributers in the github page *https://github.com/proh14/ptext*.Note that this program is based on kilo, which is developed by *antirez*.
+Mainly developed by *proh14*. You can see other contributers in the github page *https://github.com/proh14/ptext*. Note that this program is based on kilo, which is developed by *antirez*.
 
 :   
 
