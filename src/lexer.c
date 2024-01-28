@@ -120,8 +120,9 @@ Token getNextToken(Lexer *l) {
       t.textlen = l->cursor - firstloc;
       return t;
     }
-    conf.rows[l->idx].in_comment = 0;
   }
+
+  conf.rows[l->idx].in_comment = in_comment;
 
   if (l->content[l->cursor] == '#') {
     t.kind = TOKEN_PREPROC;
