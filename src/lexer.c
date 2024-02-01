@@ -122,7 +122,7 @@ Token getNextToken(Lexer *l) {
     }
   }
 
-  conf.rows[l->idx].in_comment = in_comment;
+  conf.rows[l->idx].in_comment = 0;
 
   if (l->content[l->cursor] == '#') {
     t.kind = TOKEN_PREPROC;

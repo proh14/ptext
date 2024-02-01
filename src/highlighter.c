@@ -55,8 +55,7 @@ void highlight(char *hl, char *content, struct buff *buff, int len) {
 void prehighlight(char *hl, Lexer *l) {
   Token t = {0};
   size_t hllen = 0;
-  int in_comment = (l->idx > 0 && conf.rows[l->idx - 1].in_comment);
-  int changed = (conf.rows[l->idx].in_comment != in_comment);
+  int in_comment = (conf.rows[l->idx].in_comment);
   t.kind = TOKEN_SYMBOL;
   while (t.kind != TOKEN_END) {
     t = getNextToken(l);
@@ -65,6 +64,7 @@ void prehighlight(char *hl, Lexer *l) {
     }
     hllen += t.textlen;
   }
+  int changed = (conf.rows[l->idx].in_comment != in_comment);
   hl[hllen] = TOKEN_END;
   if (changed && l->idx + 1 < conf.numrows) {
     Lexer tl = {.content = conf.rows[l->idx + 1].renchar,

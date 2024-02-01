@@ -39,6 +39,9 @@ void rowAppend(char *s, size_t len, int at) {
   conf.rows = realloc(conf.rows, sizeof(row) * (conf.numrows + 1));
   memmove(&conf.rows[at + 1], &conf.rows[at],
           sizeof(row) * (conf.numrows - at));
+
+  for (int j = at + 1; j <= conf.numrows; j++)
+    conf.rows[j].idx++;
   conf.rows[at].chars = malloc(len + 1);
   memcpy(conf.rows[at].chars, s, len);
   conf.rows[at].chars[len] = '\0';
