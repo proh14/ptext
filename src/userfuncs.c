@@ -16,7 +16,7 @@ char *nextarg(void) {
 void strip_quotes(char *src, char *dest) {
   int n = strlen(src);
   if (n <= 1) {
-    strcpy(dest, src);
+    dest = src;
     return;
   }
 
