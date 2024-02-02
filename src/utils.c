@@ -10,7 +10,7 @@ void * xmalloc(size_t size) {
   if (p == NULL)
   {
     fprintf(stderr, "Failed to allocate %zu bytes!\n", size);
-    abort();
+    die("xmalloc");
   }
 
   return p;
@@ -23,18 +23,10 @@ void * xrealloc(void * ptr, size_t size) {
   {
     fprintf(stderr, "Failed to rellocate %zu bytes to %zu bytes!\n",
       sizeof(ptr), size);
-    abort();
+    die("xrealloc");
   }
 
   return new_ptr;
-}
-
-void setStatusMessage(const char *fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  vsnprintf(conf.statusmsg, sizeof(conf.statusmsg), fmt, ap);
-  va_end(ap);
-  conf.statusmsg_time = time(NULL);
 }
 
 char *rowsToString(int *buflen) {
@@ -53,6 +45,15 @@ char *rowsToString(int *buflen) {
   }
   return buf;
 }
+
+void setStatusMessage(const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vsnprintf(conf.statusmsg, sizeof(conf.statusmsg), fmt, ap);
+  va_end(ap);
+  conf.statusmsg_time = time(NULL);
+}
+
 
 char *getPrompt(char *promt, void (*callback)(char *, int)) {
   size_t bufcap = 100;
