@@ -4,6 +4,33 @@
 #include <stdafx.h>
 #include <utils.h>
 
+void * xmalloc(size_t size)
+{
+  void * p = malloc(size);
+
+  if (p == NULL)
+  {
+    fprintf(stderr, "Failed to allocate %zu bytes!\n", size);
+    abort();
+  }
+
+  return p;
+}
+
+void * xrealloc(void * ptr, size_t size)
+{
+  void * new_ptr = realloc(ptr, size);
+
+  if (new_ptr == NULL)
+  {
+    fprintf(stderr, "Failed to rellocate %zu bytes to %zu bytes!\n",
+      sizeof(ptr), size);
+    abort();
+  }
+
+  return new_ptr;
+}
+
 void setStatusMessage(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -18,7 +45,7 @@ char *rowsToString(int *buflen) {
   for (j = 0; j < conf.numrows; j++)
     totlen += conf.rows[j].len + 1;
   *buflen = totlen;
-  char *buf = malloc(totlen);
+  char *buf = xmalloc(totlen);
   char *p = buf;
   for (j = 0; j < conf.numrows; j++) {
     memcpy(p, conf.rows[j].chars, conf.rows[j].len);
@@ -33,7 +60,7 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
   size_t bufcap = 100;
   size_t bufsize = 0;
   const int ADD_SIZE = 16;
-  char *buf = malloc(100);
+  char *buf = xmalloc(100);
   buf[0] = '\0';
 
   while (1) {
@@ -78,7 +105,7 @@ char *getPrompt(char *promt, void (*callback)(char *, int)) {
     } else if (!iscntrl(c) && c < 128) {
       if (bufcap == bufsize - 1) {
         bufcap += ADD_SIZE;
-        buf = realloc(buf, bufsize);
+        buf = xrealloc(buf, bufsize);
         if (buf == NULL) {
           die("realloc");
         }
