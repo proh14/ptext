@@ -12,6 +12,8 @@ void save(void) {
     char *fname = getPrompt("Save as: %s", NULL);
 #ifdef _WIN32
     if (GetFileAttributesA(fname) != INVALID_FILE_ATTRIBUTES) {
+#else
+    if (access(fname, F_OK) == 0) {
 #endif
       char *yorn = getPrompt("File exists. Overwrite? (y/n) %s", NULL);
       if (yorn[0] != 'y') {
@@ -20,10 +22,7 @@ void save(void) {
         return;
       }
       free(yorn);
-
-#ifdef _WIN32
     }
-#endif
     conf.filename = fname;
   }
 
