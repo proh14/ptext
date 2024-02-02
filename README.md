@@ -44,7 +44,7 @@ ptext <file name>
 to start the editor.
 
 ### Documentation📖:
-If you installed ptext on a *nix system you can simply run 
+If you installed ptext (with the make install command) on a *nix system you can simply run 
 ``` shell
 man ptext
 ```
