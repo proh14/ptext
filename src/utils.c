@@ -4,8 +4,7 @@
 #include <stdafx.h>
 #include <utils.h>
 
-void * xmalloc(size_t size)
-{
+void * xmalloc(size_t size) {
   void * p = malloc(size);
 
   if (p == NULL)
@@ -17,8 +16,7 @@ void * xmalloc(size_t size)
   return p;
 }
 
-void * xrealloc(void * ptr, size_t size)
-{
+void * xrealloc(void * ptr, size_t size) {
   void * new_ptr = realloc(ptr, size);
 
   if (new_ptr == NULL)
