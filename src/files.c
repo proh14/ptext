@@ -71,7 +71,7 @@ size_t getline(char **line, size_t *len, FILE *stream) {
   }
 
   size_t capacity = *len + 128;
-  char *temp = (char *)realloc(*line, capacity);
+  char *temp = (char *)xrealloc(*line, capacity);
 
   if (!temp)
     return -1;
@@ -84,7 +84,7 @@ size_t getline(char **line, size_t *len, FILE *stream) {
   while ((c = fgetc(stream)) != EOF && c != '\n') {
     if (i == capacity - 1) {
       capacity *= 2;
-      char *temp = (char *)realloc(*line, capacity);
+      char *temp = (char *)xrealloc(*line, capacity);
 
       if (!temp) {
         return -1;
@@ -120,7 +120,7 @@ void openFile(char *s) {
   }
   free(conf.filename);
 
-  conf.filename = malloc(strlen(s) + 1);
+  conf.filename = xmalloc(strlen(s) + 1);
   snprintf(conf.filename, strlen(s) + 1, "%s", s);
 
   char *line = NULL;

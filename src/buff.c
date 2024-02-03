@@ -1,7 +1,8 @@
 #include <buff.h>
+#include <utils.h>
 
 void buffAppend(struct buff *buff, const char *s, size_t len) {
-  char *new = realloc(buff->chars, buff->len + len);
+  char *new = xrealloc(buff->chars, buff->len + len);
   if (new == NULL) {
     return;
   }

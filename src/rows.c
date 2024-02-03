@@ -3,6 +3,7 @@
 #include <ptext.h>
 #include <rows.h>
 #include <stdafx.h>
+#include <utils.h>
 
 void updateRow(row *row) {
   int tabs = 0;
@@ -12,7 +13,7 @@ void updateRow(row *row) {
     if (row->chars[j] == '\t')
       tabs++;
   free(row->renchar);
-  row->renchar = malloc(row->len + tabs * (tabstop - 1) + 1);
+  row->renchar = xmalloc(row->len + tabs * (tabstop - 1) + 1);
   int idx = 0;
   for (j = 0; j < row->len; j++) {
     if (row->chars[j] == '\t') {
@@ -29,20 +30,20 @@ void updateRow(row *row) {
              .contentlen = row->renlen,
              .cursor = 0,
              .idx = row->idx};
-  row->hl = realloc(row->hl, row->renlen + 1);
+  row->hl = xrealloc(row->hl, row->renlen + 1);
   prehighlight(row->hl, &l);
 }
 
 void rowAppend(char *s, size_t len, int at) {
   if (at < 0 || at > conf.numrows)
     return;
-  conf.rows = realloc(conf.rows, sizeof(row) * (conf.numrows + 1));
+  conf.rows = xrealloc(conf.rows, sizeof(row) * (conf.numrows + 1));
   memmove(&conf.rows[at + 1], &conf.rows[at],
           sizeof(row) * (conf.numrows - at));
 
   for (int j = at + 1; j <= conf.numrows; j++)
     conf.rows[j].idx++;
-  conf.rows[at].chars = malloc(len + 1);
+  conf.rows[at].chars = xmalloc(len + 1);
   memcpy(conf.rows[at].chars, s, len);
   conf.rows[at].chars[len] = '\0';
   conf.rows[at].idx = at;
@@ -57,7 +58,7 @@ void rowAppend(char *s, size_t len, int at) {
 }
 
 void rowAppendString(row *row, char *s, size_t len) {
-  row->chars = realloc(row->chars, row->len + len + 1);
+  row->chars = xrealloc(row->chars, row->len + len + 1);
   memcpy(&row->chars[row->len], s, len);
   row->len += len;
   row->chars[row->len] = '\0';
@@ -97,7 +98,7 @@ void rowDelChar(row *row, int at) {
 void rowInsertChar(row *row, int at, int c) {
   if (at < 0 || at > (int)row->len)
     at = row->len;
-  row->chars = realloc(row->chars, row->len + 2);
+  row->chars = xrealloc(row->chars, row->len + 2);
   memmove(&row->chars[at + 1], &row->chars[at], row->len - at + 1);
   row->len++;
   row->chars[at] = c;
