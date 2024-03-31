@@ -261,7 +261,7 @@ void procKey(void) {
     conf.cx = 0;
     break;
   case CTRL_KEY('e'):
-    conf.cx = (int)conf.rows[conf.cy].renlen;
+    conf.cx = (int)conf.rows[conf.cy].len;
     break;
   case CTRL_KEY('d'):
     conf.cy = conf.numrows - 1;
