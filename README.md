@@ -53,10 +53,18 @@ Otherwise take a look at [./docs](./docs] directory to see the manual in diffren
 The markdown version of the [manual](./docs/manual.md)
 
 ### Goals🥅:
-1. Add a plugin system (for example .ptextrc).
-2. Add windows.
-3. Add utf support.
-4. Read the terminfo database.
+0. Add multi-buffering.
+1. Add line numbers.
+2. Add visual mode (Selecting, copy selection, paste selection, delete selection).
+3. Fix replace.
+4. Add keyboard configuration(like `bind-key CTRL_X exit`).
+5. Add syntax highlighting configuration.
+6. Add file browser mode.
+7. Add shell mode.
+8. Add a self contained help-system.
+9. Add vertical and horizontal split.
+10. Add VI mode.
+11. Add utf support.
 
 ### Work in progress⚒️:
 This is still a work in progress project!
