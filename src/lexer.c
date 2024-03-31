@@ -131,14 +131,15 @@ Token getNextToken(Lexer *l) {
     return t;
   }
 
-  if (l->content[l->cursor] == '"') {
+  if (l->content[l->cursor] == '"' || l->content[l->cursor] == '\'') {
     t.kind = TOKEN_STRING;
     l->cursor++;
-    while (l->content[l->cursor] != '"' && l->cursor < l->contentlen) {
+    while ((l->content[l->cursor] != '"' && l->content[l->cursor] != '\'') &&
+           l->cursor < l->contentlen) {
       t.textlen++;
       l->cursor++;
     }
-    if (l->content[l->cursor] == '"') {
+    if (l->content[l->cursor] == '"' || l->cursor == '\'') {
       t.textlen++;
       t.textlen++;
       l->cursor++;

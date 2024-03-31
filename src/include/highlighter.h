@@ -18,7 +18,7 @@
 #define INVALID_LEN 5
 #define MATCH_COLOR "\x1b[34m"
 #define MATCH_LEN 5
-#define STRING_COLOR "\x1b[31m"
+#define STRING_COLOR "\x1b[36m"
 #define STRING_LEN 5
 
 void highlight(char *hl, char *content, struct buff *buff, int len);
