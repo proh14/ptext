@@ -1,7 +1,7 @@
-#include <buff.h>
+#include <screen.h>
 #include <utils.h>
 
-void buffAppend(struct buff *buff, const char *s, size_t len) {
+void screenAppend(struct screenBuffer *buff, const char *s, size_t len) {
   char *new = xrealloc(buff->chars, buff->len + len);
   if (new == NULL) {
     return;

@@ -1,8 +1,8 @@
 #ifndef _HIGHLIGHT_H_
 #define _HIGHLIGHT_H_
 
-#include <buff.h>
 #include <lexer.h>
+#include <screen.h>
 
 #define SYMBOL_COLOR "\x1b[m"
 #define SYMBOL_LEN 3
@@ -21,6 +21,6 @@
 #define STRING_COLOR "\x1b[36m"
 #define STRING_LEN 5
 
-void highlight(char *hl, char *content, struct buff *buff, int len);
+void highlight(char *hl, char *content, struct screenBuffer *buff, int len);
 void prehighlight(char *hl, Lexer *l);
 #endif // _HIGHLIGHT_H_

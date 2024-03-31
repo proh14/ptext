@@ -2,11 +2,11 @@
 #ifndef _OUTPUT_H_
 #define _OUTPUT_H_
 
-#include <buff.h>
+#include <screen.h>
 
-void drawAll(struct buff *buff);
-void drawStatusBar(struct buff *buff);
-void drawStatusMessage(struct buff *buff);
+void drawAll(struct screenBuffer *buff);
+void drawStatusBar(struct screenBuffer *buff);
+void drawStatusMessage(struct screenBuffer *buff);
 void refresh(void);
 
 #endif
