@@ -92,6 +92,10 @@ void replaceCallBack(char *query, int c) {
   case '\x1b':
     row = &conf.rows[last_match];
     char *replace = getPrompt("Replace with: %s", NULL);
+    if (replace == NULL) {
+      free(replace);
+      return;
+    }
     row->chars = xrealloc(row->chars, row->len + strlen(replace) + 1);
     memcpy(&row->chars[last_mr], replace, strlen(replace));
     conf.dirty++;
