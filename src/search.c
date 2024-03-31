@@ -76,6 +76,16 @@ void replaceCallBack(char *query, int c) {
   static int direction = 1;
   static int last_mr = -1;
   static int last_match = -1;
+
+  static char *last_hl = NULL;
+
+  if (last_hl) {
+    row *row = &conf.rows[last_match];
+    memcpy(row->hl, last_hl, row->renlen);
+    free(last_hl);
+    last_hl = NULL;
+  }
+
   row *row = NULL;
   switch (c) {
   case '\r':
@@ -115,6 +125,9 @@ void replaceCallBack(char *query, int c) {
       conf.cy = current;
       conf.cx = rowRxToCx(row, match - row->renchar);
       conf.rowoff = conf.numrows;
+      last_hl = malloc(row->renlen);
+      memcpy(last_hl, row->hl, row->renlen);
+      memset(&row->hl[match - row->renchar], TOKEN_MATCH, strlen(query));
       last_mr = match - row->renchar;
       break;
     }
