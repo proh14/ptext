@@ -53,7 +53,6 @@ Otherwise take a look at [./docs](./docs] directory to see the manual in diffren
 The markdown version of the [manual](./docs/manual.md)
 
 ### Goals🥅:
-0. Add multi-buffering.
 1. Add line numbers.
 2. Add visual mode (Selecting, copy selection, paste selection, delete selection).
 3. Fix replace.
