@@ -10,8 +10,10 @@
 #include <userfuncs.h>
 #include <utils.h>
 
-commandBind commands[] = {
-    {"set-status", &user_setStatus}, {"set", &user_set}, {NULL, NULL}};
+commandBind commands[] = {{"set-status", &user_setStatus},
+                          {"set", &user_set},
+                          {"goto-buffer", &user_gotoBuffer},
+                          {NULL, NULL}};
 char *getFunctionName(char *command, int *len);
 
 void doLine(char *line) {

@@ -1,4 +1,5 @@
 #include <options.h>
+#include <ptext.h>
 #include <stdafx.h>
 #include <userfuncs.h>
 #include <utils.h>
@@ -70,4 +71,23 @@ void user_set(void) {
   if (!ret) {
     setStatusMessage("option \"%s\" not found", arg1);
   }
+}
+
+void user_gotoBuffer(void) {
+  char *arg1 = nextarg();
+  if (arg1 == NULL) {
+    setStatusMessage("arguments are not enough for \"%s\"", "goto-buffer");
+    return;
+  }
+  strip_quotes(arg1, arg1);
+  int val = atoi(arg1);
+  if (val == 0 && strcmp(arg1, "0") != 0) {
+    setStatusMessage("argument 1 is not a number");
+    return;
+  }
+  if (val < 0 || val >= conf.num_buffers) {
+    setStatusMessage("buffer index out of range");
+    return;
+  }
+  conf.current_buffer = val;
 }
