@@ -13,6 +13,7 @@
 commandBind commands[] = {{"set-status", &user_setStatus},
                           {"set", &user_set},
                           {"goto-buffer", &user_gotoBuffer},
+                          {"edit", &user_edit},
                           {NULL, NULL}};
 char *getFunctionName(char *command, int *len);
 

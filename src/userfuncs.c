@@ -1,4 +1,6 @@
+#include <files.h>
 #include <options.h>
+#include <output.h>
 #include <ptext.h>
 #include <stdafx.h>
 #include <userfuncs.h>
@@ -90,4 +92,20 @@ void user_gotoBuffer(void) {
     return;
   }
   conf.current_buffer = val;
+}
+
+void user_edit(void) {
+  char *arg1 = nextarg();
+  if (arg1 == NULL) {
+    setStatusMessage("arguments are not enough for \"%s\"", "edit");
+    return;
+  }
+  strip_quotes(arg1, arg1);
+  if (access(arg1, F_OK) == -1) {
+    setStatusMessage("file \"%s\" not found", arg1);
+    return;
+  }
+  openFile(arg1);
+  setStatusMessage("Oppend File %s", arg1);
+  refresh();
 }
