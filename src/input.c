@@ -1,8 +1,10 @@
+#include <buffer.h>
 #include <commands.h>
 #include <cursor.h>
 #include <files.h>
 #include <input.h>
 #include <options.h>
+#include <output.h>
 #include <ptext.h>
 #include <rows.h>
 #include <search.h>
@@ -10,46 +12,46 @@
 #include <utils.h>
 
 void delChar(void) {
-  if (conf.cy == conf.numrows) {
+  if (curbuf.cy == curbuf.numrows) {
     return;
   }
-  if (conf.cx == 0 && conf.cy == 0) {
+  if (curbuf.cx == 0 && curbuf.cy == 0) {
     return;
   }
-  row *row = &conf.rows[conf.cy];
-  if (conf.cx > 0) {
-    rowDelChar(row, conf.cx - 1);
-    conf.cx--;
+  row *row = &curbuf.rows[curbuf.cy];
+  if (curbuf.cx > 0) {
+    rowDelChar(row, curbuf.cx - 1);
+    curbuf.cx--;
   } else {
-    conf.cx = (int)conf.rows[conf.cy - 1].len;
-    rowAppendString(&conf.rows[conf.cy - 1], row->chars, row->len);
-    delRow(conf.cy);
-    conf.cy--;
+    curbuf.cx = (int)curbuf.rows[curbuf.cy - 1].len;
+    rowAppendString(&curbuf.rows[curbuf.cy - 1], row->chars, row->len);
+    delRow(curbuf.cy);
+    curbuf.cy--;
   }
 }
 
 void insertAChar(int c) {
-  if (conf.cy == conf.numrows) {
+  if (curbuf.cy == curbuf.numrows) {
     rowAppend("", 0, 0);
   }
-  rowInsertChar(&conf.rows[conf.cy], conf.cx, c);
-  conf.cx++;
-  conf.dirty++;
+  rowInsertChar(&curbuf.rows[curbuf.cy], curbuf.cx, c);
+  curbuf.cx++;
+  curbuf.dirty++;
 }
 
 void insertNewLine(void) {
-  if (conf.cx == 0) {
-    rowAppend("", 0, conf.cy);
+  if (curbuf.cx == 0) {
+    rowAppend("", 0, curbuf.cy);
   } else {
-    row *row = &conf.rows[conf.cy];
-    rowAppend(&row->chars[conf.cx], row->len - conf.cx, conf.cy + 1);
-    row = &conf.rows[conf.cy];
-    row->len = conf.cx;
+    row *row = &curbuf.rows[curbuf.cy];
+    rowAppend(&row->chars[curbuf.cx], row->len - curbuf.cx, curbuf.cy + 1);
+    row = &curbuf.rows[curbuf.cy];
+    row->len = curbuf.cx;
     row->chars[row->len] = '\0';
     updateRow(row);
   }
-  conf.cy++;
-  conf.cx = 0;
+  curbuf.cy++;
+  curbuf.cx = 0;
 }
 
 #ifdef _WIN32
@@ -129,7 +131,7 @@ void procKey(void) {
     */
     switch (key.wVirtualKeyCode) {
     case KEY_Q: {
-      if (!conf.dirty) {
+      if (!curbuf.dirty) {
         system("cls");
         exit(0);
       }
@@ -160,16 +162,16 @@ void procKey(void) {
       search();
       break;
     case KEY_A:
-      conf.cx = 0;
+      curbuf.cx = 0;
       break;
     case KEY_E:
-      conf.cx = (int)conf.rows[conf.cy].renlen;
+      curbuf.cx = (int)curbuf.rows[curbuf.cy].renlen;
       break;
     case KEY_D:
-      conf.cy = conf.numrows - 1;
+      curbuf.cy = curbuf.numrows - 1;
       break;
     case KEY_U:
-      conf.cy = 0;
+      curbuf.cy = 0;
       break;
     case KEY_R:
       replace();
@@ -210,7 +212,7 @@ void procKey(void) {
 
   switch (c) {
   case CTRL_KEY('q'): {
-    if (!conf.dirty || !getOption(O_QUITCONF)) {
+    if (!curbuf.dirty || !getOption(O_QUITCONF)) {
       write(1, "\x1b[2J", 4);
       write(1, "\x1b[H", 3);
       exit(0);
@@ -258,25 +260,42 @@ void procKey(void) {
     search();
     break;
   case CTRL_KEY('a'):
-    conf.cx = 0;
+    curbuf.cx = 0;
     break;
   case CTRL_KEY('e'):
-    conf.cx = (int)conf.rows[conf.cy].len;
+    curbuf.cx = (int)curbuf.rows[curbuf.cy].len;
     break;
   case CTRL_KEY('d'):
-    conf.cy = conf.numrows - 1;
+    curbuf.cy = curbuf.numrows - 1;
     break;
   case CTRL_KEY('u'):
-    conf.cy = 0;
+    curbuf.cy = 0;
     break;
   case CTRL_KEY('r'):
     replace();
     break;
   case CTRL_KEY('x'):
-    delRow(conf.cy);
+    delRow(curbuf.cy);
     break;
   case CTRL_KEY('.'):
     execCommand();
+    break;
+  case CTRL_KEY('o'):
+    if (conf.current_buffer == MAX_BUFFERS - 1) {
+      setStatusMessage("You are on the last buffer!");
+      break;
+    }
+    ++conf.current_buffer;
+    if (conf.num_buffers < conf.current_buffer) {
+      createBuffer(&conf.buffers[conf.current_buffer], 1);
+    }
+    break;
+  case CTRL_KEY('b'):
+    if (conf.current_buffer == 0) {
+      setStatusMessage("You are already on the first buffer!");
+      break;
+    }
+    --conf.current_buffer;
     break;
   default:
     insertAChar(c);

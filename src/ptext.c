@@ -1,3 +1,4 @@
+#include <buffer.h>
 #include <commands.h>
 #include <files.h>
 #include <input.h>
@@ -91,12 +92,9 @@ void die(const char *s) {
 }
 
 void init(void) {
-  conf.numrows = 0;
-  conf.rows = NULL;
-  conf.cx = 0;
-  conf.cy = 0;
-  conf.dirty = 0;
-  conf.rowoff = 0;
+  conf.current_buffer = 0;
+
+  createBuffer(&conf.buffers[0], 1);
 #ifdef _WIN32
   SetConsoleOutputCP(CP_UTF8);
 
@@ -117,7 +115,6 @@ void init(void) {
   conf.height = w.ws_row;
 #endif // _WIN32
 
-  conf.filename = NULL;
   setStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
   char filename[256];
   strcpy(filename, getenv("HOME"));
@@ -127,18 +124,18 @@ void init(void) {
 }
 
 void freeall(void) {
-  if (conf.rows == NULL && conf.numrows == 0) {
+  if (curbuf.rows == NULL && curbuf.numrows == 0) {
     return;
   }
-  for (int i = 0; i < conf.numrows; i++) {
-    free(conf.rows[i].chars);
-    free(conf.rows[i].renchar);
-    free(conf.rows[i].hl);
+  for (int i = 0; i < curbuf.numrows; i++) {
+    free(curbuf.rows[i].chars);
+    free(curbuf.rows[i].renchar);
+    free(curbuf.rows[i].hl);
   }
-  free(conf.rows);
-  conf.rows = NULL;
+  free(curbuf.rows);
+  curbuf.rows = NULL;
 
-  free(conf.filename);
+  free(curbuf.filename);
 }
 
 void done(void) {

@@ -35,26 +35,26 @@ void updateRow(row *row) {
 }
 
 void rowAppend(char *s, size_t len, int at) {
-  if (at < 0 || at > conf.numrows)
+  if (at < 0 || at > curbuf.numrows)
     return;
-  conf.rows = xrealloc(conf.rows, sizeof(row) * (conf.numrows + 1));
-  memmove(&conf.rows[at + 1], &conf.rows[at],
-          sizeof(row) * (conf.numrows - at));
+  curbuf.rows = xrealloc(curbuf.rows, sizeof(row) * (curbuf.numrows + 1));
+  memmove(&curbuf.rows[at + 1], &curbuf.rows[at],
+          sizeof(row) * (curbuf.numrows - at));
 
-  for (int j = at + 1; j <= conf.numrows; j++)
-    conf.rows[j].idx++;
-  conf.rows[at].chars = xmalloc(len + 1);
-  memcpy(conf.rows[at].chars, s, len);
-  conf.rows[at].chars[len] = '\0';
-  conf.rows[at].idx = at;
-  conf.rows[at].len = len;
-  conf.rows[at].renlen = 0;
-  conf.rows[at].renchar = NULL;
-  conf.rows[at].hl = NULL;
-  conf.rows[at].in_comment = 0;
-  conf.numrows++;
-  conf.dirty++;
-  updateRow(&conf.rows[at]);
+  for (int j = at + 1; j <= curbuf.numrows; j++)
+    curbuf.rows[j].idx++;
+  curbuf.rows[at].chars = xmalloc(len + 1);
+  memcpy(curbuf.rows[at].chars, s, len);
+  curbuf.rows[at].chars[len] = '\0';
+  curbuf.rows[at].idx = at;
+  curbuf.rows[at].len = len;
+  curbuf.rows[at].renlen = 0;
+  curbuf.rows[at].renchar = NULL;
+  curbuf.rows[at].hl = NULL;
+  curbuf.rows[at].in_comment = 0;
+  curbuf.numrows++;
+  curbuf.dirty++;
+  updateRow(&curbuf.rows[at]);
 }
 
 void rowAppendString(row *row, char *s, size_t len) {
@@ -63,7 +63,7 @@ void rowAppendString(row *row, char *s, size_t len) {
   row->len += len;
   row->chars[row->len] = '\0';
   updateRow(row);
-  conf.dirty++;
+  curbuf.dirty++;
 }
 
 void freeRow(row *row) {
@@ -73,17 +73,17 @@ void freeRow(row *row) {
 }
 
 void delRow(int at) {
-  if (at < 0 || at >= conf.numrows) {
+  if (at < 0 || at >= curbuf.numrows) {
     return;
   }
-  freeRow(&conf.rows[at]);
-  memmove(&conf.rows[at], &conf.rows[at + 1],
-          sizeof(row) * (conf.numrows - at - 1));
-  for (int i = at; i < conf.numrows - 1; i++) {
-    conf.rows[i].idx--;
+  freeRow(&curbuf.rows[at]);
+  memmove(&curbuf.rows[at], &curbuf.rows[at + 1],
+          sizeof(row) * (curbuf.numrows - at - 1));
+  for (int i = at; i < curbuf.numrows - 1; i++) {
+    curbuf.rows[i].idx--;
   }
-  conf.numrows--;
-  conf.dirty++;
+  curbuf.numrows--;
+  curbuf.dirty++;
 }
 
 void rowDelChar(row *row, int at) {
@@ -92,7 +92,7 @@ void rowDelChar(row *row, int at) {
   memmove(&row->chars[at], &row->chars[at + 1], row->len - at);
   row->len--;
   updateRow(row);
-  conf.dirty++;
+  curbuf.dirty++;
 }
 
 void rowInsertChar(row *row, int at, int c) {

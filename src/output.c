@@ -14,17 +14,17 @@ void drawAll(struct screenBuffer *buff) {
   int y;
   int frow;
   for (y = 0; y < conf.height - 2; y++) {
-    frow = conf.rowoff + y;
-    if (frow >= conf.numrows || frow == -1) {
+    frow = curbuf.rowoff + y;
+    if (frow >= curbuf.numrows || frow == -1) {
       screenAppend(buff, "~", 1);
     } else {
-      int len = conf.rows[frow].renlen - conf.coloff;
+      int len = curbuf.rows[frow].renlen - curbuf.coloff;
       if (len < 0)
         len = 0;
       if (len > conf.width)
         len = conf.width;
-      highlight(&conf.rows[frow].hl[conf.coloff],
-                &conf.rows[frow].renchar[conf.coloff], buff, len);
+      highlight(&curbuf.rows[frow].hl[curbuf.coloff],
+                &curbuf.rows[frow].renchar[curbuf.coloff], buff, len);
 
       screenAppend(buff, "\x1b[m", 3);
     }
@@ -36,11 +36,12 @@ void drawAll(struct screenBuffer *buff) {
 void drawStatusBar(struct screenBuffer *buff) {
   screenAppend(buff, "\x1b[7m", 4);
   char status[80], rstatus[80];
-  int len = snprintf(status, sizeof(status), "%.20s - %d lines %s",
-                     conf.filename ? conf.filename : "[No Name]", conf.numrows,
-                     conf.dirty ? "(modified)" : "");
-  int rlen =
-      snprintf(rstatus, sizeof(rstatus), "%d/%d", conf.cy + 1, conf.numrows);
+  int len = snprintf(status, sizeof(status), "%.20s - Buffer %d - %d lines %s",
+                     curbuf.filename ? curbuf.filename : "[No Name]",
+                     conf.current_buffer, curbuf.numrows,
+                     curbuf.dirty ? "(modified)" : "");
+  int rlen = snprintf(rstatus, sizeof(rstatus), "%d/%d", curbuf.cy + 1,
+                      curbuf.numrows);
   if (len > conf.width)
     len = conf.width;
   screenAppend(buff, status, len);
@@ -76,8 +77,8 @@ void refresh(void) {
   char s[32];
   drawAll(&buff);
 
-  snprintf(s, sizeof(s), "\x1b[%d;%dH", (conf.cy - conf.rowoff) + 1,
-           (conf.rx - conf.coloff) + 1);
+  snprintf(s, sizeof(s), "\x1b[%d;%dH", (curbuf.cy - curbuf.rowoff) + 1,
+           (curbuf.rx - curbuf.coloff) + 1);
 
   drawStatusBar(&buff);
   drawStatusMessage(&buff);

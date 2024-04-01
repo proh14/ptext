@@ -55,7 +55,7 @@ void highlight(char *hl, char *content, struct screenBuffer *buff, int len) {
 void prehighlight(char *hl, Lexer *l) {
   Token t = {0};
   size_t hllen = 0;
-  int in_comment = (conf.rows[l->idx].in_comment);
+  int in_comment = (curbuf.rows[l->idx].in_comment);
   t.kind = TOKEN_SYMBOL;
   while (t.kind != TOKEN_END) {
     t = getNextToken(l);
@@ -64,13 +64,13 @@ void prehighlight(char *hl, Lexer *l) {
     }
     hllen += t.textlen;
   }
-  int changed = (conf.rows[l->idx].in_comment != in_comment);
+  int changed = (curbuf.rows[l->idx].in_comment != in_comment);
   hl[hllen] = TOKEN_END;
-  if (changed && l->idx + 1 < conf.numrows) {
-    Lexer tl = {.content = conf.rows[l->idx + 1].renchar,
+  if (changed && l->idx + 1 < curbuf.numrows) {
+    Lexer tl = {.content = curbuf.rows[l->idx + 1].renchar,
                 .cursor = 0,
-                .contentlen = conf.rows[l->idx + 1].renlen,
+                .contentlen = curbuf.rows[l->idx + 1].renlen,
                 .idx = l->idx + 1};
-    prehighlight(conf.rows[l->idx + 1].hl, &tl);
+    prehighlight(curbuf.rows[l->idx + 1].hl, &tl);
   }
 }

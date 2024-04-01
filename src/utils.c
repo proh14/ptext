@@ -4,11 +4,10 @@
 #include <stdafx.h>
 #include <utils.h>
 
-void * xmalloc(size_t size) {
-  void * p = malloc(size);
+void *xmalloc(size_t size) {
+  void *p = malloc(size);
 
-  if (p == NULL)
-  {
+  if (p == NULL) {
     fprintf(stderr, "Failed to allocate %zu bytes!\n", size);
     die("xmalloc");
   }
@@ -16,13 +15,12 @@ void * xmalloc(size_t size) {
   return p;
 }
 
-void * xrealloc(void * ptr, size_t size) {
-  void * new_ptr = realloc(ptr, size);
+void *xrealloc(void *ptr, size_t size) {
+  void *new_ptr = realloc(ptr, size);
 
-  if (new_ptr == NULL)
-  {
+  if (new_ptr == NULL) {
     fprintf(stderr, "Failed to rellocate %zu bytes to %zu bytes!\n",
-      sizeof(ptr), size);
+            sizeof(ptr), size);
     die("xrealloc");
   }
 
@@ -32,14 +30,14 @@ void * xrealloc(void * ptr, size_t size) {
 char *rowsToString(int *buflen) {
   int totlen = 0;
   int j;
-  for (j = 0; j < conf.numrows; j++)
-    totlen += conf.rows[j].len + 1;
+  for (j = 0; j < curbuf.numrows; j++)
+    totlen += curbuf.rows[j].len + 1;
   *buflen = totlen;
   char *buf = xmalloc(totlen);
   char *p = buf;
-  for (j = 0; j < conf.numrows; j++) {
-    memcpy(p, conf.rows[j].chars, conf.rows[j].len);
-    p += conf.rows[j].len;
+  for (j = 0; j < curbuf.numrows; j++) {
+    memcpy(p, curbuf.rows[j].chars, curbuf.rows[j].len);
+    p += curbuf.rows[j].len;
     *p = '\n';
     p++;
   }
@@ -53,7 +51,6 @@ void setStatusMessage(const char *fmt, ...) {
   va_end(ap);
   conf.statusmsg_time = time(NULL);
 }
-
 
 char *getPrompt(char *promt, void (*callback)(char *, int)) {
   size_t bufcap = 100;

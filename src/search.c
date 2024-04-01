@@ -13,7 +13,7 @@ void searchCallBack(char *query, int c) {
   static char *last_hl = NULL;
 
   if (last_hl) {
-    row *row = &conf.rows[last_match];
+    row *row = &curbuf.rows[last_match];
     memcpy(row->hl, last_hl, row->renlen);
     free(last_hl);
     last_hl = NULL;
@@ -37,19 +37,19 @@ void searchCallBack(char *query, int c) {
     direction = 1;
   int current = last_match;
   int i;
-  for (i = 0; i < conf.numrows; i++) {
+  for (i = 0; i < curbuf.numrows; i++) {
     current += direction;
     if (current == -1)
-      current = conf.numrows - 1;
-    else if (current == conf.numrows)
+      current = curbuf.numrows - 1;
+    else if (current == curbuf.numrows)
       current = 0;
-    row *row = &conf.rows[current];
+    row *row = &curbuf.rows[current];
     char *match = strstr(row->renchar, query);
     if (match) {
       last_match = current;
-      conf.cy = current;
-      conf.cx = rowRxToCx(row, match - row->renchar);
-      conf.rowoff = conf.numrows;
+      curbuf.cy = current;
+      curbuf.cx = rowRxToCx(row, match - row->renchar);
+      curbuf.rowoff = curbuf.numrows;
       last_hl = malloc(row->renlen);
       memcpy(last_hl, row->hl, row->renlen);
       memset(&row->hl[match - row->renchar], TOKEN_MATCH, strlen(query));
@@ -59,16 +59,16 @@ void searchCallBack(char *query, int c) {
 }
 
 void search(void) {
-  int saved_cx = conf.cx;
-  int saved_cy = conf.cy;
-  int saved_rowoff = conf.rowoff;
+  int saved_cx = curbuf.cx;
+  int saved_cy = curbuf.cy;
+  int saved_rowoff = curbuf.rowoff;
   char *query = getPrompt("Search: %s", &searchCallBack);
   if (query) {
     free(query);
   } else {
-    conf.cx = saved_cx;
-    conf.cy = saved_cy;
-    conf.rowoff = saved_rowoff;
+    curbuf.cx = saved_cx;
+    curbuf.cy = saved_cy;
+    curbuf.rowoff = saved_rowoff;
   }
 }
 
@@ -80,7 +80,7 @@ void replaceCallBack(char *query, int c) {
   static char *last_hl = NULL;
 
   if (last_hl) {
-    row *row = &conf.rows[last_match];
+    row *row = &curbuf.rows[last_match];
     memcpy(row->hl, last_hl, row->renlen);
     free(last_hl);
     last_hl = NULL;
@@ -90,7 +90,7 @@ void replaceCallBack(char *query, int c) {
   switch (c) {
   case '\r':
   case '\x1b':
-    row = &conf.rows[last_match];
+    row = &curbuf.rows[last_match];
     char *replace = getPrompt("Replace with: %s", NULL);
     if (replace == NULL) {
       free(replace);
@@ -98,7 +98,7 @@ void replaceCallBack(char *query, int c) {
     }
     row->chars = xrealloc(row->chars, row->len + strlen(replace) + 1);
     memcpy(&row->chars[last_mr], replace, strlen(replace));
-    conf.dirty++;
+    curbuf.dirty++;
     updateRow(row);
     free(replace);
     direction = 1;
@@ -116,19 +116,19 @@ void replaceCallBack(char *query, int c) {
     direction = 1;
   int current = last_match;
   int i;
-  for (i = 0; i < conf.numrows; i++) {
+  for (i = 0; i < curbuf.numrows; i++) {
     current += direction;
     if (current == -1)
-      current = conf.numrows - 1;
-    else if (current == conf.numrows)
+      current = curbuf.numrows - 1;
+    else if (current == curbuf.numrows)
       current = 0;
-    row = &conf.rows[current];
+    row = &curbuf.rows[current];
     char *match = strstr(row->renchar, query);
     if (match) {
       last_match = current;
-      conf.cy = current;
-      conf.cx = rowRxToCx(row, match - row->renchar);
-      conf.rowoff = conf.numrows;
+      curbuf.cy = current;
+      curbuf.cx = rowRxToCx(row, match - row->renchar);
+      curbuf.rowoff = curbuf.numrows;
       last_hl = malloc(row->renlen);
       memcpy(last_hl, row->hl, row->renlen);
       memset(&row->hl[match - row->renchar], TOKEN_MATCH, strlen(query));
@@ -139,15 +139,15 @@ void replaceCallBack(char *query, int c) {
 }
 
 void replace(void) {
-  int saved_cx = conf.cx;
-  int saved_cy = conf.cy;
-  int saved_rowoff = conf.rowoff;
+  int saved_cx = curbuf.cx;
+  int saved_cy = curbuf.cy;
+  int saved_rowoff = curbuf.rowoff;
   char *query = getPrompt("Search: %s", &replaceCallBack);
   if (query) {
     free(query);
   } else {
-    conf.cx = saved_cx;
-    conf.cy = saved_cy;
-    conf.rowoff = saved_rowoff;
+    curbuf.cx = saved_cx;
+    curbuf.cy = saved_cy;
+    curbuf.rowoff = saved_rowoff;
   }
 }

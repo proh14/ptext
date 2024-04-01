@@ -79,7 +79,7 @@ int trimLeft(Lexer *l) {
 
 Token getNextToken(Lexer *l) {
   int in_comment =
-      (l->idx > 0 && conf.rows[l->idx - 1].in_comment && l->cursor == 0);
+      (l->idx > 0 && curbuf.rows[l->idx - 1].in_comment && l->cursor == 0);
   Token t = {0};
   int spaces = 0;
   int firstloc = (int)l->cursor;
@@ -88,8 +88,8 @@ Token getNextToken(Lexer *l) {
   }
   t.text = &l->content[l->cursor];
   if (l->cursor >= l->contentlen) {
-    if (!conf.rows[l->idx].in_comment && l->cursor == 0) {
-      conf.rows[l->idx].in_comment = in_comment;
+    if (!curbuf.rows[l->idx].in_comment && l->cursor == 0) {
+      curbuf.rows[l->idx].in_comment = in_comment;
     }
     t.kind = TOKEN_END;
     return t;
@@ -116,13 +116,13 @@ Token getNextToken(Lexer *l) {
         }
         l->cursor++;
       }
-      conf.rows[l->idx].in_comment = in_comment;
+      curbuf.rows[l->idx].in_comment = in_comment;
       t.textlen = l->cursor - firstloc;
       return t;
     }
   }
 
-  conf.rows[l->idx].in_comment = 0;
+  curbuf.rows[l->idx].in_comment = 0;
 
   if (l->content[l->cursor] == '#') {
     t.kind = TOKEN_PREPROC;
@@ -139,7 +139,7 @@ Token getNextToken(Lexer *l) {
       t.textlen++;
       l->cursor++;
     }
-    if (l->content[l->cursor] == '"' || l->cursor == '\'') {
+    if (l->content[l->cursor] == '"' || l->content[l->cursor] == '\'') {
       t.textlen++;
       t.textlen++;
       l->cursor++;

@@ -34,66 +34,67 @@ int rowRxToCx(row *row, int rx) {
 }
 
 void scroll(void) {
-  conf.rx = 0;
-  if (conf.cy < conf.numrows) {
-    conf.rx = rowCxToRx(&conf.rows[conf.cy], conf.cx);
+  curbuf.rx = 0;
+  if (curbuf.cy < curbuf.numrows) {
+    curbuf.rx = rowCxToRx(&curbuf.rows[curbuf.cy], curbuf.cx);
   }
-  if (conf.cy < conf.rowoff) {
-    conf.rowoff = conf.cy;
+  if (curbuf.cy < curbuf.rowoff) {
+    curbuf.rowoff = curbuf.cy;
   }
-  if (conf.cy >= conf.rowoff + conf.height - 3) {
-    conf.rowoff = conf.cy - conf.height + 3;
+  if (curbuf.cy >= curbuf.rowoff + conf.height - 3) {
+    curbuf.rowoff = curbuf.cy - conf.height + 3;
   }
-  if (conf.cx < conf.coloff) {
-    conf.coloff = conf.cx;
+  if (curbuf.cx < curbuf.coloff) {
+    curbuf.coloff = curbuf.cx;
   }
-  if (conf.cx >= conf.coloff + conf.width) {
-    conf.coloff = conf.cx - conf.width + 1;
+  if (curbuf.cx >= curbuf.coloff + conf.width) {
+    curbuf.coloff = curbuf.cx - conf.width + 1;
   }
-  if (conf.rx < conf.coloff) {
-    conf.coloff = conf.rx;
+  if (curbuf.rx < curbuf.coloff) {
+    curbuf.coloff = curbuf.rx;
   }
-  if (conf.rx >= conf.coloff + conf.width) {
-    conf.coloff = conf.rx - conf.width + 1;
+  if (curbuf.rx >= curbuf.coloff + conf.width) {
+    curbuf.coloff = curbuf.rx - conf.width + 1;
   }
 }
 
 void moveCursor(int key) {
-  row *row = (conf.cy >= conf.numrows) ? NULL : &conf.rows[conf.cy];
+  row *row = (curbuf.cy >= curbuf.numrows) ? NULL : &curbuf.rows[curbuf.cy];
 
   switch (key) {
   case ARROW_LEFT:
-    if (row && conf.cx < (int)row->len) {
-      conf.cx++;
-    } else if (row && conf.cx == (int)row->len && conf.cy < conf.numrows - 1) {
-      conf.cy++;
-      conf.cx = 0;
+    if (row && curbuf.cx < (int)row->len) {
+      curbuf.cx++;
+    } else if (row && curbuf.cx == (int)row->len &&
+               curbuf.cy < curbuf.numrows - 1) {
+      curbuf.cy++;
+      curbuf.cx = 0;
     }
 
     break;
   case ARROW_RIGHT:
-    if (conf.cx != 0) {
-      conf.cx--;
-    } else if (conf.cy > 0) {
-      conf.cy--;
-      conf.cx = (int)conf.rows[conf.cy].len;
+    if (curbuf.cx != 0) {
+      curbuf.cx--;
+    } else if (curbuf.cy > 0) {
+      curbuf.cy--;
+      curbuf.cx = (int)curbuf.rows[curbuf.cy].len;
     }
     break;
   case ARROW_UP:
-    if (conf.cy != 0) {
-      conf.cy--;
+    if (curbuf.cy != 0) {
+      curbuf.cy--;
     }
     break;
   case ARROW_DOWN:
-    if (conf.cy < conf.numrows - 1) {
-      conf.cy++;
+    if (curbuf.cy < curbuf.numrows - 1) {
+      curbuf.cy++;
     }
     break;
   }
 
-  row = (conf.cy >= conf.numrows) ? NULL : &conf.rows[conf.cy];
+  row = (curbuf.cy >= curbuf.numrows) ? NULL : &curbuf.rows[curbuf.cy];
   int rowlen = row ? (int)row->len : 0;
-  if (conf.cx > rowlen) {
-    conf.cx = rowlen;
+  if (curbuf.cx > rowlen) {
+    curbuf.cx = rowlen;
   }
 }

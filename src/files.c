@@ -8,7 +8,7 @@
 #include <utils.h>
 
 void save(void) {
-  if (conf.filename == NULL) {
+  if (curbuf.filename == NULL) {
     char *fname = getPrompt("Save as: %s", NULL);
 #ifdef _WIN32
     if (GetFileAttributesA(fname) != INVALID_FILE_ATTRIBUTES) {
@@ -23,14 +23,14 @@ void save(void) {
       }
       free(yorn);
     }
-    conf.filename = fname;
+    curbuf.filename = fname;
   }
 
   int len;
   char *buf = rowsToString(&len);
 
 #ifdef _WIN32
-  HANDLE hFile = CreateFileA(conf.filename, GENERIC_WRITE, 0, NULL,
+  HANDLE hFile = CreateFileA(curbuf.filename, GENERIC_WRITE, 0, NULL,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
   if (hFile != INVALID_HANDLE_VALUE) {
@@ -39,20 +39,20 @@ void save(void) {
         bytesWritten == len) {
       CloseHandle(hFile);
       free(buf);
-      conf.dirty = 0;
+      curbuf.dirty = 0;
       setStatusMessage("%d bytes written to disk", len);
       return;
     }
     CloseHandle(hFile);
   }
 #else
-  int fd = open(conf.filename, O_RDWR | O_CREAT, 0644);
+  int fd = open(curbuf.filename, O_RDWR | O_CREAT, 0644);
   if (fd != -1) {
     if (ftruncate(fd, len) != -1) {
       if (write(fd, buf, len) == len) {
         close(fd);
         free(buf);
-        conf.dirty = 0;
+        curbuf.dirty = 0;
         setStatusMessage("%d bytes written to disk", len);
         return;
       }
@@ -112,16 +112,16 @@ void openFile(char *s) {
     die("fopen");
   } else if (errno == ENOENT) {
 #ifdef _WIN32
-    conf.filename = _strdup(s);
+    curbuf.filename = _strdup(s);
 #else
-    conf.filename = strdup(s);
+    curbuf.filename = strdup(s);
 #endif
     return;
   }
-  free(conf.filename);
+  free(curbuf.filename);
 
-  conf.filename = xmalloc(strlen(s) + 1);
-  snprintf(conf.filename, strlen(s) + 1, "%s", s);
+  curbuf.filename = xmalloc(strlen(s) + 1);
+  snprintf(curbuf.filename, strlen(s) + 1, "%s", s);
 
   char *line = NULL;
   size_t cap = 0;
@@ -131,10 +131,10 @@ void openFile(char *s) {
     while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
       len--;
     }
-    rowAppend(line, len, conf.numrows);
+    rowAppend(line, len, curbuf.numrows);
   }
   free(line);
 
   (void)fclose(file);
-  conf.dirty = 0;
+  curbuf.dirty = 0;
 }

@@ -9,20 +9,19 @@
 
 #define RCFILE "/.ptextrc"
 
+#define curbuf conf.buffers[conf.current_buffer]
+#define MAX_BUFFERS 10
+
+#include <buffer.h>
 #include <rows.h>
 #include <stdafx.h>
 
 struct config {
-  int cx, cy;
-  int rx;
-  row *rows;
-  int numrows;
-  int rowoff;
-  int coloff;
+  buffer buffers[MAX_BUFFERS];
+  int current_buffer;
+  int num_buffers;
   int width;
   int height;
-  int dirty;
-  char *filename;
   char statusmsg[80];
   time_t statusmsg_time;
 
