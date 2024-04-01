@@ -17,5 +17,6 @@ typedef struct buffer {
 } buffer;
 
 buffer createBuffer(buffer *b, int editable);
+void freeBuffer(buffer *b);
 
 #endif

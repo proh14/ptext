@@ -124,18 +124,10 @@ void init(void) {
 }
 
 void freeall(void) {
-  if (curbuf.rows == NULL && curbuf.numrows == 0) {
-    return;
+  int i;
+  for (i = 0; i <= conf.num_buffers; i++) {
+    freeBuffer(&conf.buffers[i]);
   }
-  for (int i = 0; i < curbuf.numrows; i++) {
-    free(curbuf.rows[i].chars);
-    free(curbuf.rows[i].renchar);
-    free(curbuf.rows[i].hl);
-  }
-  free(curbuf.rows);
-  curbuf.rows = NULL;
-
-  free(curbuf.filename);
 }
 
 void done(void) {
