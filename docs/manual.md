@@ -62,6 +62,14 @@ delete characters with backspace or delete key.
 
 :   Enter a editor command.
 
+**Ctrl-B**
+
+:   Move to previous buffer.
+
+**Ctrl-O**
+
+:   Move to next buffer.
+
 # BUGS
 
 You can report any bugs to *https://github.com/proh14/ptext/issues*.

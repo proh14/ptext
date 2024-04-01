@@ -45,6 +45,10 @@
 
        [1mCtrl-. [22mEnter a editor command.
 
+       [1mCtrl-B [22mMove to previous buffer.
+
+       [1mCtrl-O [22mMove to next buffer.
+
 
 [1mBUGS[0m
        You can report any bugs to [4mhttps://github.com/proh14/ptext/issues[24m.
