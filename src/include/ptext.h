@@ -10,9 +10,9 @@
 #define RCFILE "/.ptextrc"
 
 #define curbuf conf.buffers[conf.current_buffer]
-#define MAX_BUFFERS 10
 
 #include <buffer.h>
+#include <config.h>
 #include <rows.h>
 #include <stdafx.h>
 

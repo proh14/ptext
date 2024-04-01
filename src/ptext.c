@@ -1,5 +1,6 @@
 #include <buffer.h>
 #include <commands.h>
+#include <config.h>
 #include <files.h>
 #include <input.h>
 #include <output.h>
@@ -124,10 +125,12 @@ void init(void) {
 }
 
 void freeall(void) {
+#if FREE_EVERYTHING == 1
   int i;
   for (i = 0; i <= conf.num_buffers; i++) {
     freeBuffer(&conf.buffers[i]);
   }
+#endif // FREE_EVERYTHING
 }
 
 void done(void) {
