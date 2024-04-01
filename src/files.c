@@ -121,6 +121,8 @@ void openFile(char *s) {
 
   free(curbuf.filename);
   curbuf.numrows = 0;
+  curbuf.cx = 0;
+  curbuf.cy = 0;
 
   curbuf.filename = xmalloc(strlen(s) + 1);
   snprintf(curbuf.filename, strlen(s) + 1, "%s", s);
