@@ -288,6 +288,7 @@ void procKey(void) {
     ++conf.current_buffer;
     if (conf.num_buffers < conf.current_buffer) {
       createBuffer(&conf.buffers[conf.current_buffer], 1);
+      conf.num_buffers++;
     }
     break;
   case CTRL_KEY('b'):
