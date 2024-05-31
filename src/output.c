@@ -1,3 +1,4 @@
+#include "config.h"
 #include <cursor.h>
 #include <highlighter.h>
 #include <output.h>
@@ -18,6 +19,11 @@ void drawAll(struct screenBuffer *buff) {
     if (frow >= curbuf.numrows || frow == -1) {
       screenAppend(buff, "~", 1);
     } else {
+      char linenum[6];
+      int size = snprintf(linenum, sizeof(linenum), "%-5d", frow + 1);
+      screenAppend(buff, "\x1b[1;39m", 7);
+      screenAppend(buff, linenum, size);
+      screenAppend(buff, "\x1b[m", 3);
       int len = curbuf.rows[frow].renlen - curbuf.coloff;
       if (len < 0)
         len = 0;
@@ -78,7 +84,7 @@ void refresh(void) {
   drawAll(&buff);
 
   snprintf(s, sizeof(s), "\x1b[%d;%dH", (curbuf.cy - curbuf.rowoff) + 1,
-           (curbuf.rx - curbuf.coloff) + 1);
+           (curbuf.rx - curbuf.coloff) + 1 + 5);
 
   drawStatusBar(&buff);
   drawStatusMessage(&buff);
