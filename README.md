@@ -53,17 +53,16 @@ Otherwise take a look at [./docs](./docs] directory to see the manual in diffren
 The markdown version of the [manual](./docs/manual.md)
 
 ### Goals🥅:
-1. Add line numbers.
-2. Add visual mode (Selecting, copy selection, paste selection, delete selection).
-3. Fix replace.
-4. Add keyboard configuration(like `bind-key CTRL_X exit`).
-5. Add syntax highlighting configuration.
-6. Add file browser mode.
-7. Add shell mode.
-8. Add a self contained help-system.
-9. Add vertical and horizontal split.
-10. Add VI mode.
-11. Add utf support.
+1. Add visual mode (Selecting, copy selection, paste selection, delete selection).
+2. Fix replace.
+3. Add keyboard configuration(like `bind-key CTRL_X exit`).
+4. Add syntax highlighting configuration.
+5. Add file browser mode.
+6. Add shell mode.
+7. Add a self contained help-system.
+8. Add vertical and horizontal split.
+9. Add VI mode.
+10. Add utf support.
 
 ### Work in progress⚒️:
 This is still a work in progress project!
