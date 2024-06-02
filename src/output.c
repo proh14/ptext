@@ -22,7 +22,6 @@ void drawLineNumber(struct screenBuffer *buff, int frow) {
 void drawTilde(struct screenBuffer *buff) {
   screenAppend(buff, "~", 1);
   screenAppend(buff, "\x1b[K", 3);
-  screenAppend(buff, "\r\n", 2);
 }
 
 void drawHighlighted(struct screenBuffer *buff, int frow) {
@@ -37,7 +36,6 @@ void drawHighlighted(struct screenBuffer *buff, int frow) {
             &curbuf.rows[frow].renchar[curbuf.coloff], buff, len);
   screenAppend(buff, "\x1b[m", 3);
   screenAppend(buff, "\x1b[K", 3);
-  screenAppend(buff, "\r\n", 2);
 }
 
 void drawLine(struct screenBuffer *buff, int y) {
@@ -52,9 +50,33 @@ void drawLine(struct screenBuffer *buff, int y) {
   drawHighlighted(buff, frow);
 }
 
+void drawWelcomeMessage(struct screenBuffer *buff, int y) {
+  if (y != conf.height / 3) {
+    drawTilde(buff);
+    return;
+  }
+  char welcome[80];
+  int welcomelen = snprintf(welcome, sizeof(welcome), WELCOME_MSG);
+  int padding = (conf.width - welcomelen) / 2;
+  if (padding) {
+    screenAppend(buff, "~", 1);
+    padding--;
+  }
+  while (padding--) {
+    screenAppend(buff, " ", 1);
+  }
+  screenAppend(buff, welcome, welcomelen);
+  screenAppend(buff, "\x1b[K", 3);
+}
+
 void drawAll(struct screenBuffer *buff) {
   for (int y = 0; y < conf.height - 2; y++) {
-    drawLine(buff, y);
+    if (curbuf.numrows == 0) {
+      drawWelcomeMessage(buff, y);
+    } else {
+      drawLine(buff, y);
+    }
+    screenAppend(buff, "\r\n", 2);
   }
 }
 void drawStatusBar(struct screenBuffer *buff) {
