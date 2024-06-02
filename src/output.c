@@ -11,34 +11,52 @@
 #define INIT_BUFF                                                              \
   { NULL, 0 }
 
-void drawAll(struct screenBuffer *buff) {
-  int y;
-  int frow;
-  for (y = 0; y < conf.height - 2; y++) {
-    frow = curbuf.rowoff + y;
-    if (frow >= curbuf.numrows || frow == -1) {
-      screenAppend(buff, "~", 1);
-    } else {
-      char linenum[6];
-      int size = snprintf(linenum, sizeof(linenum), "%-5d", frow + 1);
-      screenAppend(buff, "\x1b[1;39m", 7);
-      screenAppend(buff, linenum, size);
-      screenAppend(buff, "\x1b[m", 3);
-      int len = curbuf.rows[frow].renlen - curbuf.coloff;
-      if (len < 0)
-        len = 0;
-      if (len > conf.width)
-        len = conf.width;
-      highlight(&curbuf.rows[frow].hl[curbuf.coloff],
-                &curbuf.rows[frow].renchar[curbuf.coloff], buff, len);
-
-      screenAppend(buff, "\x1b[m", 3);
-    }
-    screenAppend(buff, "\x1b[K", 3);
-    screenAppend(buff, "\r\n", 2);
-  }
+void drawLineNumber(struct screenBuffer *buff, int frow) {
+  char linenum[6];
+  int size = snprintf(linenum, sizeof(linenum), "%-5d", frow + 1);
+  screenAppend(buff, "\x1b[1;39m", 7);
+  screenAppend(buff, linenum, size);
+  screenAppend(buff, "\x1b[m", 3);
 }
 
+void drawTilde(struct screenBuffer *buff) {
+  screenAppend(buff, "~", 1);
+  screenAppend(buff, "\x1b[K", 3);
+  screenAppend(buff, "\r\n", 2);
+}
+
+void drawHighlighted(struct screenBuffer *buff, int frow) {
+  int len = curbuf.rows[frow].renlen - curbuf.coloff;
+  if (len < 0) {
+    len = 0;
+  }
+  if (len > conf.width) {
+    len = conf.width;
+  }
+  highlight(&curbuf.rows[frow].hl[curbuf.coloff],
+            &curbuf.rows[frow].renchar[curbuf.coloff], buff, len);
+  screenAppend(buff, "\x1b[m", 3);
+  screenAppend(buff, "\x1b[K", 3);
+  screenAppend(buff, "\r\n", 2);
+}
+
+void drawLine(struct screenBuffer *buff, int y) {
+  int frow = curbuf.rowoff + y;
+
+  if (frow >= curbuf.numrows || frow == -1) {
+    drawTilde(buff);
+    return;
+  }
+
+  drawLineNumber(buff, frow);
+  drawHighlighted(buff, frow);
+}
+
+void drawAll(struct screenBuffer *buff) {
+  for (int y = 0; y < conf.height - 2; y++) {
+    drawLine(buff, y);
+  }
+}
 void drawStatusBar(struct screenBuffer *buff) {
   screenAppend(buff, "\x1b[7m", 4);
   char status[80], rstatus[80];
