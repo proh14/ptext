@@ -39,21 +39,27 @@ void scroll(void) {
     curbuf.rx = rowCxToRx(&curbuf.rows[curbuf.cy], curbuf.cx);
   }
   if (curbuf.cy < curbuf.rowoff) {
+    curbuf.redraw = 1;
     curbuf.rowoff = curbuf.cy;
   }
   if (curbuf.cy >= curbuf.rowoff + conf.height - 3) {
+    curbuf.redraw = 1;
     curbuf.rowoff = curbuf.cy - conf.height + 3;
   }
   if (curbuf.cx < curbuf.coloff) {
+    curbuf.redraw = 1;
     curbuf.coloff = curbuf.cx;
   }
   if (curbuf.cx >= curbuf.coloff + conf.width) {
+    curbuf.redraw = 1;
     curbuf.coloff = curbuf.cx - conf.width + 1;
   }
   if (curbuf.rx < curbuf.coloff) {
+    curbuf.redraw = 1;
     curbuf.coloff = curbuf.rx;
   }
   if (curbuf.rx >= curbuf.coloff + conf.width) {
+    curbuf.redraw = 1;
     curbuf.coloff = curbuf.rx - conf.width + 1;
   }
 }

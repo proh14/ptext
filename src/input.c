@@ -39,6 +39,13 @@ void insertAChar(int c) {
   curbuf.dirty++;
 }
 
+void markBelowRowsDirty(int at) {
+  for (int i = at; i < conf.height - 2 + curbuf.rowoff && i < curbuf.numrows;
+       i++) {
+    curbuf.rows[i].redraw = 1;
+  }
+}
+
 void insertNewLine(void) {
   if (curbuf.cx == 0) {
     rowAppend("", 0, curbuf.cy);
@@ -48,6 +55,7 @@ void insertNewLine(void) {
     row = &curbuf.rows[curbuf.cy];
     row->len = curbuf.cx;
     row->chars[row->len] = '\0';
+    markBelowRowsDirty(curbuf.cy);
     updateRow(row);
   }
   curbuf.cy++;
@@ -254,6 +262,8 @@ void procKey(void) {
     save();
     break;
   case CTRL_KEY('l'):
+    curbuf.redraw = 1;
+    break;
   case '\x1b':
     break;
   case CTRL_KEY('f'):

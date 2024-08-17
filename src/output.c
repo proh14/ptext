@@ -1,4 +1,3 @@
-#include "config.h"
 #include <cursor.h>
 #include <highlighter.h>
 #include <output.h>
@@ -46,8 +45,14 @@ void drawLine(struct screenBuffer *buff, int y) {
     return;
   }
 
+  if (!curbuf.rows[frow].redraw && !curbuf.redraw) {
+    return;
+  }
+
   drawLineNumber(buff, frow);
   drawHighlighted(buff, frow);
+
+  curbuf.rows[frow].redraw = 0;
 }
 
 void drawWelcomeMessage(struct screenBuffer *buff, int y) {
@@ -78,6 +83,7 @@ void drawAll(struct screenBuffer *buff) {
     }
     screenAppend(buff, "\r\n", 2);
   }
+  curbuf.redraw = 0;
 }
 void drawStatusBar(struct screenBuffer *buff) {
   screenAppend(buff, "\x1b[7m", 4);

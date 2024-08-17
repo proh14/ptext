@@ -110,16 +110,16 @@ void openFile(char *s) {
   FILE *file = fopen(s, "r");
   if (!file && errno != ENOENT) {
     die("fopen");
-  } else if (errno == ENOENT) {
-#ifdef _WIN32
-    curbuf.filename = _strdup(s);
-#else
-    curbuf.filename = strdup(s);
-#endif
-    return;
   }
 
   free(curbuf.filename);
+
+#ifdef _WIN32
+  curbuf.filename = _strdup(s);
+#else
+  curbuf.filename = strdup(s);
+#endif
+
   curbuf.numrows = 0;
   curbuf.cx = 0;
   curbuf.cy = 0;
@@ -133,7 +133,7 @@ void openFile(char *s) {
   int len;
   while ((len = (int)getline(&line, &cap, file)) != -1) {
     while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r')) {
-      len--;
+      line[len--] = '\0';
     }
     rowAppend(line, len, curbuf.numrows);
   }

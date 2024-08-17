@@ -11,6 +11,7 @@ typedef struct row {
   char *hl;
   int in_comment;
   int idx;
+  int redraw;
 } row;
 
 void updateRow(row *row);

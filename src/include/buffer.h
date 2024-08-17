@@ -14,6 +14,7 @@ typedef struct buffer {
   int editable;
   int dirty;
   char *filename;
+  int redraw;
 } buffer;
 
 buffer createBuffer(buffer *b, int editable);

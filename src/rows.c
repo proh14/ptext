@@ -32,6 +32,7 @@ void updateRow(row *row) {
              .idx = row->idx};
   row->hl = xrealloc(row->hl, row->renlen + 1);
   prehighlight(row->hl, &l);
+  row->redraw = 1;
 }
 
 void rowAppend(char *s, size_t len, int at) {
@@ -52,6 +53,7 @@ void rowAppend(char *s, size_t len, int at) {
   curbuf.rows[at].renchar = NULL;
   curbuf.rows[at].hl = NULL;
   curbuf.rows[at].in_comment = 0;
+  curbuf.rows[at].redraw = 1;
   curbuf.numrows++;
   curbuf.dirty++;
   updateRow(&curbuf.rows[at]);
@@ -87,8 +89,9 @@ void delRow(int at) {
 }
 
 void rowDelChar(row *row, int at) {
-  if (at < 0 || at >= (int)row->len)
+  if (at < 0 || at >= (int)row->len) {
     return;
+  }
   memmove(&row->chars[at], &row->chars[at + 1], row->len - at);
   row->len--;
   updateRow(row);
