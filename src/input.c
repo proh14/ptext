@@ -287,7 +287,7 @@ void procKey(void) {
   case CTRL_KEY('x'):
     delRow(curbuf.cy);
     break;
-  case CTRL_KEY('.'):
+  case CTRL_KEY('n'):
     execCommand();
     break;
   case CTRL_KEY('o'):
