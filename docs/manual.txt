@@ -1,4 +1,3 @@
-
 [4mPTEXT[24m(1)                    General Commands Manual                   [4mPTEXT[24m(1)
 
 [1mNAME[0m
@@ -43,7 +42,7 @@
 
        [1mCtrl-X [22mDelete the line that the cursor is on.
 
-       [1mCtrl-. [22mEnter a editor command.
+       [1mCtrl-N [22mEnter a editor command.
 
        [1mCtrl-B [22mMove to previous buffer.
 

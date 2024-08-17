@@ -58,7 +58,7 @@ delete characters with backspace or delete key.
 
 :   Delete the line that the cursor is on.
 
-**Ctrl-.**
+**Ctrl-N**
 
 :   Enter a editor command.
 
