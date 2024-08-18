@@ -27,6 +27,7 @@ void delChar(void) {
     rowAppendString(&curbuf.rows[curbuf.cy - 1], row->chars, row->len);
     delRow(curbuf.cy);
     curbuf.cy--;
+    curbuf.redraw = 1;
   }
 }
 
@@ -55,11 +56,11 @@ void insertNewLine(void) {
     row = &curbuf.rows[curbuf.cy];
     row->len = curbuf.cx;
     row->chars[row->len] = '\0';
-    markBelowRowsDirty(curbuf.cy);
     updateRow(row);
   }
   curbuf.cy++;
   curbuf.cx = 0;
+  markBelowRowsDirty(curbuf.cy);
 }
 
 #ifdef _WIN32

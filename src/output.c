@@ -49,7 +49,7 @@ void drawLine(struct screenBuffer *buff, int y) {
     return;
   }
 
-  drawLineNumber(buff, frow);
+  //drawLineNumber(buff, frow);
   drawHighlighted(buff, frow);
 
   curbuf.rows[frow].redraw = 0;
@@ -130,7 +130,7 @@ void refresh(void) {
   drawAll(&buff);
 
   snprintf(s, sizeof(s), "\x1b[%d;%dH", (curbuf.cy - curbuf.rowoff) + 1,
-           (curbuf.rx - curbuf.coloff) + 1 + 5);
+           (curbuf.rx - curbuf.coloff) + 1);
 
   drawStatusBar(&buff);
   drawStatusMessage(&buff);
