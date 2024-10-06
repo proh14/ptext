@@ -49,7 +49,7 @@ If you installed ptext (with the make install command) on a *nix system you can 
 man ptext
 ```
 to see the maual page of ptext.
-Otherwise take a look at [./docs](./docs] directory to see the manual in diffrent formats!
+Otherwise take a look at [./docs](./docs] directory to see the manual in different formats!
 The markdown version of the [manual](./docs/manual.md)
 
 ### Goals🥅:
