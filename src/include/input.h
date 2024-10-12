@@ -21,7 +21,7 @@ enum editorKeys {
   ARROW_UP = VK_UP,
   ARROW_DOWN = VK_DOWN,
   ARROW_LEFT = VK_RIGHT,
-  ARROW_RIGHT = VK_LEFT,  // swap left and right ?
+  ARROW_RIGHT = VK_LEFT, // swap left and right ?
   DEL_KEY = VK_DELETE,
   ESC_KEY = VK_ESCAPE,
 #else
@@ -34,7 +34,7 @@ enum editorKeys {
   ARROW_RIGHT,
   DEL_KEY,
   ESC_KEY = 27,
-#endif  // _WIN32
+#endif // _WIN32
 };
 
 typedef struct keyPair {
@@ -42,7 +42,7 @@ typedef struct keyPair {
   WORD key;
 #else
   int key;
-#endif  // _WIN32
+#endif // _WIN32
   void (*func)(void);
 } keysPair;
 
@@ -54,7 +54,7 @@ void insertNewLine(void);
 KEY_EVENT_RECORD readKey(void);
 #else
 int readKey(void);
-#endif  // _WIN32
+#endif // _WIN32
 
 void procKey(void);
 

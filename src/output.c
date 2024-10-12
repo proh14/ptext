@@ -7,8 +7,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define INIT_BUFF                                                              \
-  { NULL, 0 }
+#define INIT_BUFF {NULL, 0}
 
 void drawLineNumber(struct screenBuffer *buff, int frow) {
   char linenum[6];

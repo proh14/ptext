@@ -28,4 +28,4 @@
 #include <unistd.h>
 #endif
 
-#endif  // !H_STDAFX
+#endif // !H_STDAFX
