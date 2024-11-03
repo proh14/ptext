@@ -110,16 +110,17 @@ void openFile(char *s) {
   FILE *file = fopen(s, "r");
   if (!file && errno != ENOENT) {
     die("fopen");
-  }
+  } else if (errno == ENOENT) {
 
-  free(curbuf.filename);
+    free(curbuf.filename);
 
 #ifdef _WIN32
-  curbuf.filename = _strdup(s);
+    curbuf.filename = _strdup(s);
 #else
-  curbuf.filename = strdup(s);
+    curbuf.filename = strdup(s);
 #endif
-
+    return;
+  }
   curbuf.numrows = 0;
   curbuf.cx = 0;
   curbuf.cy = 0;
