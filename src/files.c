@@ -110,7 +110,8 @@ void openFile(char *s) {
   FILE *file = fopen(s, "r");
   if (!file && errno != ENOENT) {
     die("fopen");
-  } else if (errno == ENOENT) {
+  }
+  if (!file && errno == ENOENT) {
 
     free(curbuf.filename);
 
